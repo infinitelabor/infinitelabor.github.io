@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinite Labor</title>
+<meta name="description" content="The weekly brief on AI agents, robots, and the future of work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0a;
+    --surface: #131311;
+    --surface2: #1a1a17;
+    --border: rgba(255,255,255,0.08);
+    --border-bright: rgba(255,255,255,0.18);
+    --text-primary: #f5f2ea;
+    --text-dim: #8a877f;
+    --text-faint: #5a584f;
+    --red: #BF3318;
+    --green: #1D9E75;
+    --blue: #378ADD;
+    --amber: #EF9F27;
+  }
+  html, body { background: var(--bg); color: var(--text-primary); font-family: 'IBM Plex Sans', sans-serif; min-height: 100vh; }
+  body { display: flex; flex-direction: column; align-items: center; padding: 40px 24px 80px; }
+
+  .grid-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .container { max-width: 980px; width: 100%; position: relative; z-index: 1; }
+
+  /* Header */
+  .brand-mark { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+  .brand-stripe { width: 4px; height: 32px; background: var(--red); }
+  .brand-name {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+  .brand-name .b-red { color: var(--red); }
+  .brand-tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.25em;
+    color: var(--text-dim); text-transform: uppercase; margin-left: 18px;
+  }
+
+  /* Hero */
+  .hero { padding: 56px 0 64px; border-bottom: 1px solid var(--border); }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.3em;
+    color: var(--red); text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hero-title {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 64px; line-height: 1.02;
+    letter-spacing: -0.025em; margin-bottom: 24px; max-width: 880px;
+  }
+  .hero-title .accent { color: var(--red); }
+  .hero-subtitle {
+    font-size: 19px; line-height: 1.55; color: var(--text-dim); max-width: 640px;
+  }
+
+  /* Sections */
+  .section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.3em;
+    color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 32px; letter-spacing: -0.015em;
+    margin-bottom: 32px;
+  }
+
+  /* Project cards */
+  .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    padding: 28px 28px 24px; text-decoration: none; color: inherit; display: block;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    position: relative; overflow: hidden;
+  }
+  .card:hover { border-color: var(--border-bright); background: var(--surface2); transform: translateY(-2px); }
+  .card-stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .card-tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em;
+    color: var(--text-dim); text-transform: uppercase;
+  }
+  .card-arrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: var(--text-dim);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  .card:hover .card-arrow { transform: translateX(4px); color: var(--text-primary); }
+  .card-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.01em;
+    margin-bottom: 8px; line-height: 1.15;
+  }
+  .card-desc {
+    font-size: 14px; line-height: 1.5; color: var(--text-dim); margin-bottom: 18px;
+  }
+  .card-stats {
+    display: flex; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    color: var(--text-faint); padding-top: 14px; border-top: 1px solid var(--border);
+  }
+  .card-stats span { display: flex; align-items: center; gap: 5px; }
+  .card-stats .dot { width: 5px; height: 5px; border-radius: 50%; }
+
+  /* Featured (Newsletter) */
+  .featured { grid-column: span 2; padding: 36px; }
+  .featured .card-title { font-size: 36px; margin-bottom: 12px; }
+  .featured .card-desc { font-size: 15px; max-width: 600px; }
+
+  /* Socials */
+  .socials { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .social {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    padding: 18px 20px; text-decoration: none; color: inherit;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .social:hover { border-color: var(--border-bright); background: var(--surface2); }
+  .social-platform {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.25em;
+    color: var(--text-dim); text-transform: uppercase;
+  }
+  .social-handle { font-size: 14px; font-weight: 500; }
+
+  /* Footer */
+  .footer {
+    padding: 48px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    color: var(--text-faint); display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+
+  /* Mobile */
+  @media (max-width: 720px) {
+    body { padding: 24px 16px 60px; }
+    .hero { padding: 40px 0 48px; }
+    .hero-title { font-size: 40px; }
+    .hero-subtitle { font-size: 16px; }
+    .section { padding: 40px 0; }
+    .section-title { font-size: 24px; }
+    .projects { grid-template-columns: 1fr; }
+    .featured { grid-column: span 1; padding: 28px 24px; }
+    .featured .card-title { font-size: 28px; }
+    .socials { grid-template-columns: repeat(2, 1fr); }
+    .card { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="container">
+
+  <!-- Header -->
+  <div class="brand-mark">
+    <div class="brand-stripe"></div>
+    <div class="brand-name">INFINITE LA<span class="b-red">B</span>OR</div>
+    <div class="brand-tag">EST. 2026</div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-eyebrow">→ The future of work, mapped weekly</div>
+    <h1 class="hero-title">Robots, AI agents, and the labor economy<span class="accent">.</span></h1>
+    <p class="hero-subtitle">A weekly brief and a growing set of tools to track the automation transition. From the people building it. For the people figuring out what comes next.</p>
+  </section>
+
+  <!-- Projects -->
+  <section class="section">
+    <div class="section-label">01 / Projects</div>
+    <h2 class="section-title">What I'm building</h2>
+
+    <div class="projects">
+
+      <a class="card featured" href="https://infinitelabor.substack.com" target="_blank">
+        <div class="card-stripe" style="background: var(--red)"></div>
+        <div class="card-meta">
+          <span class="card-tag">★ Newsletter · Weekly</span>
+          <span class="card-arrow">→</span>
+        </div>
+        <h3 class="card-title">Infinite Labor</h3>
+        <p class="card-desc">Every Monday: the funding, deployments, and policy moves shaping AI agents, robots, and the future of work. Read by operators, investors, and engineers in the trenches.</p>
+        <div class="card-stats">
+          <span><span class="dot" style="background: var(--red)"></span>Free to subscribe</span>
+          <span><span class="dot" style="background: var(--green)"></span>Sponsorship inquiries open</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://infinitelabor.github.io/il-robot-map" target="_blank">
+        <div class="card-stripe" style="background: var(--green)"></div>
+        <div class="card-meta">
+          <span class="card-tag">↺ Interactive · Live data</span>
+          <span class="card-arrow">→</span>
+        </div>
+        <h3 class="card-title">IL Robot Map</h3>
+        <p class="card-desc">A 3D globe of every serious robotics company in the world. Filter by category, supply chain, founding date.</p>
+        <div class="card-stats">
+          <span><span class="dot" style="background: var(--green)"></span>150+ companies tracked</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://infinitelabor.github.io/il-robot-index" target="_blank">
+        <div class="card-stripe" style="background: var(--blue)"></div>
+        <div class="card-meta">
+          <span class="card-tag">≡ Field guide · Reference</span>
+          <span class="card-arrow">→</span>
+        </div>
+        <h3 class="card-title">Robot Field Guide</h3>
+        <p class="card-desc">Every type of robot, what it does, who's building it, and why it matters. The taxonomy of physical AI in one place.</p>
+        <div class="card-stats">
+          <span><span class="dot" style="background: var(--blue)"></span>4 categories · 30+ companies</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://infinitelabor.substack.com" target="_blank">
+        <div class="card-stripe" style="background: var(--amber)"></div>
+        <div class="card-meta">
+          <span class="card-tag">⌗ Quarterly · Scorecard</span>
+          <span class="card-arrow">→</span>
+        </div>
+        <h3 class="card-title">IL Robot Index</h3>
+        <p class="card-desc">A quarterly scorecard tracking the most important companies in physical AI. Coming Q2 2026.</p>
+        <div class="card-stats">
+          <span><span class="dot" style="background: var(--amber)"></span>Q2 2026 · Coming soon</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Socials -->
+  <section class="section">
+    <div class="section-label">02 / Connect</div>
+    <h2 class="section-title">Find me elsewhere</h2>
+
+    <div class="socials">
+      <a class="social" href="https://infinitelabor.substack.com" target="_blank">
+        <span class="social-platform">Substack</span>
+        <span class="social-handle">infinitelabor</span>
+      </a>
+      <a class="social" href="https://twitter.com/infinitelabor" target="_blank">
+        <span class="social-platform">Twitter / X</span>
+        <span class="social-handle">@infinitelabor</span>
+      </a>
+      <a class="social" href="https://linkedin.com/in/joshschiering" target="_blank">
+        <span class="social-platform">LinkedIn</span>
+        <span class="social-handle">Josh Schiering</span>
+      </a>
+      <a class="social" href="mailto:josh@infinitelabor.com">
+        <span class="social-platform">Email</span>
+        <span class="social-handle">Get in touch →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div>© 2026 INFINITE LABOR · ALL RIGHTS RESERVED</div>
+    <div>BUILT BY JOSH SCHIERING · ST. LOUIS</div>
+  </div>
+
+</div>
+</body>
+</html>
