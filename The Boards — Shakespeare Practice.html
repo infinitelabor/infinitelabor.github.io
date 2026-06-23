@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Boards — Shakespeare Practice</title>
+<style>
+  :root{
+    --paper:#f7f2e6; --paper-2:#efe7d2; --ink:#241c12; --ink-soft:#6a5c44;
+    --line:#d8cbab; --crimson:#7a1f2b; --crimson-2:#9a3340; --gold:#9c7a2e; --green:#3f6b3f;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:var(--serif);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 16px 40px;min-height:100%;display:flex;flex-direction:column}
+
+  header{text-align:center;margin:6px 0 14px}
+  h1{font-size:clamp(26px,6vw,40px);margin:0;letter-spacing:.5px}
+  h1 small{display:block;font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--crimson);font-family:var(--sans);margin-bottom:6px;font-weight:600}
+  .sub{margin:6px 0 0;font-style:italic;color:var(--ink-soft);font-size:15px}
+
+  nav{display:flex;gap:6px;margin:16px 0 18px;flex-wrap:wrap;justify-content:center}
+  .tab{font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    padding:9px 13px;border:1px solid var(--line);background:transparent;color:var(--ink-soft);
+    border-radius:3px;cursor:pointer;transition:all .15s}
+  .tab:hover{border-color:var(--crimson);color:var(--crimson)}
+  .tab.on{background:var(--crimson);border-color:var(--crimson);color:#fbf3e6}
+  .tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  section{display:none;animation:fade .25s ease both}
+  section.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .blurb{font-style:italic;color:var(--ink-soft);font-size:15px;text-align:center;margin:0 0 16px;line-height:1.45}
+
+  .card{border:1px solid var(--line);border-radius:6px;background:linear-gradient(180deg,#fffdf7,var(--paper-2));
+    padding:38px 24px;text-align:center;box-shadow:0 1px 0 #fff inset,0 8px 24px rgba(80,60,30,.06)}
+  .eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  .prompt{font-size:clamp(28px,6.4vw,44px);line-height:1.12;margin:0}
+  .prompt.title{font-style:italic}
+  .def{margin:16px auto 0;max-width:540px;font-size:18px;color:var(--ink-soft);line-height:1.5}
+  .def .ex{display:block;margin-top:10px;font-style:italic;color:var(--crimson)}
+  .def .play{font-style:italic;color:var(--gold)}
+
+  .charge .mode{font-family:var(--sans);font-weight:800;letter-spacing:.06em}
+  .charge .mode.praise{color:var(--green)}
+  .charge .mode.curse{color:var(--crimson-2)}
+  .charge .using{display:block;margin-top:14px;font-size:20px;color:var(--ink-soft)}
+  .charge .using b{color:var(--gold);font-style:normal}
+
+  .next{margin:22px auto 0;display:block;font-family:var(--sans);font-size:16px;font-weight:600;letter-spacing:.06em;
+    padding:13px 34px;border:none;border-radius:4px;cursor:pointer;color:#fbf3e6;
+    background:var(--crimson);box-shadow:0 2px 0 #5a141d;transition:transform .06s,filter .15s}
+  .next:hover{filter:brightness(1.07)}
+  .next:active{transform:translateY(2px);box-shadow:0 0 0 #5a141d}
+
+  .add{display:flex;gap:8px;margin:14px auto 0;max-width:540px}
+  .add input{flex:1;font-family:var(--serif);font-size:16px;padding:10px 12px;border:1px solid var(--line);
+    border-radius:4px;background:#fffdf7;color:var(--ink)}
+  .add input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 2px rgba(156,122,46,.18)}
+  .add button{font-family:var(--sans);font-weight:600;font-size:14px;padding:0 16px;border:1px solid var(--gold);
+    background:transparent;color:var(--gold);border-radius:4px;cursor:pointer}
+  .add button:hover{background:var(--gold);color:#fffdf7}
+  .added{font-family:var(--sans);font-size:12px;color:var(--ink-soft);text-align:center;margin:8px 0 0;min-height:16px}
+
+  footer{margin-top:auto;padding-top:22px;text-align:center;font-family:var(--sans);font-size:11.5px;color:#a9997a;line-height:1.6}
+
+  @media(max-width:520px){.card{padding:30px 16px}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><small>Daily Practice</small>The Boards</h1>
+    <p class="sub">Warm-ups and reference for playing Shakespeare.</p>
+  </header>
+
+  <nav id="nav">
+    <button class="tab on" data-tab="references">References</button>
+    <button class="tab" data-tab="praisecurse">Praise / Curse</button>
+    <button class="tab" data-tab="prologue">Prologue</button>
+    <button class="tab" data-tab="rhyme">Rhyme</button>
+    <button class="tab" data-tab="vocab">Vocab</button>
+    <button class="tab" data-tab="plots">Plots</button>
+    <button class="tab" data-tab="names">Names</button>
+    <button class="tab" data-tab="blainenotes">Blaine Notes</button>
+  </nav>
+
+  <section id="references" class="on">
+    <p class="blurb">A category to weave into your verse. Riff as long as you like, then call the next.</p>
+    <div class="card"><div class="eyebrow">Work this in</div><p class="prompt" id="refPrompt">—</p></div>
+    <button class="next" data-next="references">Next category ↻</button>
+    <div class="add"><input id="refAdd" placeholder="Add your own category…" /><button data-add="references">Add</button></div>
+    <p class="added" id="refAdded"></p>
+  </section>
+
+  <section id="praisecurse">
+    <p class="blurb">You're charged to praise or curse a soul — using a given subject. Make it soar, or make it sting.</p>
+    <div class="card charge"><div class="eyebrow">Your charge</div><p class="prompt" id="pcPrompt">—</p><div class="using" id="pcUsing"></div></div>
+    <button class="next" data-next="praisecurse">Next charge ↻</button>
+    <div class="add"><input id="praisecurseAdd" placeholder="Add a name to the pool… (a friend, a foe, anyone)" /><button data-add="praisecurse">Add</button></div>
+    <p class="added" id="praisecurseAdded"></p>
+  </section>
+
+  <section id="prologue">
+    <p class="blurb">The title of a play that never was. Give us its opening.</p>
+    <div class="card"><div class="eyebrow">A play in want of a scene</div><p class="prompt title" id="prologuePrompt">—</p></div>
+    <button class="next" data-next="prologue">Next title ↻</button>
+    <div class="add"><input id="prologueAdd" placeholder="Add your own title…" /><button data-add="prologue">Add</button></div>
+    <p class="added" id="prologueAdded"></p>
+  </section>
+
+  <section id="rhyme">
+    <p class="blurb">A word to rhyme against. Fire off as many as you can, then pull the next.</p>
+    <div class="card"><div class="eyebrow">Rhyme with</div><p class="prompt" id="rhymePrompt">—</p></div>
+    <button class="next" data-next="rhyme">Next word ↻</button>
+    <div class="add"><input id="rhymeAdd" placeholder="Add your own word…" /><button data-add="rhyme">Add</button></div>
+    <p class="added" id="rhymeAdded"></p>
+  </section>
+
+  <section id="vocab">
+    <p class="blurb">Learn a word, then put it to work. The goal is to own it.</p>
+    <div class="card"><div class="eyebrow">Make it thine</div><p class="prompt" id="vocabWord">—</p><div class="def" id="vocabDef"></div></div>
+    <button class="next" data-next="vocab">Next word ↻</button>
+    <div class="add"><input id="vocabAdd" placeholder="Add your own — e.g. tarry — to linger" /><button data-add="vocab">Add</button></div>
+    <p class="added" id="vocabAdded"></p>
+  </section>
+
+  <section id="plots">
+    <p class="blurb">The whole canon in brief. Flip through to keep the stories at your fingertips.</p>
+    <div class="card"><div class="eyebrow">The story, in brief</div><p class="prompt" id="plotTitle">—</p><div class="def" id="plotDef"></div></div>
+    <button class="next" data-next="plots">Next play ↻</button>
+  </section>
+
+  <section id="names">
+    <p class="blurb">Who's who across the plays — and what they got up to.</p>
+    <div class="card"><div class="eyebrow">Who's who</div><p class="prompt" id="nameName">—</p><div class="def" id="nameDef"></div></div>
+    <button class="next" data-next="names">Next name ↻</button>
+  </section>
+
+  <section id="blainenotes">
+    <p class="blurb">Coaching notes for scene work. Keep it tight. Make it soar.</p>
+    <div class="card" style="text-align:left;padding:28px 24px">
+      <div class="eyebrow" style="text-align:center">The Core</div>
+      <div style="font-size:16px;color:var(--ink);line-height:1.6;margin:0">
+        <div style="margin-bottom:18px"><b style="color:var(--gold)">Keep it simple</b> · Clear action, clear want.</div>
+        <div style="margin-bottom:18px"><b style="color:var(--gold)">Keep it tight</b> · No extra words. Every line earns its place.</div>
+        <div style="margin-bottom:18px"><b style="color:var(--gold)">Keep it heightening</b> · Raise the stakes each turn. Build.</div>
+        <div style="margin-bottom:18px"><b style="color:var(--gold)">Keep it crisp</b> · Land each beat. No dithering.</div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--line);margin:18px 0;opacity:.5" />
+      <div style="font-size:16px;color:var(--ink);line-height:1.6">
+        <div style="margin-bottom:14px"><b style="color:var(--gold)">Character Wants</b></div>
+        <div style="color:var(--ink-soft);margin-bottom:18px">
+          <div>1. What does your character want?</div>
+          <div>2. What's in their way?</div>
+          <div>3. How are they gonna get it?</div>
+        </div>
+        <div style="margin-bottom:14px"><b style="color:var(--gold)">Primary Want</b></div>
+        <div style="color:var(--ink-soft);margin-bottom:18px">Love or Hate — pick one and lean in.</div>
+        <div style="margin-bottom:14px"><b style="color:var(--gold)">Secondary Want</b></div>
+        <div style="color:var(--ink-soft);margin-bottom:18px">How are you going to help someone get what they love or hate?</div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--line);margin:18px 0;opacity:.5" />
+      <div style="font-size:15px;color:var(--crimson);font-weight:600">⚠ DON'T interrupt wooing scenes or fights.</div>
+    </div>
+    <div style="margin-top:18px">
+      <div style="font-size:14px;text-align:center;margin-bottom:12px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600">Your notes</div>
+      <div class="add"><input id="blaineAdd" placeholder="Add a coaching note…" /><button data-add="blainenotes">Add</button></div>
+      <div id="blaineNotesList" style="margin-top:14px;max-width:540px;margin-left:auto;margin-right:auto;border:1px solid var(--line);border-radius:6px;max-height:300px;overflow-y:auto">
+        <div style="padding:20px;text-align:center;color:var(--ink-soft);font-style:italic">No notes yet. Add one to get started.</div>
+      </div>
+      <p class="added" id="blaineAdded"></p>
+    </div>
+  </section>
+
+  <footer>
+    Everything here works offline — no account, no AI, no setup. Share the file freely.<br>
+    Custom additions last for this session.
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var REFERENCES = [
+  "Meryl Streep movies","Tom Hanks movies","Pixar movies","James Bond films","Quentin Tarantino movies",
+  "Car brands","Cereal brands","Candy bars","Fast food chains","Soda brands","Coffee drinks","Cocktails",
+  "Dog breeds","Cat breeds","Shark species","Dinosaurs","Cryptids","Phobias",
+  "Greek gods","Roman emperors","U.S. presidents","U.S. state capitals","World capitals","National parks",
+  "NBA teams","NFL teams","MLB teams","English soccer clubs","Olympic sports","Yoga poses","Types of dance",
+  "Board games","Video game franchises","Marvel superheroes","Star Wars characters","Disney princesses",
+  "Harry Potter characters","Lord of the Rings characters","Beatles songs","Taylor Swift songs","Broadway musicals",
+  "Shakespeare plays","Famous painters","Constellations","Periodic table elements","Musical instruments",
+  "Kitchen appliances","Power tools","Office supplies","Spices and herbs","Cheeses","Pasta shapes",
+  "Sneaker brands","Perfume brands","Airlines","Social media apps","Programming languages","Knots","Chess openings"
+];
+
+var VOCAB = [
+  {w:"teach", d:"to instruct or impart — Shakespeare leans on it for emotional pleading.", e:"Teach me to love thee."},
+  {w:"woo", d:"to court; to seek another's love.", e:"I come to woo thee for my wife."},
+  {w:"prithee", d:"\"I pray thee\" — a polite please.", e:"Prithee, speak."},
+  {w:"wherefore", d:"why; for what reason (not \"where\").", e:"Wherefore art thou Romeo?"},
+  {w:"anon", d:"soon; shortly; at once.", e:"I will return anon."},
+  {w:"soft", d:"wait; hold on; gently.", e:"But soft, what light through yonder window breaks?"},
+  {w:"mark", d:"to note, heed, pay attention to.", e:"Mark me well."},
+  {w:"hark", d:"listen!", e:"Hark, the lark at heaven's gate sings."},
+  {w:"list", d:"to listen; to hearken.", e:"List, list, O list!"},
+  {w:"fie", d:"an exclamation of disgust or reproach.", e:"Fie upon thee, knave!"},
+  {w:"marry", d:"indeed (a mild oath, from \"by Mary\").", e:"Marry, 'tis true."},
+  {w:"forsooth", d:"in truth; indeed (often dryly ironic).", e:"A great soldier, forsooth."},
+  {w:"verily", d:"truly; certainly.", e:"Verily, I say it."},
+  {w:"methinks", d:"it seems to me.", e:"The lady doth protest too much, methinks."},
+  {w:"perchance", d:"perhaps; by chance.", e:"To sleep, perchance to dream."},
+  {w:"haply", d:"perhaps; by luck.", e:"Haply I think on thee."},
+  {w:"ere", d:"before.", e:"Ere the sun doth rise."},
+  {w:"oft", d:"often.", e:"As oft I have."},
+  {w:"hence", d:"from here; away; from now on.", e:"Get thee hence!"},
+  {w:"hither", d:"to here.", e:"Come hither, friend."},
+  {w:"thither", d:"to there.", e:"We must go thither."},
+  {w:"whither", d:"to where.", e:"Whither goest thou?"},
+  {w:"whence", d:"from where.", e:"Whence came you?"},
+  {w:"aught", d:"anything.", e:"If aught of grief doth move thee."},
+  {w:"naught", d:"nothing.", e:"It availed me naught."},
+  {w:"fain", d:"gladly; willingly.", e:"I would fain see it done."},
+  {w:"beshrew", d:"a mild curse — \"a plague on\".", e:"Beshrew my heart."},
+  {w:"zounds", d:"a strong oath (from \"God's wounds\").", e:"Zounds, I was never so bethumped!"},
+  {w:"alack", d:"alas — an expression of regret.", e:"Alack, the day!"},
+  {w:"woe", d:"deep sorrow or misery.", e:"Woe is me."},
+  {w:"knave", d:"a dishonest, low fellow; a rogue.", e:"Thou crusty knave."},
+  {w:"varlet", d:"a rascal; a menial servant.", e:"Away, thou varlet!"},
+  {w:"sirrah", d:"a curt address to a social inferior.", e:"Come hither, sirrah."},
+  {w:"coxcomb", d:"a vain, foolish man (from the jester's cap).", e:"Thou painted coxcomb."},
+  {w:"caitiff", d:"a despicable wretch; a coward.", e:"O caitiff, thou hast undone me."},
+  {w:"cozen", d:"to cheat or deceive by trickery.", e:"He cozened me of all."},
+  {w:"chide", d:"to scold or rebuke.", e:"Why chide you at me thus?"},
+  {w:"rail", d:"to rant or complain bitterly.", e:"Rail not against thy fortune."},
+  {w:"prate", d:"to chatter; to talk foolishly.", e:"How the fool doth prate!"},
+  {w:"swoon", d:"to faint, especially from emotion.", e:"I near did swoon to see it."},
+  {w:"pine", d:"to languish with longing.", e:"I pine away for love of thee."},
+  {w:"doff", d:"to take off; to cast aside.", e:"Doff thy name, and take all myself."},
+  {w:"hie", d:"to hurry; to hasten.", e:"Hie thee hither."},
+  {w:"tarry", d:"to delay; to linger; to wait.", e:"Tarry a while with me."},
+  {w:"abide", d:"to endure; to remain.", e:"I cannot abide such insolence."},
+  {w:"behold", d:"to look upon; to see.", e:"Behold the man."},
+  {w:"beseech", d:"to beg earnestly.", e:"I do beseech you, hear me."},
+  {w:"entreat", d:"to plead with; to implore.", e:"I entreat thee, stay."},
+  {w:"vouchsafe", d:"to grant graciously.", e:"Vouchsafe me a single word."},
+  {w:"requite", d:"to repay or return (love, a favor, a wrong).", e:"I'll requite thy kindness."},
+  {w:"spurn", d:"to reject with contempt.", e:"She spurned my honest suit."},
+  {w:"importune", d:"to beg persistently.", e:"He importunes me daily."},
+  {w:"swain", d:"a young rustic lover or shepherd.", e:"A faithful swain am I."},
+  {w:"morrow", d:"morning; the next day.", e:"Good morrow to thee."},
+  {w:"twain", d:"two; a pair.", e:"My heart is rent in twain."},
+  {w:"visage", d:"the face, or its expression.", e:"His visage clouded o'er."},
+  {w:"countenance", d:"the face; one's composure or favor.", e:"A merry countenance."},
+  {w:"mirth", d:"merriment; gladness.", e:"A fellow of infinite mirth."},
+  {w:"folly", d:"foolishness; a foolish act.", e:"O, what folly is this!"},
+  {w:"wit", d:"keen intelligence; cleverness.", e:"Brevity is the soul of wit."},
+  {w:"bode", d:"to be an omen of.", e:"This bodes some strange eruption."},
+  {w:"vex", d:"to trouble, distress, or annoy.", e:"Why dost thou vex me so?"},
+  {w:"incarnadine", d:"to turn red, especially with blood.", e:"The multitudinous seas incarnadine."},
+  {w:"e'en", d:"even; also evening.", e:"E'en so."},
+  {w:"yare", d:"nimble; quick; ready.", e:"Be yare in thy preparation."}
+];
+
+var RHYME = [
+  "love","heart","night","day","fire","death","crown","sword","eye","hand","grave","breath","sky","rose","gold",
+  "time","soul","fate","blood","moon","star","sun","rain","fear","tears","years","kiss","kings","wings","spring",
+  "wrong","throne","alone","stone","sea","tree","thee","wine","mine","divine","line","mind","kind","blind","find",
+  "wind","fair","air","hair","despair","care","light","sight","flight","might","fight","grace","face","place","race",
+  "woe","foe","snow","glow","know","pain","chain","name","flame","shame","game","sway","stray","betray",
+  "queen","green","seen","dream","stream","gleam","weep","sleep","keep","deep","ghost","host","coast","boast"
+];
+
+var PROLOGUE = [
+  "The Glass Was Wet","The King's Shoe","Macbeth and the Spaceship","A Comedie of Lampposts","The Duke of Tuesday",
+  "The Tragedie of the Last Sandwich","Two Gentlemen of the Parking Lot","The Winter's Toothache","Hamlet's Neighbor",
+  "The Merchant of Doubt","Much Ado About a Spider","The Taming of the Wi-Fi","King Lear's Locksmith",
+  "A Midsummer Night's Parking Ticket","The Tempest in a Teacup","Romeo and the Other Guy","All's Well That Ends Tuesday",
+  "The Phantom of the Pantry","Twelfth Night, Give or Take","The Comedie of the Empty Fridge","Three Cousins of Verona",
+  "The Tragical Historie of the Burnt Toast","The Reluctant Wizard of Kent","A Lady, a Ladder, and a Lie",
+  "The Ballad of the Broken Umbrella","Sir John and the Vending Machine","The Queen Forgets Her Lines",
+  "The Cobbler's Revenge","A Plague of Pigeons","The Earl Who Could Not Whistle","The Last Train from Elsinore",
+  "Wherefore the Casserole","The Knight of the Lukewarm Bath","Othello Orders a Pizza","The Jester's Day Off",
+  "A Crown for the Cat","The Drowned Map","The Inn at the End of the Lane","The Apothecary's Mistake",
+  "The Prince Who Loved a Door","The Widow of Wednesday","The Sleeping Sentinel","A Storm Over Small Things",
+  "The Forgotten Twin of Padua","The Beggar King's Banquet","The Locket and the Liar","The Two Funerals of Lord Grey",
+  "The Garden That Would Not Grow","A Letter Never Sent","The Fool Who Inherited Everything","The Bell That Tolled Backward",
+  "The Counterfeit Cardinal","The Marriage of Mud and Moonlight","The Innkeeper's Secret Daughter",
+  "A Pox Upon the Postman","The Last Honest Man in Florence","The Duke's Imaginary War","The Salt of Old Regret"
+];
+
+var PLOTS = [
+  {t:"Hamlet", d:"A ghost reveals that Prince Hamlet's father was murdered by his uncle Claudius, now king. Hamlet feigns madness and circles his revenge until nearly everyone lies dead."},
+  {t:"Macbeth", d:"Witches prophesy that Macbeth shall be king. Spurred by his wife, he murders Duncan and rules as a bloody tyrant, undone by guilt and the march on Dunsinane."},
+  {t:"Othello", d:"Passed over for promotion, the ensign Iago convinces the Moorish general Othello that his wife Desdemona is unfaithful. Othello smothers her, then kills himself."},
+  {t:"King Lear", d:"Lear divides his kingdom by who flatters him best, banishing honest Cordelia. His cruel elder daughters cast him out, and he goes mad on the storm-swept heath."},
+  {t:"Romeo and Juliet", d:"Two teenagers from feuding Verona families fall in love and secretly wed. A chain of bad timing and poison ends in their double suicide."},
+  {t:"Julius Caesar", d:"Brutus and Cassius lead a plot to assassinate Caesar. Mark Antony turns the mob against them, and the conspirators fall in the civil war that follows."},
+  {t:"Antony and Cleopatra", d:"The Roman leader Antony is torn between duty and his love for Egypt's queen Cleopatra. Politics and passion ruin them both; she dies by an asp's bite."},
+  {t:"Titus Andronicus", d:"A Roman general and the captive queen Tamora trade escalating atrocities in Shakespeare's bloodiest revenge tragedy."},
+  {t:"Coriolanus", d:"A proud Roman war hero, banished by the people he despises, allies with his enemy and marches on Rome — until his mother pleads him back."},
+  {t:"Timon of Athens", d:"A wildly generous nobleman, abandoned by the friends he bankrupted himself to please, becomes a raging hermit and hater of mankind."},
+  {t:"Troilus and Cressida", d:"Amid the Trojan War, the lovers Troilus and Cressida are parted and betrayed in a bitter, cynical look at honor and desire."},
+  {t:"Richard II", d:"The vain, poetic King Richard is deposed by Henry Bolingbroke, raising hard questions about the divine right of kings."},
+  {t:"Henry IV, Part 1", d:"Prince Hal idles in taverns with the fat rogue Falstaff while rebellion brews, then proves himself in battle against fiery Hotspur."},
+  {t:"Henry IV, Part 2", d:"Hal continues his reform as his father dies. Crowned king, he coldly rejects his old friend Falstaff."},
+  {t:"Henry V", d:"The reformed Hal, now King Henry, invades France and wins an against-all-odds victory at Agincourt, then woos Princess Katherine."},
+  {t:"Henry VI (Parts 1–3)", d:"England slides into the Wars of the Roses under a weak, saintly king, as the houses of York and Lancaster tear the realm apart."},
+  {t:"Richard III", d:"The deformed, gleefully wicked Richard murders and manipulates his way to the crown, then is cut down at Bosworth Field."},
+  {t:"King John", d:"England's King John fights to hold a contested throne amid war, betrayal, and the doomed young prince Arthur."},
+  {t:"Henry VIII", d:"Court intrigue, the fall of Cardinal Wolsey, the rise of Anne Boleyn, and the birth of the future Queen Elizabeth."},
+  {t:"A Midsummer Night's Dream", d:"Four young lovers, a troupe of amateur actors, and warring fairies collide in an enchanted wood where a love-potion goes hilariously wrong."},
+  {t:"Twelfth Night", d:"Shipwrecked Viola disguises herself as the boy Cesario and falls into a tangled love triangle, while the steward Malvolio is cruelly pranked."},
+  {t:"Much Ado About Nothing", d:"The bickering Beatrice and Benedick are tricked into love, while the villain Don John frames the innocent Hero to wreck her wedding."},
+  {t:"As You Like It", d:"Banished Rosalind flees to the Forest of Arden disguised as a boy and ends up tutoring her own suitor in how to woo her."},
+  {t:"The Merchant of Venice", d:"Bassanio borrows from the merchant Antonio, who pledges a pound of his flesh to the moneylender Shylock. Portia, disguised as a lawyer, saves him."},
+  {t:"The Taming of the Shrew", d:"The fortune-hunting Petruchio sets out to 'tame' the sharp-tongued Katherina, while suitors vie for her gentler sister Bianca."},
+  {t:"The Comedy of Errors", d:"Two sets of identical twins, separated at birth, arrive in the same city and cause a whirlwind of mistaken identity."},
+  {t:"Love's Labour's Lost", d:"A king and his lords swear off women to study — and promptly fall for a visiting princess and her ladies."},
+  {t:"The Two Gentlemen of Verona", d:"Two friends fall for the same woman, and Proteus betrays his friend Valentine before a hasty reconciliation."},
+  {t:"The Merry Wives of Windsor", d:"Falstaff woos two married women for their money; the wives join forces to humiliate him."},
+  {t:"Measure for Measure", d:"A strict deputy condemns a man to death for fornication, then demands a novice nun's virginity to spare him; the disguised Duke sets it right."},
+  {t:"All's Well That Ends Well", d:"The clever Helena cures the king and is granted the husband she loves — Bertram — who flees her, until a bed-trick wins him back."},
+  {t:"The Winter's Tale", d:"King Leontes' wild jealousy destroys his family. Sixteen years on, a lost daughter returns and his 'dead' queen seems to step from a statue."},
+  {t:"Cymbeline", d:"Princess Imogen weathers a wager on her chastity, exile, and disguise before lost brothers and a husband are reunited."},
+  {t:"The Tempest", d:"The exiled sorcerer Prospero raises a storm to bring his betrayers to his island, where, with the spirit Ariel, he chooses forgiveness over revenge."},
+  {t:"Pericles", d:"Prince Pericles wanders the seas through shipwreck and loss, and is miraculously reunited at last with his wife and daughter."},
+  {t:"The Two Noble Kinsmen", d:"Two devoted cousins fall for the same woman and become deadly rivals in a chivalric tragicomedy."}
+];
+
+var NAMES = [
+  {n:"Hamlet", p:"Hamlet", d:"Prince who feigns madness to avenge his murdered father."},
+  {n:"Ophelia", p:"Hamlet", d:"Hamlet's love; driven to madness, she drowns."},
+  {n:"Claudius", p:"Hamlet", d:"Murdered his brother to take the crown and the queen."},
+  {n:"Gertrude", p:"Hamlet", d:"Hamlet's mother, hastily remarried to Claudius."},
+  {n:"Polonius", p:"Hamlet", d:"Meddling counselor, stabbed behind a curtain."},
+  {n:"Laertes", p:"Hamlet", d:"Ophelia's brother; duels Hamlet with a poisoned blade."},
+  {n:"Horatio", p:"Hamlet", d:"Hamlet's loyal friend, left to tell the tale."},
+  {n:"Macbeth", p:"Macbeth", d:"Scottish general who murders his king to seize the crown."},
+  {n:"Lady Macbeth", p:"Macbeth", d:"Goads her husband to murder, then sleepwalks in guilt."},
+  {n:"Banquo", p:"Macbeth", d:"Macbeth's friend, murdered; his ghost haunts the feast."},
+  {n:"Macduff", p:"Macbeth", d:"'Not of woman born'; he slays Macbeth at last."},
+  {n:"Duncan", p:"Macbeth", d:"The good king Macbeth murders in his sleep."},
+  {n:"Othello", p:"Othello", d:"Moorish general undone by manufactured jealousy."},
+  {n:"Iago", p:"Othello", d:"The ensign who engineers Othello's ruin out of spite."},
+  {n:"Desdemona", p:"Othello", d:"Othello's faithful wife, wrongly accused and killed."},
+  {n:"Cassio", p:"Othello", d:"Lieutenant Iago frames to spark Othello's rage."},
+  {n:"Emilia", p:"Othello", d:"Iago's wife, who exposes his plot too late."},
+  {n:"King Lear", p:"King Lear", d:"Aged king who divides his realm and loses his mind."},
+  {n:"Cordelia", p:"King Lear", d:"Lear's honest youngest daughter, banished then hanged."},
+  {n:"Goneril", p:"King Lear", d:"Lear's treacherous elder daughter."},
+  {n:"Regan", p:"King Lear", d:"Lear's other cruel, scheming daughter."},
+  {n:"Edmund", p:"King Lear", d:"Gloucester's scheming bastard son."},
+  {n:"Romeo", p:"Romeo and Juliet", d:"Lovestruck Montague who weds and dies for Juliet."},
+  {n:"Juliet", p:"Romeo and Juliet", d:"Capulet daughter who dies beside her Romeo."},
+  {n:"Mercutio", p:"Romeo and Juliet", d:"Romeo's quick-witted friend; 'a plague o' both your houses.'"},
+  {n:"Tybalt", p:"Romeo and Juliet", d:"Hot-tempered Capulet who kills Mercutio."},
+  {n:"Friar Laurence", p:"Romeo and Juliet", d:"Secretly weds the lovers; his plan unravels."},
+  {n:"The Nurse", p:"Romeo and Juliet", d:"Juliet's bawdy, devoted confidante."},
+  {n:"Brutus", p:"Julius Caesar", d:"The honorable conspirator; 'the noblest Roman of them all.'"},
+  {n:"Cassius", p:"Julius Caesar", d:"Lean and envious, he sparks the plot against Caesar."},
+  {n:"Mark Antony", p:"Julius Caesar", d:"Turns the mob with 'Friends, Romans, countrymen.'"},
+  {n:"Cleopatra", p:"Antony and Cleopatra", d:"Egypt's queen, who dies by the asp."},
+  {n:"Puck", p:"A Midsummer Night's Dream", d:"Mischievous sprite who bungles the love-potion."},
+  {n:"Bottom", p:"A Midsummer Night's Dream", d:"Weaver given a donkey's head; the fairy queen dotes on him."},
+  {n:"Titania", p:"A Midsummer Night's Dream", d:"Fairy queen, enchanted to love an ass."},
+  {n:"Oberon", p:"A Midsummer Night's Dream", d:"Fairy king feuding with his queen."},
+  {n:"Helena", p:"A Midsummer Night's Dream", d:"Pines for Demetrius through the night's confusion."},
+  {n:"Viola", p:"Twelfth Night", d:"Shipwrecked, she disguises as the page Cesario."},
+  {n:"Malvolio", p:"Twelfth Night", d:"Pompous steward gulled into yellow stockings and a grin."},
+  {n:"Orsino", p:"Twelfth Night", d:"The lovesick duke; 'If music be the food of love.'"},
+  {n:"Olivia", p:"Twelfth Night", d:"Countess who falls for the disguised Viola."},
+  {n:"Feste", p:"Twelfth Night", d:"The sharp-tongued clown."},
+  {n:"Sir Toby Belch", p:"Twelfth Night", d:"Olivia's rowdy, drunken kinsman."},
+  {n:"Beatrice", p:"Much Ado About Nothing", d:"Witty woman tricked into loving Benedick."},
+  {n:"Benedick", p:"Much Ado About Nothing", d:"Sworn bachelor tricked into loving Beatrice."},
+  {n:"Hero", p:"Much Ado About Nothing", d:"Slandered bride, falsely shamed at the altar."},
+  {n:"Don John", p:"Much Ado About Nothing", d:"The sour villain who frames Hero."},
+  {n:"Dogberry", p:"Much Ado About Nothing", d:"Bumbling constable who mangles every word."},
+  {n:"Rosalind", p:"As You Like It", d:"Witty heroine who woos in disguise as Ganymede."},
+  {n:"Orlando", p:"As You Like It", d:"Pins love poems to trees for Rosalind."},
+  {n:"Jaques", p:"As You Like It", d:"Melancholy cynic; 'All the world's a stage.'"},
+  {n:"Shylock", p:"The Merchant of Venice", d:"Moneylender who demands a pound of flesh."},
+  {n:"Portia", p:"The Merchant of Venice", d:"Disguises as a lawyer to outwit Shylock."},
+  {n:"Bassanio", p:"The Merchant of Venice", d:"Borrows to woo Portia, risking Antonio's life."},
+  {n:"Antonio", p:"The Merchant of Venice", d:"The merchant who pledges his flesh as bond."},
+  {n:"Katherina", p:"The Taming of the Shrew", d:"The sharp-tongued 'shrew' Petruchio sets out to tame."},
+  {n:"Petruchio", p:"The Taming of the Shrew", d:"Brash suitor who 'tames' Kate."},
+  {n:"Prospero", p:"The Tempest", d:"Exiled sorcerer-duke who conjures the storm."},
+  {n:"Miranda", p:"The Tempest", d:"Prospero's daughter; 'O brave new world.'"},
+  {n:"Ariel", p:"The Tempest", d:"Airy spirit bound to serve Prospero."},
+  {n:"Caliban", p:"The Tempest", d:"Resentful, enslaved islander."},
+  {n:"Ferdinand", p:"The Tempest", d:"Shipwrecked prince who loves Miranda."},
+  {n:"Falstaff", p:"Henry IV", d:"Fat, cowardly, boastful knight and Hal's bad influence."},
+  {n:"Prince Hal", p:"Henry IV", d:"Wayward prince who becomes the heroic Henry V."},
+  {n:"Hotspur", p:"Henry IV, Part 1", d:"Fiery rebel Harry Percy."},
+  {n:"Richard III", p:"Richard III", d:"Gleefully wicked schemer who murders his way to the throne."},
+  {n:"Leontes", p:"The Winter's Tale", d:"King whose jealousy wrecks his family."},
+  {n:"Hermione", p:"The Winter's Tale", d:"Wronged queen who returns as a 'statue.'"},
+  {n:"Perdita", p:"The Winter's Tale", d:"The lost princess raised by shepherds."},
+  {n:"Autolycus", p:"The Winter's Tale", d:"Roguish, thieving peddler and ballad-singer."},
+  {n:"Imogen", p:"Cymbeline", d:"Steadfast princess wrongly accused of unchastity."},
+  {n:"Coriolanus", p:"Coriolanus", d:"Proud Roman hero who turns on his own city."},
+  {n:"Volumnia", p:"Coriolanus", d:"His formidable mother, who talks him down."},
+  {n:"Titus", p:"Titus Andronicus", d:"Roman general locked in a revenge spiral."},
+  {n:"Aaron", p:"Titus Andronicus", d:"Unrepentant villain behind much of the carnage."},
+  {n:"Tamora", p:"Titus Andronicus", d:"Goth queen who feeds her revenge on Titus."},
+  {n:"Timon", p:"Timon of Athens", d:"Generous lord turned bitter man-hater."},
+  {n:"Isabella", p:"Measure for Measure", d:"Novice nun who pleads for her brother's life."},
+  {n:"Bertram", p:"All's Well That Ends Well", d:"Reluctant husband won over by a bed-trick."}
+];
+
+var PC_NAMES = [
+  "Hamlet","Ophelia","Claudius","Polonius","Laertes","Macbeth","Lady Macbeth","Banquo","Macduff",
+  "Othello","Iago","Desdemona","King Lear","Cordelia","Edmund","Romeo","Juliet","Mercutio","Tybalt",
+  "Brutus","Cassius","Mark Antony","Cleopatra","Puck","Bottom","Titania","Oberon","Viola","Malvolio",
+  "Orsino","Olivia","Feste","Beatrice","Benedick","Dogberry","Rosalind","Jaques","Shylock","Portia",
+  "Bassanio","Antonio","Katherina","Petruchio","Prospero","Miranda","Ariel","Caliban","Falstaff",
+  "Prince Hal","Hotspur","Henry V","Richard III","Leontes","Autolycus","Imogen","Coriolanus","Timon","Isabella"
+];
+
+/* ---- state ---- */
+var pools = {
+  references:REFERENCES.slice(), vocab:VOCAB.slice(), rhyme:RHYME.slice(),
+  prologue:PROLOGUE.slice(), plots:PLOTS.slice(), names:NAMES.slice(), pcnames:PC_NAMES.slice(),
+  blainenotes:[]
+};
+var last = { references:-1, vocab:-1, rhyme:-1, prologue:-1, plots:-1, names:-1 };
+var $ = function(id){return document.getElementById(id);};
+
+function pick(name){
+  var arr=pools[name]; if(!arr.length) return null;
+  var i=Math.floor(Math.random()*arr.length);
+  if(arr.length>1){var g=0; while(i===last[name]&&g<8){i=Math.floor(Math.random()*arr.length);g++;}}
+  last[name]=i; return arr[i];
+}
+function any(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+function showRef(){ $("refPrompt").textContent = pick("references") || "—"; }
+function showRhyme(){ $("rhymePrompt").textContent = pick("rhyme") || "—"; }
+function showPrologue(){ $("prologuePrompt").textContent = pick("prologue") || "—"; }
+function showVocab(){
+  var v=pick("vocab"); if(!v){$("vocabWord").textContent="—";$("vocabDef").innerHTML="";return;}
+  $("vocabWord").textContent=v.w;
+  var h=esc(v.d||""); if(v.e) h+='<span class="ex">"'+esc(v.e)+'"</span>';
+  $("vocabDef").innerHTML=h;
+}
+function showPlot(){ var p=pick("plots"); if(!p)return; $("plotTitle").textContent=p.t; $("plotDef").textContent=p.d; }
+function showName(){ var n=pick("names"); if(!n)return; $("nameName").textContent=n.n; $("nameDef").innerHTML='<span class="play">'+esc(n.p)+'</span> — '+esc(n.d); }
+function showCharge(){
+  var mode = Math.random()<0.5 ? "PRAISE" : "CURSE";
+  var name = any(pools.pcnames), cat = any(pools.references);
+  $("pcPrompt").innerHTML = '<span class="mode '+mode.toLowerCase()+'">'+mode+'</span> '+esc(name);
+  $("pcUsing").innerHTML = 'using <b>'+esc(cat)+'</b>';
+}
+function renderBlaineNotes(){
+  var list=$("blaineNotesList");
+  if(!pools.blainenotes.length){
+    list.innerHTML='<div style="padding:20px;text-align:center;color:var(--ink-soft);font-style:italic">No notes yet. Add one to get started.</div>';
+    return;
+  }
+  var html='';
+  pools.blainenotes.forEach(function(note,i){
+    html+='<div style="padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start">';
+    html+='<div style="flex:1;font-size:15px;color:var(--ink);line-height:1.4">'+esc(note)+'</div>';
+    html+='<button style="flex:0 0 auto;margin-left:10px;padding:4px 8px;font-size:12px;border:1px solid var(--crimson);background:transparent;color:var(--crimson);border-radius:3px;cursor:pointer" onclick="delBlaine('+i+')">✕</button>';
+    html+='</div>';
+  });
+  list.innerHTML=html;
+}
+function delBlaine(i){
+  pools.blainenotes.splice(i,1);
+  renderBlaineNotes();
+}
+
+/* ---- tabs ---- */
+document.querySelectorAll(".tab").forEach(function(t){
+  t.addEventListener("click",function(){
+    document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("on");});
+    document.querySelectorAll("section").forEach(function(s){s.classList.remove("on");});
+    t.classList.add("on"); $(t.getAttribute("data-tab")).classList.add("on");
+  });
+});
+
+/* ---- next ---- */
+document.querySelectorAll("[data-next]").forEach(function(b){
+  b.addEventListener("click",function(){
+    var n=b.getAttribute("data-next");
+    if(n==="references")showRef();
+    else if(n==="vocab")showVocab();
+    else if(n==="rhyme")showRhyme();
+    else if(n==="prologue")showPrologue();
+    else if(n==="plots")showPlot();
+    else if(n==="names")showName();
+    else if(n==="praisecurse")showCharge();
+  });
+});
+
+/* ---- add your own ---- */
+function flash(elId,msg){ var e=$(elId); e.textContent=msg; setTimeout(function(){ if(e.textContent===msg)e.textContent=""; },2600); }
+document.querySelectorAll("[data-add]").forEach(function(b){
+  b.addEventListener("click",function(){
+    var name=b.getAttribute("data-add");
+    var inp=$(name+"Add"); var val=(inp.value||"").trim(); if(!val)return;
+    if(name==="vocab"){
+      var parts=val.split(/\s*[—\-:]\s*/);
+      pools.vocab.push({w:parts[0].trim(), d:(parts.slice(1).join(" — ")||"(your word)").trim(), e:""});
+      flash("vocabAdded",'Added "'+parts[0].trim()+'" to the rotation.');
+    } else if(name==="praisecurse"){
+      pools.pcnames.push(val);
+      flash("praisecurseAdded",'Added "'+val+'" to the pool.');
+    } else if(name==="blainenotes"){
+      pools.blainenotes.push(val);
+      renderBlaineNotes();
+      flash("blaineAdded",'Note added.');
+    } else {
+      pools[name].push(val);
+      flash(name+"Added",'Added "'+val+'" to the rotation.');
+    }
+    inp.value="";
+  });
+});
+["references","vocab","rhyme","prologue","praisecurse","blainenotes"].forEach(function(name){
+  $(name+"Add").addEventListener("keydown",function(e){
+    if(e.key==="Enter"){ document.querySelector('[data-add="'+name+'"]').click(); }
+  });
+});
+
+/* ---- init ---- */
+showRef(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge();
+
+})();
+</script>
+</body>
+</html>
