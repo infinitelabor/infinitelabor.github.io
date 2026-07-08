@@ -85,6 +85,8 @@
     text-align:center;margin-top:12px;min-height:18px}
   .flowstat b{color:var(--crimson);font-size:15px}
   .flowstat .swap{color:var(--gold);font-weight:800;letter-spacing:.2em}
+  .vword{display:inline-block;margin:4px 3px;padding:7px 12px;border:1px solid var(--line);border-radius:14px;
+    font-family:var(--sans);font-size:13.5px;color:var(--ink);background:#fffdf7}
 
   @media(max-width:520px){.card{padding:30px 16px}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important}}
@@ -104,6 +106,7 @@
     <button class="tab" data-tab="rhyme">Rhyme</button>
     <button class="tab" data-tab="flow">Flow</button>
     <button class="tab" data-tab="scenes">Scenes</button>
+    <button class="tab" data-tab="world">World</button>
     <button class="tab" data-tab="vocab">Vocab</button>
     <button class="tab" data-tab="plots">Plots</button>
     <button class="tab" data-tab="names">Names</button>
@@ -176,10 +179,21 @@
 
   <section id="scenes">
     <p class="blurb">A scene in want of a player. Read it, breathe once, and go — song, speech, or full commitment.</p>
-    <div class="card"><div class="eyebrow">Perform this</div><p class="prompt" id="scenePrompt" style="font-size:clamp(22px,4.6vw,32px);line-height:1.3">—</p></div>
+    <div class="card"><div class="eyebrow">Perform this</div><p class="prompt" id="scenePrompt" style="font-size:clamp(22px,4.6vw,32px);line-height:1.3">—</p><div class="def" id="sceneVocab" style="display:none;max-width:600px"></div></div>
+    <div class="flowctl"><button id="sceneVocabBtn">Rolodex: Get 10 words</button></div>
     <button class="next" data-next="scenes">Next prompt ↻</button>
     <div class="add"><input id="scenesAdd" placeholder="Add your own prompt…" /><button data-add="scenes">Add</button></div>
     <p class="added" id="scenesAdded"></p>
+  </section>
+
+  <section id="world">
+    <p class="blurb">Country references for stage puns — meals, breads, and the places the plays send you.</p>
+    <div class="card">
+      <div class="eyebrow">Country</div>
+      <p class="prompt" id="worldPrompt">—</p>
+      <div class="def" id="worldRefs" style="max-width:620px"></div>
+    </div>
+    <button class="next" data-next="world">Next country ↻</button>
   </section>
 
   <section id="vocab">
@@ -424,7 +438,19 @@ var RHYME = [
   "situation","celebration","conversation","destination","imagination","information","combination","hesitation",
   "elemental","monumental","sentimental","accidental","continental","fundamental",
   "capacity","audacity","tenacity","gravity","cavity","calamity","insanity","vanity","humanity","profanity",
-  "orange","silver","purple","month","wolf","ninth","bulb","circus","penguin","chimney"
+  "orange","silver","purple","month","wolf","ninth","bulb","circus","penguin","chimney",
+  "baguette","croissant","escargot","soufflé","brie","quiche","beret","gondola","cannoli",
+  "mozzarella","linguine","tiramisu","salami","espresso","biscotti","Verona","Venice","Sicily","Vespa",
+  "tapas","paella","sangria","churros","chorizo","gazpacho","flamenco","matador","siesta","fiesta",
+  "Barcelona","Seville","Madrid","haggis","tartan","kilt","bagpipes","porridge","whisky","shortbread",
+  "gyro","feta","moussaka","baklava","ouzo","toga","Copenhagen","Elsinore","Vienna","Prague",
+  "pretzel","sauerkraut","schnitzel","strudel","bratwurst","fondue","gouda","waffles","tulips","windmills",
+  "kebab","hummus","falafel","shawarma","pita","couscous","tagine","Marrakesh","Casablanca","pharaoh",
+  "pyramid","sphinx","oasis","camel","Cleopatra","sushi","ramen","tempura","wasabi","sake",
+  "mochi","kimono","karaoke","samurai","ninja","geisha","Tokyo","Kyoto","sumo","bonsai",
+  "tacos","tamales","guacamole","salsa","tortilla","tequila","margarita","sombrero","piñata","mariachi",
+  "pierogi","kielbasa","vodka","goulash","paprika","polka","curry","samosa","naan","chai",
+  "biryani","samba","carnival","capoeira","Rio","kangaroo","koala","boomerang","didgeridoo","pavlova"
 ];
 
 var PROLOGUE = [
@@ -620,71 +646,106 @@ var FLOW_DEVICES = [
   {n:"Internal rhyme", d:"Every fourth line must rhyme inside itself before the end."}
 ];
 var SCENES = [
-  "A sea shanty about the group project where you did all the work",
-  "A power ballad about finding a parking spot and then losing it",
-  "The national anthem of a country that is just one guy",
-  "A lullaby for a baby who knows too much",
-  "A gospel song about the office microwave",
-  "A country song about a truck that's still in the shop",
-  "An opera aria about forgetting why you walked into the room",
-  "A boy band's farewell song to their choreographer",
-  "A jingle for a store that only sells left shoes",
-  "Walk-up music, sung by the batter, who knows he's about to strike out",
-  "A protest song about the new thermostat policy",
-  "A love song from autocorrect to the word you actually meant",
-  "A sad song by a birthday clown, performed at the birthday",
-  "The world's first rock opera about jury duty",
-  "A holiday carol about a gift receipt",
-  "A tour guide who has clearly never been to this city",
-  "A wedding toast from the friend who was not supposed to speak",
-  "A magician revealing too much about his personal life mid-trick",
-  "A pilot's announcement that slowly becomes a confession",
-  "A knight knighting someone he clearly cannot stand",
-  "A weatherman delivering the forecast out of pure spite",
-  "A GPS voice going through a breakup",
-  "The world's most polite hostage negotiator",
-  "A ghost haunting a house he cannot afford",
-  "A substitute teacher surviving attendance",
-  "A lifeguard who respects the ocean too much to interfere",
-  "An auctioneer selling an item he refuses to describe",
-  "A museum docent defending the museum's worst painting",
-  "A mob boss firing someone as gently as possible",
-  "A dad unveiling the thermostat rules like a keynote speech",
-  "A vampire making his case at a daytime HOA meeting",
-  "A pirate captain conducting a very fair performance review",
-  "A eulogy for a houseplant, delivered by the person who killed it",
-  "A sommelier describing tap water",
-  "A drive-thru speaker that has become self-aware",
-  "A medieval town crier announcing extremely minor news",
-  "A superhero updating his résumé out loud",
-  "Wedding vows that are mostly terms and conditions",
-  "A breakup delivered entirely in sports clichés",
-  "A bedtime story that keeps getting scarier by accident",
-  "An apology that makes everything worse the longer it goes",
-  "A halftime speech for a team that is losing at chess",
-  "A nature documentary about the office break room",
-  "A carnival barker hyping a deeply underwhelming attraction",
-  "A royal decree about splitting the check",
-  "A classically trained actor doing a fast food commercial",
-  "A detective interrogating himself",
-  "A safety demonstration for a flight that is not going well",
-  "A telemarketer who genuinely believes in the product too much",
-  "A realtor showing a house that is obviously haunted, mentioning everything but that",
-  "A fitness instructor slowly giving up mid-class",
-  "A librarian shushing an empty room",
-  "A wizard reading the terms of a very fine-print prophecy",
-  "A best man speech that reveals the speaker was never invited",
-  "A cooking show host whose recipe is falling apart in real time",
-  "A general rallying troops for a battle over the last parking space",
-  "An astronaut calling home about something extremely minor",
-  "A game show host who no longer believes in prizes",
-  "A butler announcing guests who keep getting worse",
-  "A street mime breaking his silence for one urgent announcement",
-  "A fortune teller who only predicts things that already happened",
-  "A hotel concierge recommending places he is banned from",
-  "A scientist unveiling an invention that already exists",
-  "A gym coach motivating one single houseplant",
-  "A king abdicating the throne over a very small inconvenience"
+  {s:"A sea shanty about the group project where you did all the work", v:["heave","haul","mutiny","deadweight","capsize","anchor","crew","plunder","overboard","shore leave"]},
+  {s:"A power ballad about finding a parking spot and then losing it", v:["parallel","meter","valet","compact","tow-away","signal","reverse","curb","permit","hazards"]},
+  {s:"The national anthem of a country that is just one guy", v:["sovereign","republic","banner","pledge","valor","homeland","census","border","motto","citizenry"]},
+  {s:"A lullaby for a baby who knows too much", v:["hush","cradle","slumber","classified","dossier","secrets","moonlight","blanket","whisper","witness"]},
+  {s:"A gospel song about the office microwave", v:["hallelujah","testify","blessed","leftovers","rotate","reheat","congregation","miracle","splatter","amen"]},
+  {s:"A country song about a truck that's still in the shop", v:["transmission","tailgate","gravel","mechanic","alternator","dirt road","honky-tonk","carburetor","flatbed","warranty"]},
+  {s:"An opera aria about forgetting why you walked into the room", v:["encore","crescendo","doorway","errand","vibrato","threshold","libretto","fortissimo","keys","tragedia"]},
+  {s:"A boy band's farewell song to their choreographer", v:["five-six-seven-eight","formation","harmony","key change","spin","heartthrob","matching outfits","falsetto","final bow","legacy"]},
+  {s:"A jingle for a store that only sells left shoes", v:["catchy","slogan","laces","insole","hop","half-off","pairless","cobbler","tagline","inventory"]},
+  {s:"Walk-up music, sung by the batter, who knows he's about to strike out", v:["plate","dugout","swing","whiff","curveball","batting average","ninth inning","bench","strike zone","destiny"]},
+  {s:"A protest song about the new thermostat policy", v:["solidarity","picket","degrees","union","sweater","memo","demands","march","chant","compromise"]},
+  {s:"A love song from autocorrect to the word you actually meant", v:["ducking","typo","predictive","swipe","undo","dictionary","cursor","intended","unsent","longing"]},
+  {s:"A sad song by a birthday clown, performed at the birthday", v:["balloon animal","confetti","honk","greasepaint","party hat","juggling","frown","streamers","deposit","encore"]},
+  {s:"The world's first rock opera about jury duty", v:["summons","verdict","sidebar","deliberation","foreman","objection","sequester","gavel","testimony","acquittal"]},
+  {s:"A holiday carol about a gift receipt", v:["exchange","store credit","tinsel","regifting","sleigh","return policy","ornament","mistletoe","gift wrap","final sale"]},
+  {s:"A tour guide who has clearly never been to this city", v:["landmark","founded","allegedly","plaque","cobblestone","locals","roughly","monument","brochure","fun fact"]},
+  {s:"A wedding toast from the friend who was not supposed to speak", v:["raise a glass","plus-one","open bar","cherish","anecdote","best wishes","seating chart","vows","champagne","anyway"]},
+  {s:"A magician revealing too much about his personal life mid-trick", v:["presto","sleight","misdirection","custody","abracadabra","therapist","reveal","volunteer","alimony","ta-da"]},
+  {s:"A pilot's announcement that slowly becomes a confession", v:["altitude","cruising","turbulence","cockpit","mayday","layover","regret","autopilot","descent","black box"]},
+  {s:"A knight knighting someone he clearly cannot stand", v:["sire","dub","valor","oath","scabbard","chivalry","kneel","herald","begrudgingly","arise"]},
+  {s:"A weatherman delivering the forecast out of pure spite", v:["barometric","cold front","humidity","doppler","precipitation","gusts","overcast","advisory","jet stream","vendetta"]},
+  {s:"A GPS voice going through a breakup", v:["recalculating","u-turn","destination","detour","merge","exit","closure","route","rerouting","arrived"]},
+  {s:"The world's most polite hostage negotiator", v:["demands","perimeter","rapport","if you please","ransom","de-escalate","courtesy","terms","release","much obliged"]},
+  {s:"A ghost haunting a house he cannot afford", v:["mortgage","poltergeist","drafty","escrow","haunting","utilities","seance","eviction","manifest","property tax"]},
+  {s:"A substitute teacher surviving attendance", v:["roll call","pronunciation","present","lesson plan","syllable","apologies","absent","hall pass","worksheet","surname"]},
+  {s:"A lifeguard who respects the ocean too much to interfere", v:["riptide","whistle","buoy","currents","majesty","tide","sovereignty","undertow","shore","her domain"]},
+  {s:"An auctioneer selling an item he refuses to describe", v:["lot","gavel","reserve","bidder","going once","provenance","paddle","increment","sold","undisclosed"]},
+  {s:"A museum docent defending the museum's worst painting", v:["brushwork","composition","period","bold choice","palette","perspective","acquisition","curator","texture","intentional"]},
+  {s:"A mob boss firing someone as gently as possible", v:["respect","family","arrangement","severance","capisce","loyalty","nothing personal","transition","associates","blessings"]},
+  {s:"A dad unveiling the thermostat rules like a keynote speech", v:["efficiency","degrees","vents","layers","quarterly","filter","insulation","agenda","synergy","Q&A"]},
+  {s:"A vampire making his case at a daytime HOA meeting", v:["bylaws","covenant","nocturnal","curb appeal","crypt","quorum","garlic clause","fence height","eternal","motion to table"]},
+  {s:"A pirate captain conducting a very fair performance review", v:["plunder","quota","scallywag","initiative","keelhaul","feedback","doubloons","growth areas","crow's nest","promotion"]},
+  {s:"A eulogy for a houseplant, delivered by the person who killed it", v:["fern","wilted","photosynthesis","neglect","repotted","sunlight","roots","legacy","overwatered","compost"]},
+  {s:"A sommelier describing tap water", v:["bouquet","minerality","mouthfeel","vintage","notes","terroir","finish","aeration","pairing","municipal"]},
+  {s:"A drive-thru speaker that has become self-aware", v:["combo","upsell","window","consciousness","fries","existence","order","static","value menu","purpose"]},
+  {s:"A medieval town crier announcing extremely minor news", v:["hear ye","proclamation","township","decree","hitherto","tidings","forsooth","notice","bell","henceforth"]},
+  {s:"A superhero updating his résumé out loud", v:["cape","vigilante","references","nemesis","skill set","secret identity","liability","team player","lair","availability"]},
+  {s:"Wedding vows that are mostly terms and conditions", v:["heretofore","party of the first part","clause","amendments","liability","in perpetuity","notwithstanding","breach","arbitration","I do"]},
+  {s:"A breakup delivered entirely in sports clichés", v:["game plan","benched","free agency","rebuild","hail mary","locker room","trade","stats","overtime","give 110%"]},
+  {s:"A bedtime story that keeps getting scarier by accident", v:["once upon","cottage","shadow","footsteps","cellar","wolf","creaking","lantern","the woods","anyway goodnight"]},
+  {s:"An apology that makes everything worse the longer it goes", v:["to be fair","context","technically","intention","misconstrued","circumstances","moving forward","clarify","in my defense","if anyone was offended"]},
+  {s:"A halftime speech for a team that is losing at chess", v:["endgame","gambit","sacrifice","tempo","checkmate","opening","blunder","rally","grandmaster","protect the queen"]},
+  {s:"A nature documentary about the office break room", v:["habitat","alpha","forage","watering hole","territorial","migration","dominance","specimen","ritual","predator"]},
+  {s:"A carnival barker hyping a deeply underwhelming attraction", v:["step right up","marvel","admission","behold","one thin dime","spectacle","astonishing","curiosity","no refunds","allegedly"]},
+  {s:"A royal decree about splitting the check", v:["exchequer","tribute","sovereign","itemize","gratuity","decree","ducats","proclamation","appetizer clause","coin of the realm"]},
+  {s:"A classically trained actor doing a fast food commercial", v:["soliloquy","wherefore","combo meal","gravitas","projection","drive-thru","iambic","value","tragedy","supersize"]},
+  {s:"A detective interrogating himself", v:["alibi","motive","good cop","confession","whereabouts","suspect","lawyer","sweating","timeline","the truth"]},
+  {s:"A safety demonstration for a flight that is not going well", v:["flotation","brace","oxygen","exits","calmly","altitude","seatbelt","procedure","inflate","in the unlikely event"]},
+  {s:"A telemarketer who genuinely believes in the product too much", v:["limited time","warranty","testimonial","act now","satisfaction","installments","operators","guarantee","miracle","changed my life"]},
+  {s:"A realtor showing a house that is obviously haunted, mentioning everything but that", v:["charm","character","original fixtures","motivated seller","cozy","previous owners","ambiance","good bones","disclosure","price reduced"]},
+  {s:"A fitness instructor slowly giving up mid-class", v:["reps","burn","core","hydrate","modification","cooldown","form","intervals","or don't","whatever"]},
+  {s:"A librarian shushing an empty room", v:["shush","decibel","stacks","circulation","quiet zone","patron","overdue","reference","whisper","policy"]},
+  {s:"A wizard reading the terms of a very fine-print prophecy", v:["chosen one","subsection","doom","asterisk","prophecy","void where prohibited","rider","portent","amendments","heretofore"]},
+  {s:"A best man speech that reveals the speaker was never invited", v:["the groom","we go way back","toast","venue","RSVP","crashed","cherished memories","open bar","speech","security"]},
+  {s:"A cooking show host whose recipe is falling apart in real time", v:["fold","reduction","garnish","improvise","plating","sear","substitute","smoke","presentation","meant to do that"]},
+  {s:"A general rallying troops for a battle over the last parking space", v:["flank","terrain","hold the line","reconnaissance","casualties","glory","compact only","siege","retreat","victory"]},
+  {s:"An astronaut calling home about something extremely minor", v:["mission control","orbit","copy","telemetry","Houston","re-entry","payload","splashdown","over","the stove"]},
+  {s:"A game show host who no longer believes in prizes", v:["showcase","behind door number two","contestant","applause","buzzer","lovely parting gifts","sponsor","spin","hollow","what's it all worth"]},
+  {s:"A butler announcing guests who keep getting worse", v:["presenting","esquire","distinguished","regret to announce","household","calling card","the honorable","entrance","decorum","heavens"]},
+  {s:"A street mime breaking his silence for one urgent announcement", v:["invisible wall","gesture","silence","pantomime","rope","the box","against the wind","finally","urgent","listen"]},
+  {s:"A fortune teller who only predicts things that already happened", v:["crystal ball","foresee","destiny","palms","spirits","hindsight","the cards","inevitably","last Tuesday","I see it clearly"]},
+  {s:"A hotel concierge recommending places he is banned from", v:["reservations","bistro","valet","incident","ambiance","maître d'","comped","regrettably","alias","don't mention my name"]},
+  {s:"A scientist unveiling an invention that already exists", v:["breakthrough","patent pending","revolutionary","prototype","peer review","funding","innovation","citation","never before seen","the umbrella"]},
+  {s:"A gym coach motivating one single houseplant", v:["reps","gains","photosynthesis","chlorophyll","spot me","protein","growth mindset","stretch","beast mode","feel the burn"]},
+  {s:"A king abdicating the throne over a very small inconvenience", v:["throne","abdicate","succession","burden","crown","decree","lineage","duty","farewell","the wifi"]},
+  {s:"A torch song about the dishwasher being loaded wrong", v:["smolder","regret","martini","spotlight","top rack","prongs","nozzle","longing","velvet","one more time"]},
+  {s:"A barbershop quartet audition where the other three didn't show", v:["harmony","tenor","baritone","pitch pipe","chord","straw hat","a cappella","blend","solo","the boys"]},
+  {s:"An EDM anthem about finding a phone charger", v:["the drop","bass","festival","glow","percent","outlet","cable","remix","hands up","low battery"]},
+  {s:"A sea shanty recruiting people to a carpool", v:["haul","crew","voyage","shotgun","port","gas money","anchor","mates","departure","HOV lane"]},
+  {s:"A villain's song about returning a library book late", v:["scheme","dastardly","overdue","fines","midnight","lair","henchmen","renew","mercy","the stamp"]},
+  {s:"A lounge singer's tribute to the hotel continental breakfast", v:["crooner","velvet","waffle station","ambiance","darling","buffet","muffin","encore","regulars","last call"]},
+  {s:"A national park jingle for a very small park", v:["vista","wildlife","trailhead","majesty","acreage","ranger","scenic","permit","modest","gift shop"]},
+  {s:"A hype song for getting out of bed", v:["alarm","snooze","champion","blanket","warrior","sunrise","momentum","legs","victory","five more minutes"]},
+  {s:"An opera duet between a man and his smoke detector", v:["battery","chirp","aria","midnight","ladder","crescendo","silence","duet","ceiling","mercy"]},
+  {s:"A folk ballad about the neighborhood's mysterious free couch", v:["curbside","upholstery","legend","stains","mystery","hauled","generations","warning","sunset","still there"]},
+  {s:"A doo-wop number about waiting for the microwave", v:["sha-la-la","one minute","harmony","spinning","patience","ding","baby","countdown","hunger","my love"]},
+  {s:"A patriotic march for the office snack drawer", v:["rations","glory","salute","pretzels","allegiance","reserves","morale","quartermaster","crumbs","victory"]},
+  {s:"A breakup song with a streaming service", v:["subscription","cancel","algorithm","free trial","buffering","queue","password","moving on","renewal","we've grown apart"]},
+  {s:"A Gregorian chant about doing laundry", v:["vestments","cycle","penance","detergent","folding","brotherhood","dawn","ritual","lint","amen"]},
+  {s:"A stadium rock anthem about mowing the lawn", v:["encore","riff","blades","stripes","edging","glory","two-stroke","the crowd","sweat","one more row"]},
+  {s:"A jazz scat solo that's just excuses", v:["improvise","riff","traffic","syncopation","my alarm","smooth","bebop","deadline","skiddly","my bad"]},
+  {s:"A love ballad to the last slice of pizza", v:["devotion","crust","destiny","midnight","grease","forever","temptation","sharing","cold","one true slice"]},
+  {s:"A show tune about merging onto the highway", v:["jazz hands","signal","crescendo","lane","confidence","tempo","zipper merge","spotlight","accelerate","big finish"]},
+  {s:"A park ranger giving a safety talk about one specific squirrel", v:["wildlife","perimeter","do not engage","acorns","incident report","cunning","trailhead","backpack","survivor","him"]},
+  {s:"A barista announcing a name they cannot pronounce", v:["grande","foam","order up","syllables","apologies","counter","marker","lid","next guest","close enough"]},
+  {s:"A pro wrestler cutting a promo about doing his taxes", v:["smackdown","deductions","championship","W-2","the ring","audit","brother","April 15th","body slam","refund"]},
+  {s:"A medieval blacksmith handling a very modern complaint", v:["forge","anvil","warranty","temper","bellows","refund policy","craftsmanship","horseshoe","one star","quench"]},
+  {s:"A conspiracy theorist explaining why the vending machine skipped B4", v:["cover-up","the coil","they","evidence","wake up","quarters","surveillance","patterns","sheeple","follow the money"]},
+  {s:"A yoga instructor guiding a class through rush-hour traffic", v:["breathe","namaste","center","brake lights","release","intention","merge","inner peace","exhale","let it go"]},
+  {s:"A ship captain's log about a very calm voyage", v:["captain's log","nautical","becalmed","provisions","morale","horizon","uneventful","knots","the stars","day twelve"]},
+  {s:"A game show contestant explaining their strategy after losing everything", v:["wager","gut feeling","daily double","hindsight","buzzer","strategy","all in","the board","respectfully","next time"]},
+  {s:"A raccoon giving a TED talk on trash security vulnerabilities", v:["exploit","latch","perimeter","innovation","opposable","bins","midnight ops","deterrent","case study","thumbs"]},
+  {s:"A retirement speech for the office stapler", v:["service","decades","jams","loyalty","colleague","farewell","plaque","successor","staples","one last punch"]},
+  {s:"A knight explaining to his horse that they're lost", v:["steed","quest","crossroads","the map","honor","gallop","sire","apologies","the north star","my fault"]},
+  {s:"A flight attendant doing beverage service during light turbulence", v:["cart","aisle","ginger ale","seatbelt sign","apologies","ice","napkin","bumps","brace","exact change"]},
+  {s:"A prom king conceding to the prom queen like it's an election", v:["ballots","gracious","sash","unity","campaign","corsage","mandate","gymnasium","healing","concede"]},
+  {s:"A garden gnome giving his deposition", v:["sworn","whereabouts","the lawn","testimony","ceramic","witnessed","the incident","counsel","the flamingo","perjury"]},
+  {s:"A crossing guard directing traffic at the world's slowest intersection", v:["whistle","vest","halt","proceed","crosswalk","patience","signal","authority","school zone","all clear"]},
+  {s:"A hypnotist whose volunteer is clearly pretending", v:["deeper","trance","snap","pendulum","suggestible","you are getting sleepy","volunteer","skeptic","refund","wake"]},
+  {s:"A grandpa unveiling his secret pancake recipe like it's a heist plan", v:["blueprints","buttermilk","the crew","the drop","griddle","secret ingredient","timing","getaway","syrup","one last job"]}
 ];
 
 var FLOW_MODES = {
@@ -697,17 +758,56 @@ var FLOW_MODES = {
   cypher:  {eye:"Spark (optional)", blurb:"A simple beat that loops forever. Rhyme about anything — the topic's just a spark if you want one.", secs:0}
 };
 
+/* ---- world references ---- */
+var WORLD = [
+  {c:"Italy", r:["Verona","Padua","Venice","Milan","Rome","Sicily","gondola","cannoli","meatballs","mozzarella","linguine","tiramisu","salami","prosciutto","espresso","biscotti","Vespa","the Colosseum","olive oil","mamma mia"]},
+  {c:"France", r:["Paris","Agincourt","Calais","Marseille","baguette","croissant","\u00e9clair","cr\u00eape","brie","champagne","escargot","souffl\u00e9","macaron","quiche","beret","the Louvre","the Seine","a mime","ooh la la","French kiss"]},
+  {c:"Spain", r:["Navarre","Seville","Barcelona","Madrid","tapas","paella","sangria","churros","chorizo","gazpacho","jam\u00f3n","flamenco","siesta","matador","castanets","the Armada","conquistador","the bull run","ol\u00e9","Ibiza"]},
+  {c:"England", r:["London","Windsor","Stratford","the Globe","York","crumpets","scones","spotted dick","toad in the hole","bangers and mash","Yorkshire pudding","mushy peas","Eton mess","bubble and squeak","fish and chips","tea time","the Tower","the Thames","the crown","a cheeky pint"]},
+  {c:"Scotland", r:["Dunsinane","Inverness","Glamis","Birnam Wood","Edinburgh","the Highlands","haggis","neeps and tatties","shortbread","porridge","whisky","kilt","sporran","bagpipes","tartan","the caber toss","Loch Ness","thistle","the clan","och aye"]},
+  {c:"Ireland", r:["Dublin","the Blarney Stone","stout","soda bread","colcannon","boxty","Irish stew","corned beef","shamrock","leprechaun","pot of gold","a jig","the fiddle","Cliffs of Moher","whiskey","banshee","limerick","peat","gift of the gab","top o' the morning"]},
+  {c:"Greece", r:["Athens","Sparta","Mount Olympus","the Acropolis","olives","feta","gyro","souvlaki","moussaka","baklava","tzatziki","ouzo","toga","the oracle","laurel wreath","amphora","the islands","Zeus","sirens","opa"]},
+  {c:"Denmark", r:["Elsinore","Copenhagen","Kronborg","a danish","herring","rye bread","sm\u00f8rrebr\u00f8d","frikadeller","marzipan","aquavit","hygge","Vikings","longship","the Little Mermaid","Tivoli","the battlements","something rotten","the prince","the ghost","to be or not to be"]},
+  {c:"Germany", r:["Berlin","Hamburg","the Black Forest","the Rhine","bratwurst","frankfurter","pretzel","sauerkraut","schnitzel","strudel","beer stein","Oktoberfest","lederhosen","oompah band","mustard","dumplings","the autobahn","kaiser roll","gesundheit","wunderbar"]},
+  {c:"Austria", r:["Vienna","Salzburg","the Alps","the Danube","wiener schnitzel","sacher torte","apple strudel","the coffee house","Mozart","the waltz","the opera","yodeling","Freud","edelweiss","the palace","a ball gown","kaiser roll","the hills are alive","a little night music","the duke in disguise"]},
+  {c:"Egypt", r:["Alexandria","Cairo","the Nile","the pyramids","the Sphinx","Cleopatra","the asp","pharaoh","mummy","hieroglyphs","papyrus","obelisk","dates","figs","flatbread","falafel","the camel","an oasis","the barge","serpent of old Nile"]},
+  {c:"Turkey", r:["Ephesus","Troy","Istanbul","Constantinople","the Bosphorus","Turkish delight","baklava","kebab","d\u00f6ner","Turkish coffee","the Turkish bath","the Grand Bazaar","the fez","the evil eye","tulips","the Trojan horse","the minaret","the sultan","crossroads of the world","the twins confusion"]},
+  {c:"Croatia", r:["Illyria","Dubrovnik","the Adriatic","shipwreck","seafood","olive groves","lavender","marble streets","island hopping","figs","local wine","fortress walls","yellow stockings","cross-garters","Duke Orsino","if music be the food of love","sardines","truffles","the coastline","twins separated at sea"]},
+  {c:"Cyprus", r:["the citadel","Aphrodite's rock","halloumi","olives","carob","meze","island wine","copper","the harbor","Venetian walls","the garrison","the handkerchief","Desdemona","the moonlit watch","grilled octopus","lemon groves","sandy beaches","the storm at sea","the ensign","strategic island"]},
+  {c:"Bohemia", r:["Prague","the seacoast of Bohemia","exit pursued by a bear","goulash","dumplings","pilsner","kolache","the castle","the astronomical clock","Charles Bridge","marionettes","crystal","garnet","spa towns","trdeln\u00edk","beer halls","defenestration","the shepherd's find","the statue awakes","a bohemian lifestyle"]},
+  {c:"Portugal", r:["Lisbon","Porto","port wine","pastel de nata","sardines","bacalhau","piri piri","cork","azulejo tiles","fado","the Age of Exploration","Vasco da Gama","custard tart","vinho verde","the Algarve","the trams","codfish","saudade","the navigators","egg tarts"]},
+  {c:"Netherlands", r:["Amsterdam","the canals","tulips","windmills","clogs","stroopwafel","gouda","edam","pickled herring","bicycles","Van Gogh","Rembrandt","the dikes","wooden shoes","cheese wheels","poffertjes","The Hague","the color orange","going Dutch","double dutch"]},
+  {c:"Switzerland", r:["the Alps","Geneva","Zurich","fondue","raclette","holey cheese","chocolate","muesli","yodeling","the alphorn","cuckoo clock","the army knife","the banks","neutrality","the Matterhorn","a ski chalet","the St. Bernard","mountain chocolate","precision watches","the avalanche"]},
+  {c:"Mexico", r:["Mexico City","Canc\u00fan","tacos","tamales","enchiladas","guacamole","salsa","tortilla","quesadilla","mole","tequila","margarita","mariachi","pi\u00f1ata","sombrero","lucha libre","Day of the Dead","the temples","fiesta","churros"]},
+  {c:"Japan", r:["Tokyo","Kyoto","sushi","ramen","tempura","wasabi","sake","mochi","bento box","Mount Fuji","samurai","ninja","geisha","kimono","karaoke","bonsai","cherry blossoms","the bullet train","sumo","kanpai"]},
+  {c:"Wales", r:["Milford Haven","Cardiff","Snowdonia","leeks","Welsh rarebit","laverbread","bara brith","cawl","Welsh cakes","dragons","the Eisteddfod","male voice choir","daffodils","castles","sheep","Fluellen's leek","Glendower","the valleys","the longest town name","look you"]},
+  {c:"Norway", r:["Fortinbras","Oslo","the fjords","lutefisk","lefse","brown cheese","salmon","Vikings","longships","trolls","the northern lights","skiing","reindeer","the midnight sun","The Scream","slalom","aquavit","wool sweaters","the army on the march","skål"]},
+  {c:"Poland", r:["Warsaw","Kraków","pierogi","kielbasa","bigos","gołąbki","pączki","babka","poppy seed roll","vodka","amber","the polka","Chopin","the Wawel dragon","the salt mines","dumplings","na zdrowie","the old town","Fortinbras' quarrel","solidarity"]},
+  {c:"Lebanon", r:["Tyre","Beirut","Pericles Prince of Tyre","cedar trees","hummus","tabbouleh","falafel","shawarma","pita","kibbeh","fattoush","labneh","za'atar","manousheh","the souk","the Phoenicians","the alphabet","olive groves","grapevines","Paris of the Middle East"]},
+  {c:"Tunisia", r:["Tunis","Carthage","the wedding in Tunis","Dido of Carthage","couscous","brik","harissa","mint tea","dates","olives","the medina","Hannibal","mosaics","the Sahara","an oasis","jasmine","Sidi Bou Said","blue doors","the ruins","desert film sets"]},
+  {c:"Russia", r:["Moscow","St. Petersburg","the Muscovites in disguise","borscht","blini","caviar","vodka","stroganoff","pelmeni","the Kremlin","Red Square","the ballet","nesting dolls","the ushanka","the Trans-Siberian","bears","deep winter","Tchaikovsky","the czar","na zdorovie"]},
+  {c:"India", r:["Mumbai","Delhi","the changeling boy","naan","curry","samosa","tikka masala","biryani","chai","mango lassi","tandoori","the Taj Mahal","Bollywood","cricket","the monsoon","spice markets","elephants","the sitar","yoga","namaste"]},
+  {c:"China", r:["Beijing","Shanghai","dumplings","dim sum","noodles","Peking duck","bao","hot pot","fried rice","tea ceremony","the Great Wall","pandas","dragons","chopsticks","kung fu","lanterns","the zodiac","the Silk Road","calligraphy","gan bei"]},
+  {c:"USA", r:["New York","Hollywood","hot dogs","hamburgers","apple pie","barbecue","buffalo wings","corn dogs","milkshakes","diners","baseball","the Grand Canyon","Route 66","cowboys","jazz","Vegas","freedom","pickup trucks","the drive-thru","howdy"]},
+  {c:"Sweden", r:["Stockholm","meatballs","lingonberries","gravlax","cinnamon buns","cardamom buns","crispbread","the smorgasbord","fika","the midsummer pole","herring","Vikings","the Nobel Prize","moose","flat-pack furniture","minimalist design","lagom","the archipelago","pop harmonies","skål"]},
+  {c:"Belgium", r:["Brussels","Bruges","waffles","chocolate","fries","mussels","abbey beer","brewing monks","lace","diamonds","the Grand Place","endive","speculoos","pralines","moules-frites","the Manneken Pis","canals","medieval squares","the EU","comic strips"]},
+  {c:"Hungary", r:["Budapest","Buda and Pest","goulash","paprika","lángos","chimney cake","the thermal baths","the Danube","the Rubik's cube","salami","pálinka","the parliament building","ruin bars","the csárdás","Tokaji wine","wine cellars","dumplings","the violin","egészségedre","the bridge"]},
+  {c:"Morocco", r:["Marrakesh","Casablanca","tagine","couscous","mint tea","harira","the medina","the souks","the kasbah","argan oil","the Atlas Mountains","the Sahara","camels","riads","lanterns","spice pyramids","snake charmers","the blue city","leather tanneries","henna"]},
+  {c:"Brazil", r:["Rio","São Paulo","samba","carnival","feijoada","churrasco","pão de queijo","caipirinha","açaí","coconut water","the Amazon","Copacabana","football","capoeira","Christ the Redeemer","toucans","the beaches","bossa nova","flip-flops","obrigado"]},
+  {c:"Australia", r:["Sydney","the Outback","meat pies","Vegemite","sausage rolls","pavlova","lamingtons","fairy bread","shrimp on the barbie","kangaroos","koalas","boomerangs","the reef","surfing","the didgeridoo","crocs","utes","the bush","g'day","no worries"]}
+];
+
 /* ---- state ---- */
 var pools = {
   references:REFERENCES.slice(), vocab:VOCAB.slice(), rhyme:RHYME.slice(),
   prologue:PROLOGUE.slice(), plots:PLOTS.slice(), names:NAMES.slice(), pcnames:PC_NAMES.slice(),
   flowsprint:FLOW_SPRINT.slice(), flowendwords:FLOW_ENDWORDS.slice(), flowtopics:FLOW_TOPICS.slice(),
-  flowtitles:FLOW_TITLES.slice(), flowflips:FLOW_FLIPS.slice(), flowdevices:FLOW_DEVICES.slice(),
+  flowtitles:FLOW_TITLES.slice(), flowflips:FLOW_FLIPS.slice(), flowdevices:FLOW_DEVICES.slice(), world:WORLD.slice(),
   scenes:SCENES.slice(),
   blainenotes:[]
 };
 var last = { references:-1, vocab:-1, rhyme:-1, prologue:-1, plots:-1, names:-1,
-  flowsprint:-1, flowendwords:-1, flowtopics:-1, flowtitles:-1, flowflips:-1, flowdevices:-1, scenes:-1 };
+  flowsprint:-1, flowendwords:-1, flowtopics:-1, flowtitles:-1, flowflips:-1, flowdevices:-1, world:-1, scenes:-1 };
 var $ = function(id){return document.getElementById(id);};
 
 function pick(name){
@@ -722,7 +822,22 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp
 function showRef(){ $("refPrompt").textContent = pick("references") || "—"; }
 function showRhyme(){ $("rhymePrompt").textContent = pick("rhyme") || "—"; }
 function showPrologue(){ $("prologuePrompt").textContent = pick("prologue") || "—"; }
-function showScene(){ $("scenePrompt").textContent = pick("scenes") || "—"; }
+var currentScene = null;
+function showScene(){
+  var sc = pick("scenes");
+  currentScene = sc;
+  $("scenePrompt").textContent = sc ? (sc.s || sc) : "—";
+  var vp = $("sceneVocab");
+  vp.style.display = "none"; vp.innerHTML = "";
+  $("sceneVocabBtn").style.display = (sc && sc.v) ? "" : "none";
+}
+document.getElementById("sceneVocabBtn").addEventListener("click", function(){
+  if(!currentScene || !currentScene.v) return;
+  var vp = $("sceneVocab");
+  vp.innerHTML = currentScene.v.map(function(w){ return '<span class="vword">'+esc(w)+'</span>'; }).join("");
+  vp.style.display = "";
+  this.style.display = "none";
+});
 function showVocab(){
   var v=pick("vocab"); if(!v){$("vocabWord").textContent="—";$("vocabDef").innerHTML="";return;}
   $("vocabWord").textContent=v.w;
@@ -941,6 +1056,14 @@ $("flowTimerBtn").addEventListener("click", function(){
 $("flowMetroBtn").addEventListener("click", function(){ metroOn ? stopMetro() : startMetro(); });
 $("flowBpm").addEventListener("change", function(){ if(metroOn) startMetro(); });
 
+
+function showWorld(){
+  var w = pick("world");
+  if(!w){ $("worldPrompt").textContent = "\u2014"; return; }
+  $("worldPrompt").textContent = w.c;
+  $("worldRefs").innerHTML = w.r.map(function(x){ return '<span class="vword">'+esc(x)+'</span>'; }).join("");
+}
+
 /* ---- tabs ---- */
 document.querySelectorAll(".tab").forEach(function(t){
   t.addEventListener("click",function(){
@@ -963,6 +1086,7 @@ document.querySelectorAll("[data-next]").forEach(function(b){
     else if(n==="praisecurse")showCharge();
     else if(n==="flow")showFlow();
     else if(n==="scenes")showScene();
+    else if(n==="world")showWorld();
   });
 });
 
@@ -997,7 +1121,7 @@ document.querySelectorAll("[data-add]").forEach(function(b){
 });
 
 /* ---- init ---- */
-showRef(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); showScene();
+showRef(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); showScene(); showWorld();
 
 })();
 </script>
