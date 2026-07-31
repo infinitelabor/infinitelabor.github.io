@@ -122,7 +122,7 @@
   </section>
 
   <section id="praisecurse">
-    <p class="blurb">You're charged to praise or curse a soul — using a given subject. Make it soar, or make it sting.</p>
+    <p class="blurb">You're charged to praise or curse — a soul, or an object at hand — using a given subject. Make it soar, or make it sting.</p>
     <div class="card charge"><div class="eyebrow">Your charge</div><p class="prompt" id="pcPrompt">—</p><div class="using" id="pcUsing"></div></div>
     <button class="next" data-next="praisecurse">Next charge ↻</button>
     <div class="add"><input id="praisecurseAdd" placeholder="Add a name to the pool… (a friend, a foe, anyone)" /><button data-add="praisecurse">Add</button></div>
@@ -311,7 +311,34 @@ var REFERENCES = [
   "Ballet terms","Circus acts","Magic trick names","Firework types","Cocktail names","Types of tea","Wine terms",
   "Whiskey terms","Barista terms","Space terms","Anatomy terms","Geology terms","D&D terms","Arcade games",
   "State nicknames","City nicknames","Baby gear","Things in a glove compartment","Things at a garage sale",
-  "Hotel amenities","Cruise ship activities","Theme park rides","Road trip games","Campfire activities"
+  "Hotel amenities","Cruise ship activities","Theme park rides","Road trip games","Campfire activities",
+  "Smells you can't unsmell","Sounds in an old house","Textures that feel wrong","Colors of the sky","Tastes you can't describe",
+  "Things that squeak","Things that glow","Things you find in the couch","Things at the bottom of a bag","Things you inherited",
+  "Things a grandma keeps","Things a dad has in the garage","Things a teenager hides","Things a toddler thinks are toys","Things a cat knocks over",
+  "Types of laughs","Types of stares","Types of handshakes","Types of hugs","Types of sighs",
+  "Types of doorbells","Types of ringtones","Types of alarm sounds","Types of applause","Types of silence",
+  "Types of clouds","Types of rocks","Types of dirt","Types of moss","Types of mushrooms",
+  "Things at a wedding reception","Things at a funeral","Things at a graduation","Things at a baby shower","Things at a retirement party",
+  "Things at a bar mitzvah","Things at a bachelor party","Things at a quinceañera","Things at a barn dance","Things at a rave",
+  "Ways people flirt","Ways people avoid conversation","Ways people show off","Ways people fake being busy","Ways people lie",
+  "Things overheard on a bus","Things overheard in a bathroom","Things overheard at brunch","Things overheard at Costco","Things overheard at a wedding",
+  "Bad advice from your uncle","Bad advice from a stranger","Bad advice from a self-help book","Bad advice from a coworker","Bad advice from the internet",
+  "Types of bosses","Types of coworkers","Types of teachers","Types of neighbors","Types of roommates",
+  "Types of exes","Types of first dates","Types of parents","Types of siblings","Types of grandparents",
+  "Villain professions","Sidekick professions","Chosen one origin stories","Prophecies","Curses that backfired",
+  "Reasons people cry at movies","Reasons people quit their job","Reasons people move to a new city","Reasons people get divorced","Reasons people join a cult",
+  "Things you say when you're stalling","Things you say when you're lying","Things you say when you're impressed","Things you say when you're offended","Things you say when you're proud",
+  "Compliments that are actually insults","Insults that are actually compliments","Threats that aren't scary","Apologies that make it worse","Excuses that sound rehearsed",
+  "Things a magician says","Things a hypnotist says","Things a psychic says","Things a life coach says","Things a bartender says",
+  "Things a real estate agent says","Things a car salesman says","Things a doctor says","Things a dentist says","Things a mechanic says",
+  "Reality show confessional lines","Podcast intro clichés","Talk show host openers","Award speech clichés","Ted Talk phrases",
+  "Reasons a plan falls apart","Reasons a party gets weird","Reasons a date gets awkward","Reasons a meeting goes long","Reasons a road trip goes wrong",
+  "Things in a time capsule","Things in an attic","Things in a basement","Things in a shed","Things in a storage unit",
+  "Old family recipes","Old wives' tales","Old superstitions","Old inventions","Old customs",
+  "Sports you invented as a kid","Games you played at recess","Songs you sang in the car","Cartoons you watched Saturday morning","Snacks from your childhood",
+  "Things that used to be common","Things that used to be legal","Things that used to be free","Things that used to be popular","Things that used to be scary",
+  "Warning signs on packaging","Symbols you don't understand","Emojis that need a reboot","Text abbreviations","Internet acronyms",
+  "Things you regret saying","Things you regret buying","Things you regret texting","Things you regret eating","Things you regret agreeing to"
 ];
 
 var VOCAB = [
@@ -415,42 +442,125 @@ var VOCAB = [
   {w:"brevity is the soul of wit", d:"cleverness is best when brief.", e:"Since brevity is the soul of wit, I will be brief."},
   {w:"the better part of valor", d:"caution; discretion over recklessness.", e:"The better part of valor is discretion."},
   {w:"a dish fit for the gods", d:"something exquisite; worthy of divinity.", e:"This stew, I say, is a dish fit for the gods."},
-  {w:"thereby hangs a tale", d:"there's a story behind this.", e:"He lost the boot at midnight — and thereby hangs a tale."}
+  {w:"thereby hangs a tale", d:"there's a story behind this.", e:"He lost the boot at midnight — and thereby hangs a tale."},
+  {w:"I do redouble my proclamation that I love thee.", d:"a full-line declaration of love, made twice for emphasis.", e:"Use when a scene needs a bigger swing than a simple \"I love you.\""},
+  {w:"Mine heart doth beat a rhythm only thou canst hear.", d:"a poetic confession that the beloved has unique power over the speaker.", e:"Deploy in a wooing scene when you want to sound like you've been rehearsing."},
+  {w:"By all the stars that yet remain in heaven, I swear it.", d:"a grand oath — good for promises you may or may not keep.", e:"Precedes any lie or exaggeration a character wishes to sell hard."},
+  {w:"Thou hast a face that could launch a modest fleet.", d:"a backhanded compliment; less than Helen of Troy but still nautical.", e:"Great for lukewarm flattery that reveals the speaker's cheapness."},
+  {w:"I would sooner sup with a serpent than speak with thee again.", d:"a full-line refusal to talk.", e:"Storming out; ending an argument; petty theater."},
+  {w:"Methinks the lady doth protest too much.", d:"an accusation that vehement denial reveals guilt (from Hamlet).", e:"Use it to needle someone who's overselling their innocence."},
+  {w:"'Tis but a scratch, though the scratch be mortal.", d:"understating a fatal wound — usable literal or figurative.", e:"For any comically stoic injury or defeat."},
+  {w:"Prithee, spare me thy counsel; my folly is a garden I tend alone.", d:"a haughty refusal of advice.", e:"For characters who insist on their own bad decisions."},
+  {w:"O, that this too, too solid pizza would melt.", d:"a mock-Hamlet lament, template style.", e:"Substitute anything for 'pizza' — the frame works for any minor complaint."},
+  {w:"Let not the wound of yesterday poison the wine of today.", d:"an entreaty to move past old grievances.", e:"For a scene of forgiveness or gaslighting, depending on delivery."},
+  {w:"There is a divinity that shapes our ends, rough-hew them how we will.", d:"fate finishes what we begin (from Hamlet).", e:"For philosophical resignation after a plan collapses."},
+  {w:"I am not what I am, nor shall I be what I seem.", d:"a Iago-flavored declaration of hidden identity.", e:"Perfect for a villain's aside or a disguise reveal."},
+  {w:"Come, gentle night, and pay no bill.", d:"a call for evening's cover, freeloader-flavored.", e:"For a scene of scheming, escape, or comic laziness."},
+  {w:"My purse is thin, but my rage is bottomless.", d:"a broke man's threat.", e:"For a character who has nothing to lose but their pride."},
+  {w:"Hath he but eyes, and yet no sight?", d:"asking whether someone can perceive what's obvious.", e:"For calling out a person who is missing the point."},
+  {w:"I would give my kingdom for a nap.", d:"Richard III template — swap 'nap' for anything small.", e:"For a weary king, a tired parent, a fed-up manager."},
+  {w:"Speak plain, sir, and spare me thy embroidery.", d:"a demand to cut the flowery talk.", e:"For characters who see through another's rhetorical fluff."},
+  {w:"Fortune, thou art a fickle innkeeper.", d:"blaming fate for uneven treatment.", e:"When luck has just turned bad in a scene."},
+  {w:"I have known men to lose all for less.", d:"warning that a small offense could bring ruin.", e:"For a scene of counsel, threat, or foreshadowing."},
+  {w:"Now cracks a noble heart.", d:"a mourning line at the death of someone great (from Hamlet).", e:"For any death scene — real or mock-solemn."},
+  {w:"Give me my robe, put on my crown; I have immortal longings in me.", d:"a queen's line preparing for death (Cleopatra).", e:"For a grand farewell — literal death or exit from a room."},
+  {w:"O, I am fortune's fool!", d:"a cry at being played by fate (from Romeo).", e:"For a moment of catastrophic realization."},
+  {w:"Hell is empty and all the devils are here.", d:"observing that chaos has arrived (from The Tempest).", e:"For an entrance of villains, or a family reunion gone wrong."},
+  {w:"To thine own self be true.", d:"advice to remain honest to your nature (Polonius).", e:"For sincere counsel or a smug send-off."},
+  {w:"What light through yonder window breaks?", d:"noticing a new arrival or discovery (Romeo).", e:"Adaptable — swap 'window' for any surface."},
+  {w:"I bear a charmed life.", d:"claiming invulnerability (Macbeth).", e:"For a brag before a fall — or a genuine boast."},
+  {w:"Out, damned spot!", d:"trying to scrub away guilt (Lady Macbeth).", e:"For any character wrestling with what they've done."},
+  {w:"The lady doth carry the lamp.", d:"a template of quiet praise — she leads.", e:"Substitute 'lamp' for any responsibility she quietly shoulders."},
+  {w:"He wears his heart upon his sleeve for daws to peck at.", d:"warns against wearing feelings openly (Iago).", e:"For a scene of romantic vulnerability turned target."},
+  {w:"Nothing will come of nothing.", d:"blunt refusal to reward emptiness (King Lear).", e:"For a scene of denied inheritance, praise, or promotion."},
+  {w:"Once more unto the breach, dear friends.", d:"rally cry into another attempt (Henry V).", e:"For any renewed effort — battle, dinner rush, or Wi-Fi setup."},
+  {w:"We few, we happy few, we band of brothers.", d:"the small brave crew (Henry V).", e:"For any small crew going into something bigger than them."},
+  {w:"Cry havoc, and let slip the dogs of war.", d:"a call for unleashed violence (Julius Caesar).", e:"For any escalation — real or comically inflated."},
+  {w:"Beware the ides of March.", d:"a warning of a coming reckoning.", e:"Substitute any date to warn of a scheduled disaster."},
+  {w:"Cowards die many times before their deaths.", d:"observation that fear itself is death (Julius Caesar).", e:"For scolding, self-scolding, or steeling oneself."},
+  {w:"The fault, dear Brutus, is not in our stars, but in ourselves.", d:"self-accountability (Julius Caesar).", e:"For a scene of blame reversal."},
+  {w:"Give every man thy ear, but few thy voice.", d:"listen more than you speak (Polonius).", e:"For a counsel scene, or a sarcastic reminder."},
+  {w:"Some are born great, some achieve greatness, and some have greatness thrust upon them.", d:"a taxonomy of fortune (Twelfth Night).", e:"For any moment of unexpected promotion or blame."},
+  {w:"If music be the food of love, play on.", d:"asking for more of a feeling until it dies (Twelfth Night).", e:"For sincere or ironic requests for continued indulgence."},
+  {w:"Journeys end in lovers meeting.", d:"a soft romantic assertion (Twelfth Night).", e:"For any reunion — a lover, a friend, or a dog."},
+  {w:"Better a witty fool than a foolish wit.", d:"praises the clever-simple over the dull-clever.", e:"For a compliment to the underrated or a jab at the pretentious."},
+  {w:"I do desire we may be better strangers.", d:"a polite request to be left alone (As You Like It).", e:"Perfect for ending a conversation with maximum civility."},
+  {w:"How poor are they that have not patience!", d:"a lament for the hasty (Othello).", e:"For a scene of exasperation with an impulsive character."},
+  {w:"The course of true love never did run smooth.", d:"observation that romance is bumpy (Midsummer).", e:"For any lovers' quarrel — or a sardonic aside."},
+  {w:"Lord, what fools these mortals be!", d:"delighted mockery of humanity (Puck, Midsummer).", e:"For a scene watched from above — literal or figurative."},
+  {w:"Parting is such sweet sorrow.", d:"a bittersweet goodbye (Romeo).", e:"For any farewell that shouldn't be but is."},
+  {w:"A rose by any other name would smell as sweet.", d:"names don't change essence (Romeo).", e:"For any scene where a label is being defended or dismissed."},
+  {w:"But, soft! Yon device doth vibrate anew.", d:"a mock-solemn announcement of a phone buzzing.", e:"For turning a modern interruption into a Shakespearean moment."},
+  {w:"I do commend thee to the mercy of the algorithm.", d:"a modern-Shakespeare farewell to a scrolling companion.", e:"For a satirical blessing on someone lost to their phone."},
+  {w:"Speak, friend, and dine.", d:"a hosting line — enter and eat.", e:"For any scene of welcome, particularly one involving food."},
+  {w:"I am but a humble player upon a most confusing stage.", d:"a modest disclaimer, useful when overwhelmed.", e:"For any character out of their depth."},
+  {w:"Alas, poor Yorick, I knew him well — he had a real head for business.", d:"a joke-Hamlet twist on the graveyard line.", e:"For pun-forward eulogies of coworkers, brands, or ideas."}
 ];
 
 var RHYME = [
-  "love","heart","night","day","fire","death","crown","sword","eye","hand","grave","breath","sky","rose","gold",
-  "time","soul","fate","blood","moon","star","sun","rain","fear","tears","years","kiss","kings","wings","spring",
-  "wrong","throne","alone","stone","sea","tree","thee","wine","mine","divine","line","mind","kind","blind","find",
-  "wind","fair","air","hair","despair","care","light","sight","flight","might","fight","grace","face","place","race",
-  "woe","foe","snow","glow","know","pain","chain","name","flame","shame","game","sway","stray","betray",
-  "queen","green","seen","dream","stream","gleam","weep","sleep","keep","deep","ghost","host","coast","boast",
-  "road","home","bone","door","floor","war","storm","dawn","dust","trust","rust","crust","luck","truck","spark",
-  "dark","mark","start","art","smart","chart","cash","flash","crash","trash","clock","block","shock","talk","walk",
-  "bright","tight","street","beat","heat","sweet","cheat","fleet","cold","bold","told","hold","sold","young","tongue",
-  "sung","strong","song","long","belong","free","key","dirt","hurt","shirt","word","bird","heard","world","girl",
-  "brain","train","lane","plane","insane","complain","explain","remain","champagne","hurricane","entertain",
-  "money","honey","funny","sunny","story","glory","history","mystery","victory","memory","energy","enemy","destiny",
-  "candy","dandy","handy","brandy","fifty","thrifty","shifty","city","pity","gritty","pretty","witty",
-  "danger","stranger","anger","chamber","weather","feather","leather","together","forever","clever","never","whatever",
-  "ocean","motion","potion","devotion","emotion","explosion","collision","decision","vision","precision",
-  "impossible","responsible","invisible","incredible","original","criminal","subliminal","pinnacle","cynical","miracle",
-  "situation","celebration","conversation","destination","imagination","information","combination","hesitation",
-  "elemental","monumental","sentimental","accidental","continental","fundamental",
+  "love","heart","night","day","fire","death","crown","sword","eye","hand",
+  "grave","breath","sky","rose","gold","time","soul","fate","blood","moon",
+  "star","sun","rain","fear","tears","years","kiss","kings","wings","spring",
+  "wrong","throne","alone","stone","sea","tree","thee","wine","mine","divine",
+  "line","mind","kind","blind","find","wind","fair","air","hair","despair",
+  "care","light","sight","flight","might","fight","grace","face","place","race",
+  "woe","foe","snow","glow","know","pain","chain","name","flame","shame",
+  "game","sway","stray","betray","queen","green","seen","dream","stream","gleam",
+  "weep","sleep","keep","deep","ghost","host","coast","boast","road","home",
+  "bone","door","floor","war","storm","dawn","dust","trust","rust","crust",
+  "luck","truck","spark","dark","mark","start","art","smart","chart","cash",
+  "flash","crash","trash","clock","block","shock","talk","walk","bright","tight",
+  "street","beat","heat","sweet","cheat","fleet","cold","bold","told","hold",
+  "sold","young","tongue","sung","strong","song","long","belong","free","key",
+  "dirt","hurt","shirt","word","bird","heard","world","girl","brain","train",
+  "lane","plane","insane","complain","explain","remain","champagne","hurricane","entertain","money",
+  "honey","funny","sunny","story","glory","history","mystery","victory","memory","energy",
+  "enemy","destiny","candy","dandy","handy","brandy","fifty","thrifty","shifty","city",
+  "pity","gritty","pretty","witty","danger","stranger","anger","chamber","weather","feather",
+  "leather","together","forever","clever","never","whatever","ocean","motion","potion","devotion",
+  "emotion","explosion","collision","decision","vision","precision","impossible","responsible","invisible","incredible",
+  "original","criminal","subliminal","pinnacle","cynical","miracle","situation","celebration","conversation","destination",
+  "imagination","information","combination","hesitation","elemental","monumental","sentimental","accidental","continental","fundamental",
   "capacity","audacity","tenacity","gravity","cavity","calamity","insanity","vanity","humanity","profanity",
   "orange","silver","purple","month","wolf","ninth","bulb","circus","penguin","chimney",
-  "baguette","croissant","escargot","soufflé","brie","quiche","beret","gondola","cannoli",
-  "mozzarella","linguine","tiramisu","salami","espresso","biscotti","Verona","Venice","Sicily","Vespa",
-  "tapas","paella","sangria","churros","chorizo","gazpacho","flamenco","matador","siesta","fiesta",
-  "Barcelona","Seville","Madrid","haggis","tartan","kilt","bagpipes","porridge","whisky","shortbread",
-  "gyro","feta","moussaka","baklava","ouzo","toga","Copenhagen","Elsinore","Vienna","Prague",
-  "pretzel","sauerkraut","schnitzel","strudel","bratwurst","fondue","gouda","waffles","tulips","windmills",
-  "kebab","hummus","falafel","shawarma","pita","couscous","tagine","Marrakesh","Casablanca","pharaoh",
-  "pyramid","sphinx","oasis","camel","Cleopatra","sushi","ramen","tempura","wasabi","sake",
-  "mochi","kimono","karaoke","samurai","ninja","geisha","Tokyo","Kyoto","sumo","bonsai",
-  "tacos","tamales","guacamole","salsa","tortilla","tequila","margarita","sombrero","piñata","mariachi",
-  "pierogi","kielbasa","vodka","goulash","paprika","polka","curry","samosa","naan","chai",
-  "biryani","samba","carnival","capoeira","Rio","kangaroo","koala","boomerang","didgeridoo","pavlova"
+  "baguette","croissant","escargot","soufflé","brie","quiche","beret","gondola","cannoli","mozzarella",
+  "linguine","tiramisu","salami","espresso","biscotti","Verona","Venice","Sicily","Vespa","tapas",
+  "paella","sangria","churros","chorizo","gazpacho","flamenco","matador","siesta","fiesta","Barcelona",
+  "Seville","Madrid","haggis","tartan","kilt","bagpipes","porridge","whisky","shortbread","gyro",
+  "feta","moussaka","baklava","ouzo","toga","Copenhagen","Elsinore","Vienna","Prague","pretzel",
+  "sauerkraut","schnitzel","strudel","bratwurst","fondue","gouda","waffles","tulips","windmills","kebab",
+  "hummus","falafel","shawarma","pita","couscous","tagine","Marrakesh","Casablanca","pharaoh","pyramid",
+  "sphinx","oasis","camel","Cleopatra","sushi","ramen","tempura","wasabi","sake","mochi",
+  "kimono","karaoke","samurai","ninja","geisha","Tokyo","Kyoto","sumo","bonsai","tacos",
+  "tamales","guacamole","salsa","tortilla","tequila","margarita","sombrero","piñata","mariachi","pierogi",
+  "kielbasa","vodka","goulash","paprika","polka","curry","samosa","naan","chai","biryani",
+  "samba","carnival","capoeira","Rio","kangaroo","koala","boomerang","didgeridoo","pavlova","life",
+  "strife","knife","wife","fright","kite","hate","late","gate","weight","state",
+  "great","plate","break","take","space","chase","trace","waste","haste","case",
+  "fine","shine","sign","design","confine","align","decline","refine","stand","land",
+  "brand","command","understand","planned","grand","expand","demand","run","done","won",
+  "stun","undone","begun","spun","funhouse","overrun","seat","meet","greet","complete",
+  "defeat","retreat","concrete","offbeat","upbeat","behind","grind","refined","aligned","designed",
+  "confined","undermined","fame","frame","claim","aim","proclaim","reclaim","voice","choice",
+  "noise","poise","boys","toys","rejoice","destroy","employ","enjoy","sound","found",
+  "around","bound","crowned","profound","astound","surround","rebound","underground","tonight","spotlight",
+  "insight","overnight","hindsight","limelight","stoplight","stagefright","upright","spin","begin","within",
+  "genuine","discipline","adrenaline","medicine","violin","masculine","feminine","trap","clap","map",
+  "cap","zap","kidnap","overlap","handicap","gingersnap","thunderclap","coffee","toffee","allegory",
+  "territory","laboratory","observatory","inventory","dormitory","spinach","gimmick","dynamic","panoramic","electronic",
+  "supersonic","platonic","chronic","cosmic","comic","banjo","calico","tornado","volcano","potato",
+  "tomato","piano","mosquito","stiletto","incognito","witness","business","dizziness","fitness","weakness",
+  "darkness","forgiveness","kindness","stiffness","sweetness","August","chorus","porous","bogus","focus",
+  "locus","hocus-pocus","dubious","serious","glorious","wander","ponder","yonder","squander","launder",
+  "conquer","stronger","longer","younger","hunger","sizzle","fizzle","drizzle","chisel","gristle",
+  "whistle","thistle","bristle","missile","dismissal","kayak","yak","tarmac","almanac","insomniac",
+  "maniac","zodiac","cardiac","pontiac","paperback","envelope","antelope","horoscope","kaleidoscope","stethoscope",
+  "microscope","telescope","cantaloupe","tightrope","misanthrope","abacus","ridiculous","meticulous","ludicrous","conspicuous",
+  "ambiguous","industrious","victorious","notorious","voracious","juggle","struggle","smuggle","cuddle","huddle",
+  "muddle","puddle","meddle","peddle","saddle","waffle","raffle","baffle","shuffle","truffle",
+  "scuffle","muffle","stifle","rifle","trifle","ferret","hermit","summit","committed","permitted",
+  "emitted","admitted","transmitted","submitted","outwitted","ostrich","sandwich","zenith","width","sixth",
+  "twelfth","eighth","depth","warmth"
 ];
 
 var PROLOGUE = [
@@ -468,7 +578,22 @@ var PROLOGUE = [
   "The Forgotten Twin of Padua","The Beggar King's Banquet","The Locket and the Liar","The Two Funerals of Lord Grey",
   "The Garden That Would Not Grow","A Letter Never Sent","The Fool Who Inherited Everything","The Bell That Tolled Backward",
   "The Counterfeit Cardinal","The Marriage of Mud and Moonlight","The Innkeeper's Secret Daughter",
-  "A Pox Upon the Postman","The Last Honest Man in Florence","The Duke's Imaginary War","The Salt of Old Regret"
+  "A Pox Upon the Postman","The Last Honest Man in Florence","The Duke's Imaginary War","The Salt of Old Regret",
+  "Bobland","Chew","Romeo and the DMV","The Tragedie of Karen","The Uber of Uttermost Elsinore",
+  "Two Guys Named Steve","The Prophecy Was a Typo","Macbeth Runs a Food Truck","The Group Chat of Verona",
+  "Sir Bartholomew's Bad Yelp Review","The Podcast at the End of the World","Iambic PentaMETH",
+  "The Ghost Who Was Just a Draft","Julius Caesarean Section","A Complete List of My Grievances",
+  "The Reasonable Prince","Nobody Asked, Hamlet","The Very Slow Duel","The Prince of Suburbia",
+  "Ophelia's Last Voicemail","The Substitute King","Falstaff's Fitness Journey","Diet Coke",
+  "The Ballad of a Very Small Grievance","Sonnet 155","The Locksmith of Elsinore","Meanwhile in Kansas",
+  "The Cursed Vending Machine","The Slow Wedding","The Fool and the Fax Machine","Merlin's Divorce",
+  "The Airport",  "The Traffic Circle","The Waiting Room","The Return of the Wi-Fi Password",
+  "Everyone Is My Cousin Now","The Tragedy of the Middle Seat","The Two Popes of Poughkeepsie",
+  "Absolutely Nothing Happens","The Sequel Nobody Asked For","The Prequel That Ruins Everything",
+  "Chad's Revenge","Karen Meets the Ghost","The Prince of Delaware","A History of Small Slights",
+  "The Woman Who Married Her Boss","The Landlord's Ghost","Escape from the HOA","The Return of Chad",
+  "A Comedy of Cul-de-Sacs","Prince Terrance and the Complaint Box","Yonder Applebees","The Bard's Karaoke Night",
+  "Uncle","Pterodactyl","The Sleepover","The Bake Sale"
 ];
 
 var PLOTS = [
@@ -507,7 +632,38 @@ var PLOTS = [
   {t:"Cymbeline", d:"Princess Imogen weathers a wager on her chastity, exile, and disguise before lost brothers and a husband are reunited."},
   {t:"The Tempest", d:"The exiled sorcerer Prospero raises a storm to bring his betrayers to his island, where, with the spirit Ariel, he chooses forgiveness over revenge."},
   {t:"Pericles", d:"Prince Pericles wanders the seas through shipwreck and loss, and is miraculously reunited at last with his wife and daughter."},
-  {t:"The Two Noble Kinsmen", d:"Two devoted cousins fall for the same woman and become deadly rivals in a chivalric tragicomedy."}
+  {t:"The Two Noble Kinsmen", d:"Two devoted cousins fall for the same woman and become deadly rivals in a chivalric tragicomedy."},
+  {t:"A Streetcar Named Desire", d:"Faded Southern belle Blanche DuBois moves in with her sister Stella and her brutish husband Stanley, whose rivalry unravels her."},
+  {t:"Death of a Salesman", d:"Willy Loman, an aging traveling salesman, clings to his fading dream of success as his family confronts what he never was."},
+  {t:"The Glass Menagerie", d:"In St. Louis, Tom recalls his fragile sister Laura and their overbearing mother Amanda, and the gentleman caller who briefly promised escape."},
+  {t:"Long Day's Journey Into Night", d:"Over one day, the Tyrone family — an actor father, a morphine-addicted mother, two haunted sons — tear each other open."},
+  {t:"A Doll's House", d:"Nora Helmer, a doting wife and mother, discovers her marriage is a lie and walks out — slamming the door heard around the world."},
+  {t:"The Cherry Orchard", d:"A Russian aristocratic family faces the auction of their beloved estate, unable to change with the times."},
+  {t:"Waiting for Godot", d:"Two tramps wait by a tree for a man named Godot, who never arrives. Two acts. Nothing happens. Twice."},
+  {t:"Angels in America", d:"During the AIDS crisis, gay men in New York confront illness, faith, politics, and visitations from an angel who insists they stop moving."},
+  {t:"A Raisin in the Sun", d:"A Black family in Chicago debates what to do with a life insurance check that could finally lift them into a house of their own."},
+  {t:"Fences", d:"Troy Maxson, a former Negro League ballplayer turned Pittsburgh garbageman, casts a shadow over his son and wife that only breaks when he does."},
+  {t:"Who's Afraid of Virginia Woolf?", d:"An aging academic couple invite a younger pair over for late-night drinks that turn into a scorched-earth marital war."},
+  {t:"The Crucible", d:"In colonial Salem, a jilted girl's accusation of witchcraft becomes a mass hysteria that destroys the town — and John Proctor with it."},
+  {t:"Our Town", d:"In small-town Grover's Corners, the stage manager narrates the ordinary lives of two families and the girl who dies too young."},
+  {t:"Rosencrantz and Guildenstern Are Dead", d:"Two minor Hamlet characters wander through the play they're stuck in, arguing about identity, chance, and death."},
+  {t:"True West", d:"Two estranged brothers — one a Hollywood screenwriter, one a drifter — meet in their mother's kitchen and destroy it."},
+  {t:"Glengarry Glen Ross", d:"A group of Chicago real estate salesmen claw at each other for leads in a sales contest where losing means fired."},
+  {t:"August: Osage County", d:"When the father disappears, three sisters and their mother — a pill-addled, poisonous matriarch — reunite in Oklahoma for a scorching family reckoning."},
+  {t:"Doubt", d:"A Bronx nun suspects a beloved parish priest of misconduct with a boy. There is no proof. There is only her certainty."},
+  {t:"Proof", d:"A young woman inherits her late mathematician father's notebooks — and one groundbreaking proof, whose authorship no one believes is hers."},
+  {t:"The Piano Lesson", d:"A Pittsburgh family debates selling a piano carved with their enslaved ancestors' faces — the son wants the money, his sister will not let go."},
+  {t:"Fool for Love", d:"In a Mojave motel room, two lovers who share a father argue, remember, and cannot leave each other."},
+  {t:"Buried Child", d:"A grandson returns to his rural family home and finds them refusing to acknowledge him — or the child buried in the yard."},
+  {t:"The Odd Couple", d:"Two divorced men, one a slob and one obsessively neat, become roommates in Manhattan and drive each other insane."},
+  {t:"Barefoot in the Park", d:"Newlyweds in a fifth-floor Manhattan walk-up discover just how different they are, and whether love can survive stairs."},
+  {t:"The Miracle Worker", d:"Blind and deaf Helen Keller and her uncompromising teacher Annie Sullivan fight, until Annie breaks through with the word 'water.'"},
+  {t:"Noises Off", d:"A struggling touring theater company puts on a farce; we see it from front, backstage, and total collapse."},
+  {t:"Six Characters in Search of an Author", d:"During a rehearsal, six characters walk on stage demanding their unfinished play be performed."},
+  {t:"Hedda Gabler", d:"A general's daughter, newly and unhappily married, manipulates the men around her toward destruction, then finally her own."},
+  {t:"The Importance of Being Earnest", d:"Two dandies invent fictional brothers named Ernest to escape their obligations; the women they love will only marry a man named Ernest."},
+  {t:"Pygmalion", d:"A phonetics professor bets he can pass off a Cockney flower girl, Eliza Doolittle, as a duchess by teaching her to speak."},
+  {t:"Arcadia", d:"Two eras of a Derbyshire estate — 1809 and now — collide as modern scholars try to reconstruct what happened there, and what love means across time."}
 ];
 
 var NAMES = [
@@ -589,7 +745,53 @@ var NAMES = [
   {n:"Tamora", p:"Titus Andronicus", d:"Goth queen who feeds her revenge on Titus."},
   {n:"Timon", p:"Timon of Athens", d:"Generous lord turned bitter man-hater."},
   {n:"Isabella", p:"Measure for Measure", d:"Novice nun who pleads for her brother's life."},
-  {n:"Bertram", p:"All's Well That Ends Well", d:"Reluctant husband won over by a bed-trick."}
+  {n:"Bertram", p:"All's Well That Ends Well", d:"Reluctant husband won over by a bed-trick."},
+  {n:"Blanche DuBois", p:"A Streetcar Named Desire", d:"Faded Southern belle who has always depended on the kindness of strangers."},
+  {n:"Stanley Kowalski", p:"A Streetcar Named Desire", d:"Brutal, magnetic New Orleans laborer who dismantles Blanche."},
+  {n:"Stella", p:"A Streetcar Named Desire", d:"Blanche's sister, torn between blood and husband."},
+  {n:"Willy Loman", p:"Death of a Salesman", d:"Aging traveling salesman who never became well liked enough."},
+  {n:"Biff Loman", p:"Death of a Salesman", d:"Willy's disillusioned older son, who once had promise."},
+  {n:"Linda Loman", p:"Death of a Salesman", d:"Willy's steadfast wife: 'Attention must be paid.'"},
+  {n:"Tom Wingfield", p:"The Glass Menagerie", d:"Narrator remembering the sister and mother he left behind."},
+  {n:"Laura", p:"The Glass Menagerie", d:"Painfully shy sister who collects glass animals."},
+  {n:"Amanda Wingfield", p:"The Glass Menagerie", d:"Faded Southern mother reliving her seventeen gentleman callers."},
+  {n:"Nora Helmer", p:"A Doll's House", d:"Doting wife who slams the door on her marriage."},
+  {n:"Torvald", p:"A Doll's House", d:"Nora's husband, who sees her as a possession, not a partner."},
+  {n:"Vladimir", p:"Waiting for Godot", d:"One of the two tramps waiting endlessly for Godot."},
+  {n:"Estragon", p:"Waiting for Godot", d:"Vladimir's partner in waiting; can't remember what he can't leave."},
+  {n:"Prior Walter", p:"Angels in America", d:"A young man dying of AIDS, visited by an angel."},
+  {n:"Roy Cohn", p:"Angels in America", d:"Vicious closeted lawyer, based on the real one."},
+  {n:"Walter Lee Younger", p:"A Raisin in the Sun", d:"A Chicago chauffeur betting the family's future on a liquor store."},
+  {n:"Lena Younger", p:"A Raisin in the Sun", d:"Walter's mother, matriarch dreaming of a house of their own."},
+  {n:"Beneatha", p:"A Raisin in the Sun", d:"Walter's sister, med student searching for her identity."},
+  {n:"Troy Maxson", p:"Fences", d:"Former Negro League ballplayer working sanitation in Pittsburgh."},
+  {n:"Rose Maxson", p:"Fences", d:"Troy's wife, whose loyalty is finally tested past bearing."},
+  {n:"Martha", p:"Who's Afraid of Virginia Woolf?", d:"The wife who runs a war campaign disguised as a dinner party."},
+  {n:"George", p:"Who's Afraid of Virginia Woolf?", d:"Martha's academic husband; better at the game than she thinks."},
+  {n:"John Proctor", p:"The Crucible", d:"Salem farmer who chooses death over signing a lie."},
+  {n:"Abigail Williams", p:"The Crucible", d:"Jilted girl who accuses her way to power."},
+  {n:"Emily Webb", p:"Our Town", d:"Small-town girl who dies young and returns for one ordinary day."},
+  {n:"George Gibbs", p:"Our Town", d:"Baseball-loving boy who marries Emily and outlives her."},
+  {n:"Rosencrantz", p:"Rosencrantz and Guildenstern Are Dead", d:"Confused schoolfellow of Hamlet, doomed and philosophizing."},
+  {n:"Guildenstern", p:"Rosencrantz and Guildenstern Are Dead", d:"Rosencrantz's slightly more anxious partner in doom."},
+  {n:"Austin", p:"True West", d:"Screenwriter brother whose life a drifter sibling dismantles."},
+  {n:"Lee", p:"True West", d:"Desert-dwelling drifter brother with a screenplay of his own."},
+  {n:"Ricky Roma", p:"Glengarry Glen Ross", d:"Top salesman with a scary silver tongue."},
+  {n:"Shelly 'The Machine' Levene", p:"Glengarry Glen Ross", d:"Aging salesman clawing to close one more deal."},
+  {n:"Violet Weston", p:"August: Osage County", d:"Pill-addled Oklahoma matriarch, brutally honest at the worst time."},
+  {n:"Barbara", p:"August: Osage County", d:"Eldest daughter dragged home into her mother's disaster."},
+  {n:"Sister Aloysius", p:"Doubt", d:"Iron-willed Bronx nun certain of a priest's guilt."},
+  {n:"Catherine", p:"Proof", d:"Brilliant daughter whose landmark math proof no one believes she wrote."},
+  {n:"Boy Willie", p:"The Piano Lesson", d:"Farmer who wants to sell the family piano to buy his ancestors' land."},
+  {n:"Felix Ungar", p:"The Odd Couple", d:"Neat-freak roommate who drives Oscar insane."},
+  {n:"Oscar Madison", p:"The Odd Couple", d:"Slob sportswriter who takes in Felix and regrets it."},
+  {n:"Annie Sullivan", p:"The Miracle Worker", d:"Uncompromising teacher who breaks through to Helen Keller."},
+  {n:"Hedda Gabler", p:"Hedda Gabler", d:"Bored newlywed who manipulates men toward ruin, ending her own."},
+  {n:"Algernon Moncrieff", p:"The Importance of Being Earnest", d:"Idle dandy who invents an invalid friend named Bunbury."},
+  {n:"Jack Worthing", p:"The Importance of Being Earnest", d:"Country gentleman who pretends to have a wayward brother named Ernest."},
+  {n:"Eliza Doolittle", p:"Pygmalion", d:"Cockney flower girl passed off as a duchess by phonetics."},
+  {n:"Henry Higgins", p:"Pygmalion", d:"Phonetics professor who bets he can transform Eliza's accent."},
+  {n:"Thomasina Coverly", p:"Arcadia", d:"1809 mathematical prodigy uncovering chaos theory a century early."}
 ];
 
 var PC_NAMES = [
@@ -601,29 +803,57 @@ var PC_NAMES = [
   "Prince Hal","Hotspur","Henry V","Richard III","Leontes","Autolycus","Imogen","Coriolanus","Timon","Isabella"
 ];
 
+var PC_OBJECTS = [
+  "this candle","this crown","this dagger","this letter","this locket","this map","this ring","this scroll","this sword","this cup",
+  "this mirror","this key","this book","this quill","this hourglass","this lantern","this pillow","this cloak","this boot","this glove",
+  "this rose","this apple","this loaf","this flagon","this coin","this purse","this chair","this bench","this door","this window",
+  "this microwave","this remote","this phone","this laptop","this Wi-Fi router","this vending machine","this parking meter","this thermostat","this toaster","this alarm clock",
+  "this stapler","this pen","this notebook","this coffee mug","this water bottle","this houseplant","this doormat","this shopping cart","this umbrella","this backpack",
+  "this receipt","this password","this group chat","this email","this voicemail","this notification","this software update","this loading screen","this error message","this printer",
+  "this couch","this pillow fort","this junk drawer","this refrigerator","this microwave burrito","this leftover pizza","this ice cube tray","this lawn mower","this leaf blower","this garden gnome",
+  "this ballpoint pen","this thermos","this ladder","this candle","this desk lamp","this ceiling fan","this doorknob","this shoelace","this napkin","this fork",
+  "this pocket knife","this compass","this pocket watch","this walking stick","this fishing rod","this fanny pack","this dad hat","this tote bag","this reusable straw","this yoga mat"
+];
+
 /* ---- flow drills data ---- */
 var FLOW_SPRINT = [
   "gold","flame","crown","stage","mind","street","clock","storm","blade","throne","tide","spark",
   "elevator","operation","complicated","dedicated","territory","anniversary","gravity","festival",
-  "monumental","hesitation","conversation","fascinating","supersonic","revolution"
+  "monumental","hesitation","conversation","fascinating","supersonic","revolution",
+  "silver","thunder","harbor","mirror","shadow","whisper","paper","hunger","engine","poison",
+  "diamond","emerald","kingdom","mountain","valley","weapon","empire","army","freedom","legend",
+  "unbelievable","cinematic","undeniable","irreversible","unforgettable","impossible","undefeated","catastrophic","electrifying","hypnotic",
+  "vibration","dedication","liberation","navigation","preparation","confrontation","transformation","validation","precipitation","exclamation"
 ];
 var FLOW_ENDWORDS = [
   "elevator","microphone","dynamite","alligator","cinnamon","gasoline","chandelier","corduroy",
   "refrigerator","tambourine","catastrophe","broccoli","velociraptor","submarine","kaleidoscope",
-  "guillotine","honeydew","thermostat","porcupine","mozzarella","trampoline","apocalypse"
+  "guillotine","honeydew","thermostat","porcupine","mozzarella","trampoline","apocalypse",
+  "avalanche","xylophone","pumpernickel","harmonica","limousine","umbrella","chameleon","asparagus",
+  "hallelujah","aluminum","cassette tape","tarantula","turpentine","paperback","interstellar","cardigan",
+  "quesadilla","polyester","carburetor","vestibule","pterodactyl","sarcophagus","peppermint","astronaut",
+  "cauliflower","sasquatch","hieroglyphic","kombucha","rickshaw","catamaran","embezzler","kryptonite"
 ];
 var FLOW_TOPICS = [
   "vending machines","airport security","group projects","sour candy","robot delivery","open mic night",
   "thrift stores","leftovers","houseplants","self-checkout","conference calls","gas station sushi",
   "escape rooms","pigeons","hot yoga","juice cleanses","street parking","karaoke","spreadsheets",
-  "the DMV","haunted houses","food trucks","garage sales","jury duty","meal prep","layovers"
+  "the DMV","haunted houses","food trucks","garage sales","jury duty","meal prep","layovers",
+  "wet socks","cold pizza","dead phone","the group chat","the doorbell","the printer","the office pet",
+  "small talk","first dates","last calls","expired coupons","unread emails","lost keys","surprise parties",
+  "the wedding registry","the parade","the after-party","the neighborhood","the family reunion","the elevator",
+  "the drive-thru","the meeting that could have been an email","the notification","the podcast recommendation"
 ];
 var FLOW_TITLES = [
   "The Intern Who Knew Too Much","Fifty Feet of Feelings","My Landlord, My Enemy",
   "Brunch at the End of the World","The Last Vending Machine","HOA Confidential",
   "A Musical About Insurance","The Ghost in the Group Chat","Middle Seat",
   "The Great Casserole Betrayal","Everyone Clapped But You","The Substitute Wizard",
-  "Weekend at the Water Park","My Roommate the Cryptid","Escrow!"
+  "Weekend at the Water Park","My Roommate the Cryptid","Escrow!",
+  "The Dry Cleaner's Confession","Voicemail: The Musical","The Barista Who Named Me","The Return of the Mall",
+  "The Prophecy Was in the Fine Print","Kayak","The Fourth Marriage of Uncle Roy","Never Have I Ever, But Louder",
+  "The Cousin at the Reunion","Karaoke Night at the End of Days","The Long Wait","Elevator to Nowhere",
+  "Dinner With the Landlord","The Airport Musical","The Slow Divorce","The Ghost Hunter's Yelp Review"
 ];
 var FLOW_FLIPS = [
   "You write your rhymes in pencil so they're easy to erase.",
@@ -635,7 +865,17 @@ var FLOW_FLIPS = [
   "You freestyle like you're reading terms and conditions.",
   "Even your echo won't repeat you.",
   "Your best line was the one where you stopped.",
-  "You call that a verse? My voicemail goes harder."
+  "You call that a verse? My voicemail goes harder.",
+  "You spit like your dentist told you not to.",
+  "Your ghostwriter quit to become a ghost.",
+  "You bring bars to the stage; I bring the whole prison.",
+  "Your metaphors need a translator and an apology.",
+  "You freestyle like you're checking notes on your palm.",
+  "Your delivery's got the confidence of a wet paper bag.",
+  "You went for a punchline and pulled a hamstring.",
+  "You rap like autocorrect is doing the flow for you.",
+  "Your best feature was the guy who left the group.",
+  "You want the mic? Here — take it. It's clearly the problem."
 ];
 var FLOW_DEVICES = [
   {n:"Iambic landing", d:"Every fourth line must land in clean iambic pentameter."},
@@ -643,7 +883,12 @@ var FLOW_DEVICES = [
   {n:"Thou-form insult", d:"Every fourth line is an insult in the thou form."},
   {n:"Apostrophe", d:"Every fourth line addresses someone or something absent — O topic, wherefore…"},
   {n:"Alliteration run", d:"Every fourth line strings at least three alliterative words."},
-  {n:"Internal rhyme", d:"Every fourth line must rhyme inside itself before the end."}
+  {n:"Internal rhyme", d:"Every fourth line must rhyme inside itself before the end."},
+  {n:"Antithesis", d:"Every fourth line balances two opposing ideas — light/dark, near/far, love/scorn."},
+  {n:"Rule of three", d:"Every fourth line lists three items — nouns, verbs, or adjectives — building to the last."},
+  {n:"Rhetorical question", d:"Every fourth line poses a question the audience can't answer."},
+  {n:"Chiasmus", d:"Every fourth line inverts a phrase — ask not what X does for Y, but what Y does for X."},
+  {n:"End with proverb", d:"Every fourth line lands like an old saying — as though it were centuries old."}
 ];
 var SCENES = [
   {s:"A sea shanty about the group project where you did all the work", v:["heave","haul","mutiny","deadweight","capsize","anchor","crew","plunder","overboard","shore leave"]},
@@ -745,7 +990,57 @@ var SCENES = [
   {s:"A garden gnome giving his deposition", v:["sworn","whereabouts","the lawn","testimony","ceramic","witnessed","the incident","counsel","the flamingo","perjury"]},
   {s:"A crossing guard directing traffic at the world's slowest intersection", v:["whistle","vest","halt","proceed","crosswalk","patience","signal","authority","school zone","all clear"]},
   {s:"A hypnotist whose volunteer is clearly pretending", v:["deeper","trance","snap","pendulum","suggestible","you are getting sleepy","volunteer","skeptic","refund","wake"]},
-  {s:"A grandpa unveiling his secret pancake recipe like it's a heist plan", v:["blueprints","buttermilk","the crew","the drop","griddle","secret ingredient","timing","getaway","syrup","one last job"]}
+  {s:"A grandpa unveiling his secret pancake recipe like it's a heist plan", v:["blueprints","buttermilk","the crew","the drop","griddle","secret ingredient","timing","getaway","syrup","one last job"]},
+  {s:"A scene at a wedding — but the officiant clearly wants to be somewhere else", v:["dearly beloved","gathered","abbreviated","vows","time-sensitive","the rings","cliff notes","game","recording it","onward"]},
+  {s:"A scene at a funeral — but the eulogy keeps circling back to the speaker", v:["survived by","touched us all","reminds me of myself","legacy","incidentally","when I","full circle","tribute","refreshments","carrying on"]},
+  {s:"A scene at a DMV — but everyone thinks they're the main character", v:["number","window","documentation","proof of residence","the wait","fluorescent","clerk","form","photo","next"]},
+  {s:"A scene at a laundromat — where every stranger is telling the same secret", v:["quarters","permanent press","the folding table","the dryer","lint trap","confession","separated","tumble","spin cycle","hang to dry"]},
+  {s:"A scene in an elevator — with every possible personality type inside", v:["floor number","the mirror","close door","muzak","awkward","the button","service","doors opening","weight limit","going up"]},
+  {s:"A scene at a coffee shop — where everyone is writing a novel about the person next to them", v:["oat milk","cortado","laptop","free refills","open mic","the barista","pastry case","one more chapter","corner table","first draft"]},
+  {s:"A scene at a grocery store — where the shopping list is falling apart", v:["basket","express lane","coupon","the freezer aisle","forgot","substitution","list","impulse buy","checkout","reusable bag"]},
+  {s:"A scene at a hair salon — where the stylist is going through something", v:["shampoo bowl","layers","just a trim","the reveal","tears","hot tools","split ends","confession","tip","the reveal chair"]},
+  {s:"A scene at a nail salon — where a pact is being made", v:["gel","cuticle","chip resistant","the chair","the color choice","filing","the dryer","commitment","french tip","matte finish"]},
+  {s:"A scene at a book club — where nobody read the book", v:["I meant to","the movie","key themes","chapter one","tea","the ending","stalled at","the author","great points","next month"]},
+  {s:"A scene at a farmer's market — where every vendor is angling for something", v:["heirloom","organic","cash only","free samples","local","in season","the tasting","artisanal","the last one","the good tomatoes"]},
+  {s:"A scene at a garage sale — where one item is way more valuable than it looks", v:["dollar bin","haggle","as-is","cash only","hidden gem","the estate","the driveway","the sign","early birds","take it"]},
+  {s:"A scene at a hardware store — where nobody asked the question they came in for", v:["aisle","the guy who works here","tape measure","sold in packs","the extension cord","project","warranty","socket","the manager","stripped screw"]},
+  {s:"A scene at a movie theater — where the wrong people got in", v:["previews","the recliner","concessions","phone off","the wrong screen","spoilers","credits","projection","reserved","refund"]},
+  {s:"A scene at a bowling alley — during someone's rock bottom", v:["gutter","the shoe rental","frame","the sign-in kiosk","spare","strike","reset","the ball return","turkey","last frame"]},
+  {s:"A scene at a bus stop — where two strangers become confidants in twelve minutes", v:["schedule","shelter","transfer","exact change","the bench","running late","route","express","the connection","almost there"]},
+  {s:"A scene at a food truck — where the truck is having an identity crisis", v:["fusion","the window","special","cash preferred","napkins","the menu","chef's choice","the line","seasonal","truck life"]},
+  {s:"A scene at a jury deliberation — where one holdout has a very unrelated reason", v:["reasonable doubt","the foreman","evidence","the transcript","not guilty","hung jury","the witness","recess","personal","for the record"]},
+  {s:"A scene at a nail-biting parent-teacher conference", v:["participation","concerns","the classroom","potential","conferences","in class","the report card","meeting","behavior","talented"]},
+  {s:"A scene at an open house — where the buyer is asking suspicious questions", v:["square footage","open concept","recently updated","the neighborhood","asking","inspection","the pantry","fixture","closing","comps"]},
+  {s:"A scene at an airport gate — where boarding has been delayed indefinitely", v:["group C","the agent","boarding","standby","the gate change","layover","the announcement","first class","stroller check","seat 14A"]},
+  {s:"A scene at a rooftop bar — where nobody remembers whose idea this was", v:["the elevator","cover charge","bottle service","the view","overpriced","the DJ","the line","altitude","the party","last call"]},
+  {s:"A scene at a hospital waiting room — where nobody knows who to hug", v:["update","the desk","waiting","the vending machine","protocol","family only","the pager","chapel","visitors","stable"]},
+  {s:"A scene at a middle school dance — where the DJ is way too invested", v:["shout out","request","the dance floor","chaperone","the punch bowl","song of the summer","choreography","group circle","last dance","dedicated to"]},
+  {s:"A scene at a self-checkout — where everything is going wrong", v:["please wait","unexpected item","assistance","the bag","attendant","scanner","weight","approval","the receipt","cancel"]},
+  {s:"A scene at a small-town parade — where floats keep exposing local drama", v:["the float","the queen","candy toss","route","the mayor","waving","the announcer","the band","antique cars","the finale"]},
+  {s:"A scene at a haunted attraction — where the actors are unionizing", v:["the queue","strobe","the actor","the escape route","the wait","corn maze","the mask","the disclaimer","boo","fifteen minute breaks"]},
+  {s:"A scene at a pumpkin patch — where the family portrait is going badly", v:["hay ride","the perfect one","the wagon","muddy","posed","apple cider","corn maze","fall vibes","the tractor","one more"]},
+  {s:"A scene at a used car lot — where every car has a story", v:["low mileage","one owner","as-is","the sticker","test drive","the lot","the office","the loan","certified","drives itself off"]},
+  {s:"A scene at a wedding rehearsal dinner — where the toasts are getting away from everyone", v:["thank the parents","the couple","short version","hit the mic","the venue","raise a glass","the timeline","free flowing","the rehearsal","the wine"]},
+  {s:"A scene at a costume party — where two people came as the same thing", v:["the theme","the punch","in character","the reveal","photo booth","the group","last-minute","original","the accessory","the bit"]},
+  {s:"A scene at a stakeout — where the detectives are working through their relationship", v:["binoculars","the target","overtime","stakeout snacks","the radio","suspect","surveillance","backup","procedure","the shift"]},
+  {s:"A courtroom drama about a very small dispute", v:["exhibit A","objection","your honor","the plaintiff","the record","sidebar","testimony","precedent","deliberation","the ruling"]},
+  {s:"An expensive commercial for a very cheap product", v:["stock footage","voiceover","testimonial","the reveal","cinematic","the tagline","limited time","act now","the family","the mascot"]},
+  {s:"A game night that has gone completely off the rails", v:["house rules","the box","instructions","team up","the tiebreaker","the pieces","one more round","betrayal","the timer","game over"]},
+  {s:"A slow-motion argument over the last parking space", v:["turn signal","the eye contact","the spot","reverse","the honk","the point","standoff","the meter","the window","first"]},
+  {s:"A dad reading his kid's college application essay out loud with commentary", v:["the hook","conclusion","400 words","the theme","transitions","the voice","the metaphor","clarify","strong","proud"]},
+  {s:"A very tender argument in the produce section", v:["the tomato","organic","in season","the display","refrigerated","the mister","the misting","the price","weighed","the bruise"]},
+  {s:"A rideshare where the driver is a former celebrity", v:["five stars","the aux","the route","name drop","the rating","tip","the water","the story","the sunglasses","destination"]},
+  {s:"A yoga class taught by someone in the middle of a very bad week", v:["breathe","child's pose","namaste","the mat","hold this","transition","block","hydrate","let go","savasana"]},
+  {s:"A children's birthday party that has become philosophical", v:["the piñata","cake time","the party favor","the theme","the streamers","the games","the parents","the balloon","the wish","turning six"]},
+  {s:"A silent film scene with intertitles that keep getting sassier", v:["the title card","the villain twirls","the swoon","the piano","the chase","the escape","the fainting","meanwhile","alas","fin"]},
+  {s:"A very intense book signing", v:["the line","personalized","the sharpie","first edition","the flap","autograph","the reader","the anecdote","the launch","the reveal"]},
+  {s:"A staff meeting that has gone completely off topic", v:["the agenda","circle back","action item","the recap","tangent","the deck","the deliverable","EOD","the follow-up","adjourn"]},
+  {s:"A tender moment at a batting cage", v:["the helmet","the tokens","the swing","stance","the cage","the whiff","the coach","form","the connection","one more round"]},
+  {s:"A group therapy session that is entirely about the group", v:["I feel","the circle","boundaries","hold space","the reflection","the check-in","the facilitator","triggered","validated","the closing"]},
+  {s:"A scene at a very small Renaissance faire", v:["huzzah","the queen","the turkey leg","m'lady","the joust","the sword swallower","fair thee well","the bard","the mud pit","the mead"]},
+  {s:"A very intense escape room briefing", v:["the clues","the timer","the theme","the puzzle","teamwork","the walkie","the hint","the reveal","the escape","the debrief"]},
+  {s:"A poet slam judge going on a personal journey mid-scoring", v:["snap","the score","technique","the voice","the truth","representation","the pause","the mic","the applause","perfect ten"]},
+  {s:"A very serious pillow fort under construction", v:["the blueprint","load-bearing","the entrance","reinforcement","the couch cushions","the blanket roof","the flashlight","the perimeter","the vote","the fortress"]}
 ];
 
 var FLOW_MODES = {
@@ -835,7 +1130,7 @@ var WORLD = [
 /* ---- state ---- */
 var pools = {
   references:REFERENCES.slice(), vocab:VOCAB.slice(), rhyme:RHYME.slice(),
-  prologue:PROLOGUE.slice(), plots:PLOTS.slice(), names:NAMES.slice(), pcnames:PC_NAMES.slice(),
+  prologue:PROLOGUE.slice(), plots:PLOTS.slice(), names:NAMES.slice(), pcnames:PC_NAMES.slice(), pcobjects:PC_OBJECTS.slice(),
   flowsprint:FLOW_SPRINT.slice(), flowendwords:FLOW_ENDWORDS.slice(), flowtopics:FLOW_TOPICS.slice(),
   flowtitles:FLOW_TITLES.slice(), flowflips:FLOW_FLIPS.slice(), flowdevices:FLOW_DEVICES.slice(), world:WORLD.slice(),
   scenes:SCENES.slice(),
@@ -883,8 +1178,11 @@ function showPlot(){ var p=pick("plots"); if(!p)return; $("plotTitle").textConte
 function showName(){ var n=pick("names"); if(!n)return; $("nameName").textContent=n.n; $("nameDef").innerHTML='<span class="play">'+esc(n.p)+'</span> — '+esc(n.d); }
 function showCharge(){
   var mode = Math.random()<0.5 ? "PRAISE" : "CURSE";
-  var name = any(pools.pcnames), cat = any(pools.references);
-  $("pcPrompt").innerHTML = '<span class="mode '+mode.toLowerCase()+'">'+mode+'</span> '+esc(name);
+  var target, isObj = Math.random()<0.5;
+  if(isObj){ target = any(pools.pcobjects); }
+  else { target = any(pools.pcnames); }
+  var cat = any(pools.references);
+  $("pcPrompt").innerHTML = '<span class="mode '+mode.toLowerCase()+'">'+mode+'</span> '+esc(target);
   $("pcUsing").innerHTML = 'using <b>'+esc(cat)+'</b>';
 }
 function renderBlaineNotes(){
