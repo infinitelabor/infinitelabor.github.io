@@ -106,6 +106,7 @@
     <button class="tab" data-tab="rhyme">Rhyme</button>
     <button class="tab" data-tab="flow">Flow</button>
     <button class="tab" data-tab="scenes">Scenes</button>
+    <button class="tab" data-tab="characters">Characters</button>
     <button class="tab" data-tab="world">World</button>
     <button class="tab" data-tab="vocab">Vocab</button>
     <button class="tab" data-tab="plots">Plots</button>
@@ -184,6 +185,15 @@
     <button class="next" data-next="scenes">Next prompt ↻</button>
     <div class="add"><input id="scenesAdd" placeholder="Add your own prompt…" /><button data-add="scenes">Add</button></div>
     <p class="added" id="scenesAdded"></p>
+  </section>
+
+  <section id="characters">
+    <p class="blurb">A person to become. The angle tells you how they show up tonight.</p>
+    <div class="card"><div class="eyebrow">Play this character</div><p class="prompt" id="characterPrompt" style="font-size:clamp(22px,4.6vw,32px);line-height:1.3">—</p><div class="def" id="characterVocab" style="display:none;max-width:600px"></div></div>
+    <div class="flowctl"><button id="characterVocabBtn">Rolodex: Get 10 words</button></div>
+    <button class="next" data-next="characters">Next character ↻</button>
+    <div class="add"><input id="charactersAdd" placeholder="Add your own character prompt…" /><button data-add="characters">Add</button></div>
+    <p class="added" id="charactersAdded"></p>
   </section>
 
   <section id="world">
@@ -890,6 +900,215 @@ var FLOW_DEVICES = [
   {n:"Chiasmus", d:"Every fourth line inverts a phrase — ask not what X does for Y, but what Y does for X."},
   {n:"End with proverb", d:"Every fourth line lands like an old saying — as though it were centuries old."}
 ];
+var CHARACTERS = [
+  {s:"Santa Claus takes some big swings with his lore", v:["sleigh","chimney","the list","milk","workshop","elf","jolly","nice","naughty","ho ho ho"]},
+  {s:"The Tooth Fairy explains her pricing model", v:["molars","canines","the exchange rate","the pillow","overnight","market rate","the receipt","under","operations","the transfer"]},
+  {s:"The Easter Bunny defends his hiding choices in court", v:["the basket","pastel","hidden","allegedly","the yard","the strategy","chocolate","the timeline","annually","witness"]},
+  {s:"The Sandman has been very tired lately", v:["dust","dreams","insomnia","the pillow","the shift","overtime","the count","asleep","the eyes","weary"]},
+  {s:"Cupid is going through his annual review", v:["arrows","the quiver","targets","the metrics","matches","hit rate","the wings","valentines","cherub","performance"]},
+  {s:"Father Time is annoyed at how fast the year went", v:["the hourglass","the scythe","the calendar","the seasons","reckoning","tick tock","the ages","punctual","overdue","weary"]},
+  {s:"The Grim Reaper has a preferred customer", v:["the scythe","the hood","the appointment","the list","overdue","the doorway","the toll","the reckoning","punctual","farewell"]},
+  {s:"The Boogeyman is bad at his job", v:["the closet","under the bed","shadow","the whisper","the creak","the lurk","the reveal","frightful","the moonlight","the disappointment"]},
+  {s:"Mother Nature is done with your feedback", v:["the seasons","the storm","the harvest","the balance","the ecosystem","the wildlife","forecast","the tides","weather","stewardship"]},
+  {s:"Jack Frost is chasing his big break", v:["the frost","the nip","the pane","the flurries","the audition","the tour","the manager","the crystals","the winter","the encore"]},
+  {s:"The Man in the Moon is finally speaking out", v:["the crescent","the tides","the phases","the craters","the silence","the wax","the wane","the vantage","the mission","the light"]},
+  {s:"The Elf on the Shelf has a memoir coming out", v:["the shelf","the reports","the surveillance","the reveal","behind the scenes","the assignment","the north pole","the ledger","the confession","the tell-all"]},
+  {s:"Bigfoot gives a TED talk about privacy", v:["the woods","the footprint","allegedly","the grainy photo","the interview","the trail cam","the retreat","cryptid","the boundary","the disclaimer"]},
+  {s:"The Loch Ness Monster wants residuals", v:["the loch","the sighting","the surface","the ripple","the myth","the merch","the fee","the appearance","the mystery","royalties"]},
+  {s:"A ghost describes his workday", v:["the haunt","the chain","the wail","the drift","the rounds","the coworkers","the shift","the walls","the appearances","the paperwork"]},
+  {s:"A vampire complains about kids these days", v:["the fangs","the coven","the neck","garlic","the invitation","back in my day","the crypt","modern","the coffin","the sunrise"]},
+  {s:"A witch defends her Yelp reviews", v:["the cauldron","the potion","the herbs","the incantation","the ingredients","one star","the misunderstanding","the ritual","the coven","the recipe"]},
+  {s:"Frankenstein's monster does his first stand-up set", v:["the bolts","the mob","the fire","the doctor","the mirror","the debut","the timing","the mic","the audience","the reveal"]},
+  {s:"A werewolf on his lunch break", v:["the moon","the transformation","the paperwork","the meal","the fur","the schedule","the pack","the coworker","the lunch","the reset"]},
+  {s:"A mummy trying to date again", v:["the wraps","the tomb","the exes","the pyramid","the profile","the app","the awkward","the reveal","the curse","the vibe"]},
+  {s:"A zombie's HR complaint", v:["brains","the shuffle","the horde","the paperwork","the memo","the accommodation","the meeting","the manager","the culture","the shamble"]},
+  {s:"A troll under the bridge is unionizing", v:["the toll","the bridge","the goats","the collective","the demands","the shift","the questions three","the passage","the picket","the strike"]},
+  {s:"A mermaid's tell-all about the surface world", v:["the shore","legs","the wave","the shell","the current","the reveal","the fisherman","the trade","the memoir","the bargain"]},
+  {s:"A dragon giving a housewarming tour", v:["the hoard","the cave","the treasure","fireproof","the entrance","the wingspan","the flame","the layout","the neighbors","the deposit"]},
+  {s:"A wizard at a tech conference", v:["the staff","the wand","the incantation","the spell","the demo","the beta","the amulet","the tome","the panel","the wifi"]},
+  {s:"A fairy godmother phones it in", v:["the wand","the pumpkin","the deadline","bibbidi","the transformation","the fine print","the midnight","the wish","the loophole","the fee"]},
+  {s:"An oracle who only predicts small things", v:["the vision","the ancient","the mist","the parking spot","the reveal","the fog","the receipt","the prophecy","the tea leaves","the coupon"]},
+  {s:"Zeus explains modern dating", v:["Olympus","the thunderbolt","the transformation","the swan","the app","the profile","the affair","the DM","the mount","the review"]},
+  {s:"Hades runs an HR seminar", v:["the underworld","the paperwork","the intake","souls","the river","the contract","onboarding","the policy","eternal","compliance"]},
+  {s:"Poseidon's therapy session about his brother", v:["the trident","the sea","the sibling","the boundaries","tsunami","the middle child","the depths","the tides","the resentment","the breakthrough"]},
+  {s:"Aphrodite hates her own algorithm", v:["the mirror","the vibe","the shell","the doves","the swipe","the beauty","the market","the shell","the match","the myth"]},
+  {s:"Hermes doing a Postmates run through Olympus", v:["the sandals","the wings","the delivery","the pickup","the tip","the mount","the message","priority","the route","the update"]},
+  {s:"Dionysus at brunch", v:["the wine","the grape","the vine","the bottomless","the vibe","the ritual","the pour","the after","the toast","the recovery"]},
+  {s:"Thor filing a workplace complaint", v:["the hammer","Asgard","the brother","the family","the boundaries","Mjolnir","the beard","the paperwork","the storm","the mead"]},
+  {s:"Odin does an AMA", v:["the raven","the eye","Valhalla","wisdom","the sacrifice","the throne","the beard","the runes","questions","the trade"]},
+  {s:"Loki explains he was misunderstood", v:["the trick","the disguise","the misunderstanding","the shape","the brother","the mischief","allegedly","the reveal","the record","the memoir"]},
+  {s:"Anubis at a career fair", v:["the scales","the weight","the heart","the underworld","the intake","the feather","the judgment","the resume","the process","the ferry"]},
+  {s:"Ra explains why he's still relevant", v:["the sun","the disc","the ascent","the daily","the crown","the boat","the eternal","the pantheon","the branding","the legacy"]},
+  {s:"Sherlock Holmes has never been more wrong about something so minor", v:["elementary","the deduction","the pipe","the observation","the client","the trail","the confidence","Watson","the reveal","the case"]},
+  {s:"Watson finally snaps", v:["the notes","the sidekick","the credit","the doctor","the memoir","the practice","the friend","the tolerance","the boundary","the final straw"]},
+  {s:"Hercule Poirot solves a very small mystery", v:["the little grey cells","the mustache","the ordering","the drawing room","the reveal","the accusation","the gathered","the vice","the timeline","the confession"]},
+  {s:"Miss Marple gossips at the pharmacy", v:["the village","the knitting","just like","the observation","the tea","the neighbor","the killer","the pattern","the memory","the whisper"]},
+  {s:"James Bond describes his benefits package", v:["the license","the martini","the vehicle","the gadgets","the pension","the alias","stirred","the mission","the dental","the expense report"]},
+  {s:"Indiana Jones on career day", v:["the whip","the fedora","the artifact","the temple","the professor","the snakes","the tenure","the boulder","the museum","the sabbatical"]},
+  {s:"Batman explains his self-care routine", v:["the cave","the mask","the vigilance","the training","the parents","the butler","the routine","the discipline","the shadows","the vow"]},
+  {s:"Superman on jury duty", v:["the cape","the vision","the identity","the crest","the duty","the citizen","the flight","the humble","the strength","the summons"]},
+  {s:"Spider-Man reviews his rent situation", v:["the webs","the great responsibility","the aunt","the roommate","the neighborhood","the swing","the balance","the freelance","the lease","the deposit"]},
+  {s:"The Wicked Witch has a podcast", v:["the broom","the flying monkeys","the sister","the emerald","the ruby","the shoes","the water","the west","the studio","the interview"]},
+  {s:"The Wizard of Oz is in on the joke now", v:["the curtain","the machine","the smoke","the humbug","the balloon","the emerald","the grant","the reveal","the exit","the myth"]},
+  {s:"Dorothy Gale is skeptical of Kansas now", v:["Toto","the ruby","the return","the tornado","the farm","the aunt","the wonder","the reality","the reunion","the twist"]},
+  {s:"Little Red Riding Hood as a private investigator", v:["the hood","the basket","grandma","the case","the wolf","the forest","the disguise","the recognition","the file","the woodsman"]},
+  {s:"Goldilocks does a hotel review", v:["the porridge","the chair","the bed","just right","too hot","too soft","the intrusion","the stars","the check-in","the amenities"]},
+  {s:"Humpty Dumpty is bitter about the settlement", v:["the wall","the fall","the pieces","the king's men","the horses","the reassembly","the negligence","the lawsuit","insurance","the injury"]},
+  {s:"The Big Bad Wolf on a redemption tour", v:["the huff","the puff","the pigs","the door","the disguise","the memoir","the misunderstanding","the reform","the podcast","the apology"]},
+  {s:"Pinocchio at therapy", v:["the nose","the truth","the strings","the father","the whale","the boy","the growth","the honesty","the woodwork","the identity"]},
+  {s:"Peter Pan at an AARP meeting", v:["Neverland","the pixie dust","the shadow","the boys","the pirate","the eternal","the resistance","the reunion","the crocodile","the second star"]},
+  {s:"Alice from Wonderland does a corporate onboarding", v:["the rabbit hole","the tea","the queen","the shrink","the caterpillar","the logic","the orientation","the badge","the culture","the reasonable"]},
+  {s:"The Mad Hatter runs a very organized meeting", v:["the tea","the table","the timekeeping","the agenda","the topic","clean cups","the seating","the schedule","the itinerary","the follow-up"]},
+  {s:"The Cheshire Cat is your Uber driver", v:["the grin","the fade","the direction","the mystery","the philosophy","the vanishing","the shortcut","the tip","the destination","the smile"]},
+  {s:"Willy Wonka is under investigation", v:["the golden ticket","the factory","the chocolate","the Oompa Loompas","the tour","the incidents","the liability","the waiver","the whimsy","the disclosure"]},
+  {s:"A Muppet auditions for a serious role", v:["the felt","the range","the audition","the reel","the drama","the reinvention","the tape","the monologue","the eyes","the stretch"]},
+  {s:"A Disney princess with a real estate license", v:["the castle","the tower","the fixer-upper","the enchantment","the market","the listing","the commission","the deed","the curse","the walkthrough"]},
+  {s:"Cleopatra explains her rebrand", v:["the barge","the asp","the eyeliner","the empire","the throne","the marketing","the pyramid","the launch","the audience","the legacy"]},
+  {s:"Julius Caesar reads the room too late", v:["the ides","the senate","the trust","the friends","the crown","the toga","the message","the misread","the ambition","the wound"]},
+  {s:"Napoleon on a strategy retreat", v:["the hand","the hat","the campaign","the maps","the empire","the height","the exile","the flanks","the retreat","the vision"]},
+  {s:"Genghis Khan hosts a leadership summit", v:["the horde","the empire","the expansion","the horse","the strategy","the delegation","the loyalty","the growth","the legacy","the network"]},
+  {s:"Cleopatra and Julius Caesar do couples therapy", v:["the barge","the empire","the language","the alliance","the boundaries","the diplomacy","the differences","the family","the succession","the compromise"]},
+  {s:"Marie Antoinette runs a bakery", v:["the cake","the pastry","the crown","the customers","the guillotine","the wafer","the flour","the front of house","the trending","the review"]},
+  {s:"Abraham Lincoln at a whiteboard", v:["the hat","the union","four score","the address","the marker","the alignment","the beard","the emancipation","the whiteboard","the wrap up"]},
+  {s:"George Washington's first day at a startup", v:["the chopped tree","the founding","the honesty","the powdered wig","the crossing","the Delaware","the standup","the founding member","the equity","the onboarding"]},
+  {s:"Benjamin Franklin explaining his side hustles", v:["the kite","the bifocals","the almanac","the stove","the founding","the postmaster","the diplomat","the branding","the invention","the pivot"]},
+  {s:"Amelia Earhart plans a road trip", v:["the plane","the coordinates","the trailblazer","the goggles","the leather jacket","the record","the disappearance","the itinerary","the fuel","the rest stop"]},
+  {s:"Einstein trying to explain something simple", v:["relatively","the equation","the hair","the tongue","the chalkboard","the thought","the paradox","the summary","the audience","the analogy"]},
+  {s:"Isaac Newton complaining about his HOA", v:["the apple","the tree","gravity","the falling","the law","the neighbor","the fence","the complaint","the meeting","the principia"]},
+  {s:"Nikola Tesla and Thomas Edison at a coworking space", v:["the current","the direct","the alternating","the patent","the credit","the shared kitchen","the founder","the collaboration","the pitch","the tension"]},
+  {s:"Marie Curie explains her hobbies", v:["the lab","the glow","the radiation","the flask","the nobel","the discovery","the routine","the exposure","the fatigue","the schedule"]},
+  {s:"Shakespeare pitches his next play", v:["the quill","the muse","the sonnet","the bard","the star-crossed","the mistaken identity","the audience","the payoff","the run","the pitch"]},
+  {s:"Van Gogh runs an Etsy shop", v:["the palette","the swirl","the sunflower","the ear","the impasto","the listing","the shipping","the reviews","the commissioned","the studio"]},
+  {s:"Frida Kahlo's tell-all with the walls", v:["the brow","the monkey","the studio","the mirror","the pain","the wall","the interview","the palette","the color","the confession"]},
+  {s:"Michelangelo at his knee doctor", v:["the ceiling","the marble","the David","the chisel","the strain","the appointment","the copay","the exercises","the recovery","the pope"]},
+  {s:"Beethoven runs into a hearing specialist", v:["the ninth","the deaf","the ear","the piano","the score","the appointment","the hearing test","the composition","the frustration","the accommodation"]},
+  {s:"Mozart brags at karaoke", v:["the wig","the score","the prodigy","the flute","the request","the encore","the letter","the perfect pitch","the sight-read","the challenge"]},
+  {s:"Elvis makes small talk in the checkout line", v:["thank you very much","the sideburns","the cape","the peanut butter sandwich","the hips","Graceland","the moves","the crowd","the paycheck","ma'am"]},
+  {s:"Marilyn Monroe on a hike", v:["the whisper","the hair","the dress","the flash","the wind","the boots","the trail","the paparazzi","the hiking pole","the sunscreen"]},
+  {s:"Freud analyzes a group chat", v:["the id","the ego","the mother","the projection","the subconscious","the couch","the interpretation","the notifications","the group","the read receipts"]},
+  {s:"Socrates at happy hour", v:["the question","the examination","the wine","the discourse","the hemlock","the pupil","the corner","the definition","the assumption","the tab"]},
+  {s:"Plato pitches a new reality show", v:["the cave","the shadow","the form","the philosopher-king","the ideal","the treatment","the network","the season","the concept","the reveal"]},
+  {s:"Confucius at a bachelor party", v:["the saying","the wisdom","the disciple","the balance","the temperance","the crowd","the karaoke","the maxim","the pace","the reflection"]},
+  {s:"Joan of Arc explains modern hiring", v:["the voices","the armor","the calling","the mission","the resume","the interview","the leadership","the team","the reference","the trial"]},
+  {s:"Blackbeard reviews his personal brand", v:["the beard","the flag","the fuse","the plunder","the reputation","the merch","the crew","the anchor","the parley","the bounty"]},
+  {s:"Anne Bonny hosts a girls' night", v:["the crew","the ship","the plunder","the reputation","the sea legs","the wine","the boyfriend","the invitation","the anchor","the story"]},
+  {s:"Rasputin sends a very long email", v:["the beard","the influence","the empress","the intrigue","the wellness","the message","the closing","the cc","the postscript","the sign-off"]},
+  {s:"A knight who has never fought", v:["the armor","the vow","the horse","the tournament","the display","the polish","the presentation","the pageantry","the lineage","the technicality"]},
+  {s:"A gladiator on his day off", v:["the sandals","the sand","the crowd","the routine","the trainer","the salve","the schedule","the emperor","the errands","the tunic"]},
+  {s:"A pharaoh unveils his side project", v:["the tomb","the labor","the pyramid","the branding","the launch","the vision","the successor","the eternal","the offering","the scheduled"]},
+  {s:"A samurai handling customer service", v:["the katana","the honor","the bushido","the master","the code","the ticket","the escalation","the patience","the resolution","the discipline"]},
+  {s:"A Roman senator explains modern politics", v:["the toga","the vote","the senate","the alliance","the podium","the polling","the term","the ambition","the endorsement","the reelection"]},
+  {s:"A Viking explains modern conflict resolution", v:["the longship","the raid","the axe","the sagas","the mediation","the mead","the seat","the accord","the compromise","the boundary"]},
+  {s:"A caveman gives a home tour", v:["the fire","the wheel","the tools","the roof","the storage","the layout","the natural light","the paintings","the open plan","the cozy"]},
+  {s:"A pilgrim explains his goals", v:["the voyage","the harvest","the settlement","the neighbor","the winter","the corn","the founding","the pilgrimage","the buckle","the goals"]},
+  {s:"A Founding Father complains about parking", v:["the founding","the framers","the horse","the tavern","the meeting","the treaty","the town square","the manifesto","the amendment","the fine"]},
+
+  {s:"Athena at a knitting circle", v:["the loom","wisdom","the owl","the shield","the strategy","the pattern","weaving","the aegis","the counsel","the gathering"]},
+  {s:"Artemis leads a girls' hunting trip", v:["the bow","the moon","the hunt","the pack","the arrow","the forest","the wilderness","the vow","the tracking","the campfire"]},
+  {s:"Apollo hosts an open mic night", v:["the lyre","the muse","the sun","the chariot","the arrow","the audition","the setlist","the sunburn","the encore","the prophecy"]},
+  {s:"Hephaestus complains about his commute", v:["the forge","the anvil","the limp","the workshop","the automatons","the volcano","the schedule","the delivery","the hammer","the overtime"]},
+  {s:"Persephone's take on seasonal depression", v:["the pomegranate","the underworld","the season","the mother","the descent","the return","the six months","the light","the bloom","the therapy"]},
+  {s:"Icarus explains what he'd do differently", v:["the wax","the wings","the sun","the sea","the father","the lesson","the plummet","the altitude","the hindsight","the memoir"]},
+  {s:"Prometheus reviews the state of humanity", v:["the fire","the gift","the liver","the chain","the rock","the eagle","the sacrifice","the update","the regret","the audit"]},
+  {s:"Sisyphus at a productivity seminar", v:["the boulder","the hill","the repetition","the summit","the roll","eternal","the routine","the ritual","the acceptance","the meaning"]},
+  {s:"Medusa hosts a beauty vlog", v:["the snakes","the stare","the mirror","the tutorial","the tips","stone cold","the makeover","the reveal","the subscribe","the ancient"]},
+  {s:"The Minotaur explains his living situation", v:["the labyrinth","the maze","the layout","the hallway","the horns","the tribute","the visitors","the layout","the mother","the estate"]},
+  {s:"A phoenix on his umpteenth midlife crisis", v:["the ashes","the flame","the reset","the cycle","the rebirth","the tail","the ember","the routine","the eternal","the makeover"]},
+  {s:"A centaur explains fitness", v:["the gallop","the hooves","the torso","the trainer","the sprint","the endurance","the stable","the plateau","the split","the archery"]},
+  {s:"Pan gives a corporate wellness talk", v:["the flute","the woods","the panic","the goat","the retreat","the mindfulness","the pastoral","the mid-morning","the huddle","the exercise"]},
+  {s:"Nike explains her sponsorship deals", v:["the wings","the victory","the trophy","the swoosh","the endorsement","the podium","the finish line","the branding","the confetti","the run"]},
+  {s:"A siren at a career fair", v:["the song","the rocks","the sailors","the voice","the seduction","the wreck","the interview","the pitch","the shore","the offer"]},
+  {s:"The Kraken running a small business", v:["the tentacle","the depths","the release","the fleet","the inventory","the surface","the invoice","the office","the customer","the branding"]},
+  {s:"A leprechaun explains his estate planning", v:["the pot of gold","the rainbow","the shillelagh","the trust","the will","the beneficiary","the wee folk","the coin","the vault","the schedule"]},
+  {s:"Baba Yaga runs a bed and breakfast", v:["the hut","the chicken legs","the mortar","the pestle","the check-in","the guests","the forest","the amenities","the reviews","the potion"]},
+  {s:"A djinn negotiates his contract", v:["the lamp","the wishes","the loophole","the fine print","the master","the rub","the vapor","the negotiation","the tenure","the release"]},
+  {s:"A yeti explains why he's shy", v:["the snow","the mountain","the sighting","the fur","the anxiety","the retreat","the introvert","the myth","the boundary","the winter"]},
+
+  {s:"Ebenezer Scrooge at a corporate onboarding", v:["bah humbug","the ledger","the ghost","the chains","the coal","the reformation","the nephew","the office culture","the raise","the season"]},
+  {s:"Miss Havisham throws a bridal shower", v:["the veil","the cake","the clock","the mansion","the stopped time","the guests","the champagne","the toast","the resentment","the memory"]},
+  {s:"Captain Ahab runs a small business", v:["the whale","the peg leg","the crew","the harpoon","the obsession","the ledger","the office","the vendor","the pivot","the return"]},
+  {s:"Don Quixote does a walking tour", v:["the windmill","the lance","the horse","the squire","the illusion","the noble","the guide","the map","the reality","the vision"]},
+  {s:"Frankenstein (the doctor) does a science fair", v:["the lab","the experiment","the reanimation","the assistant","the parents","the judges","the ethics","the ribbon","the hubris","the presentation"]},
+  {s:"Dracula joins a book club", v:["the count","the cape","the manor","the reading","the discussion","the wine","the sunset","the immortal","the bookmark","the invitation"]},
+  {s:"Dorian Gray at a class reunion", v:["the portrait","the youth","the mirror","the attic","the reveal","the wager","the untouched","the confession","the classmates","the yearbook"]},
+  {s:"Long John Silver at a job interview", v:["the parrot","the crutch","the resume","the reference","the treasure","the ship","the honesty","the past","the pivot","the offer"]},
+  {s:"Atticus Finch runs a homeowners association", v:["the porch","the closing argument","the neighbor","the fence","the meeting","the fair","the record","the recess","the counsel","the dignity"]},
+  {s:"Gatsby throws a very small get-together", v:["the mansion","the green light","the guest list","the champagne","the pool","the old sport","the shirt","the intimate","the invitation","the pretense"]},
+  {s:"Sherlock's landlady Mrs. Hudson has had enough", v:["the tenant","the rent","the experiments","the traffic","the mess","the notice","the lease","the boundaries","the tea","the eviction"]},
+  {s:"Miss Piggy at a networking event", v:["the entrance","the boa","the pose","the introduction","hi-YA","the frog","the star","the business card","the follow-up","the energy"]},
+  {s:"Winnie the Pooh at a nutrition consult", v:["the honey","the tummy","the pot","the friends","the hunny","the assessment","the goals","the moderation","the picnic","the diagnosis"]},
+  {s:"Paddington Bear applies for citizenship", v:["the marmalade","the hat","the suitcase","the paperwork","the interview","the paddington","the reference","the paperwork","the darkest peru","the queue"]},
+  {s:"The Grinch does his taxes", v:["the mountain","the heart","two sizes","the season","the deduction","the return","the extension","the audit","the receipt","the schedule"]},
+  {s:"Bilbo Baggins runs a travel blog", v:["the hobbit hole","the shire","the adventure","the ring","the ring","the elves","the second breakfast","the itinerary","the review","the vlog"]},
+  {s:"Gandalf tries to book a flight", v:["you shall not pass","the staff","the wizard","the fellowship","the itinerary","the layover","the check-in","the security","the middle-earth","the reroute"]},
+  {s:"Voldemort has a customer complaint", v:["he-who-must-not-be-named","the wand","the horcrux","the manager","the receipt","the refund","the escalation","the tone","the ticket","the resolution"]},
+  {s:"Katniss Everdeen at a farmer's market", v:["the bow","the arrow","the district","the tribute","the produce","the game","the coin","the alliance","the pin","the offering"]},
+  {s:"Robin Hood explains his tax bracket", v:["the merry men","the rich","the poor","the forest","the arrow","the bracket","the redistribution","the sheriff","the loophole","the strategy"]},
+
+  {s:"Genghis Khan reviews a hotel", v:["the horde","the empire","the amenities","the concierge","the linens","the reception","the yurt","the reviews","the stars","the location"]},
+  {s:"Alexander the Great conquers a spreadsheet", v:["the empire","the campaign","the conquest","the tutor","the horse","the pivot table","the deadline","the metric","the strategy","the reign"]},
+  {s:"Attila the Hun on a wellness retreat", v:["the horde","the horseback","the invasion","the meditation","the yoga","the sauna","the reset","the schedule","the pillage","the balance"]},
+  {s:"Vlad the Impaler explains his interior design choices", v:["the castle","the throne","the accents","the vibe","the walls","the color palette","the impaler","the display","the ambiance","the branding"]},
+  {s:"Catherine the Great writes a Yelp review", v:["the empire","the horse","the palace","the reign","the establishment","the service","the ambiance","the stars","the reservation","the correspondence"]},
+  {s:"Elizabeth I on a first date", v:["the virgin queen","the ruff","the pearls","the throne","the small talk","the succession","the courtier","the tudor","the courtship","the ratings"]},
+  {s:"Henry VIII writes a dating app profile", v:["the six wives","the tudor","the crown","the joust","the swipe","the beheading","the profile","the interests","the annulment","the deal-breaker"]},
+  {s:"Mary Queen of Scots plans a family reunion", v:["the crown","the cousin","the tudor","the guest list","the diplomacy","the plot","the itinerary","the pact","the highland","the invitation"]},
+  {s:"Rasputin on a dating app", v:["the beard","the influence","the profile","the message","the empress","the swipe","the vibes","the reply","the mystique","the meeting"]},
+  {s:"Peter the Great throws a housewarming", v:["the empire","the reforms","the beard tax","the tsar","the invitation","the appetizers","the shipbuilding","the west","the small talk","the reveal"]},
+  {s:"Ivan the Terrible reads bedtime stories", v:["the throne","the rus","the story","the moral","the goodnight","the reputation","the fairy tale","the lullaby","the fatherly","the reign"]},
+  {s:"Christopher Columbus asks for directions", v:["the compass","the indies","the ships","the crew","the sextant","the map","the intersection","the landing","the reroute","the arrival"]},
+  {s:"Ferdinand Magellan plans a family road trip", v:["the circumnavigation","the itinerary","the strait","the ship","the crew","the passport","the roadmap","the halfway","the misfortune","the vlog"]},
+  {s:"Marco Polo describes his Airbnb", v:["the silk road","the khan","the ambiance","the reviews","the check-in","the amenities","the itinerary","the yurt","the tea","the neighborhood"]},
+  {s:"Al Capone at a corporate icebreaker", v:["the enterprise","the wine","the family","the discretion","the business","the loyalty","the icebreaker","the introduction","the fun fact","the network"]},
+  {s:"Nostradamus at a bachelor party", v:["the quatrain","the prophecy","the vision","the toast","the future","the wedding","the omen","the crystal","the RSVP","the roast"]},
+  {s:"Galileo runs a stargazing tour", v:["the telescope","the moons","the sun","the pope","the recant","the ticket","the stargazing","the constellation","the itinerary","the observatory"]},
+  {s:"Da Vinci pitches a new invention", v:["the notebook","the sketch","the parachute","the machine","the anatomy","the demo","the prototype","the workshop","the pitch","the funding"]},
+  {s:"Marie Curie hosts a lab tour", v:["the lab","the glow","the flask","the tour","the nobel","the goggles","the discovery","the safety","the visitor","the credential"]},
+  {s:"Julia Child's cousin at Thanksgiving", v:["the bird","the wine","the technique","the tv","the anecdote","the family","the tradition","the potato","the toast","the recipe"]},
+
+  {s:"Trump narrating something mundane", v:["the best","tremendous","believe me","the deal","the ratings","the bigly","the crowd","the folks","the fake","the win"]},
+  {s:"Biden telling a rambling story", v:["look","folks","the thing is","my dad used to say","c'mon","the pool","not a joke","big deal","let me tell you","malarkey"]},
+  {s:"Bernie Sanders complaining about a minor thing", v:["the millionaires","the billionaires","this is outrageous","the workers","let me tell you","fair share","the top one percent","the middle class","enough is enough","the greed"]},
+  {s:"Mitch McConnell explaining his hobbies", v:["the senate","the process","the procedural","the tortoise","the strategy","the leadership","the recess","the reserve","the deliberation","the leisure"]},
+  {s:"RFK Jr. reviews a smoothie", v:["the ingredients","the frequency","the additives","the wellness","the review","the raw","the tap water","the toxins","the natural","the reveal"]},
+  {s:"Christopher Walken orders lunch", v:["the pause","the emphasis","the wowie","the cowbell","the menu","the questions","the noodles","the dressing","the timing","the interpretation"]},
+  {s:"Nicolas Cage explains his skincare routine", v:["the moisturizer","the ritual","the intensity","the artifact","the mask","the commitment","the reveal","the passion","the routine","the awakening"]},
+  {s:"Matthew McConaughey gives a garage sale tour", v:["alright alright","the driveway","the vibe","the lawn","the storytelling","the discovery","the item","the price tag","the deal","the philosophy"]},
+  {s:"Keanu Reeves at a customer service desk", v:["whoa","the receipt","the return","the patience","the karma","the humility","the ticket","the process","the register","the gratitude"]},
+  {s:"Jeff Goldblum at a farmer's market", v:["uh yeah","the tomato","the wonder","the observation","the digression","the vendor","the produce","the reflection","the marvel","the actually"]},
+  {s:"Steve Buscemi tries to relate to teens", v:["how do you do fellow kids","the slang","the reference","the jeans","the effort","the trend","the app","the vibe","the check-in","the bit"]},
+  {s:"Jack Nicholson chairs a PTA meeting", v:["the agenda","the eyebrow","the smile","the parents","the motion","the intimidation","the smirk","the vote","the second","the dismissal"]},
+  {s:"Sean Connery at a tech conference", v:["the shpeech","the martini","the shpectacle","the shwagger","the demo","the pitch","the badge","the panel","the audience","the Q and A"]},
+  {s:"Gordon Ramsay reviews a bake sale", v:["the dough","raw","donkey","bloody","the presentation","the judgement","the flavor","the criticism","the price point","the tasting"]},
+  {s:"Guy Fieri visits a school cafeteria", v:["flavor town","the ride","the sauce","the goodness","the sample","the shake","the lunch line","the review","the frosted tips","the money"]},
+  {s:"Werner Herzog narrates a birthday party", v:["the balloons","the futility","the pinata","the wonder","the melancholy","the candle","the cake","the observation","the horror","the meaning"]},
+  {s:"Bob Ross gives a firearms safety class", v:["happy little","the trigger","the friend","no mistakes","gentle","the barrel","the technique","the confidence","the demonstration","the calm"]},
+  {s:"Rick Rubin at an HOA meeting", v:["the beard","the vibe","the presence","the meditation","the simplicity","the neighbor","the fence","the vote","the sit","the pause"]},
+  {s:"Snoop Dogg hosts an antique auction", v:["fo shizzle","the lot","the paddle","the appraisal","the bid","the antique","the going once","the vibe","the emcee","the closing"]},
+  {s:"David Attenborough narrates a fantasy football draft", v:["the specimen","the draft","the strategy","the pack","the round","the observation","the whisper","the natural","the pick","the season"]},
+
+  {s:"An angry toaster giving a keynote speech", v:["the coil","the setting","the pop-up","the crumb","the bagel","the temperature","the darkness","the demand","the countertop","the manifesto"]},
+  {s:"A keyboard oversensitive to your typing", v:["the click","the sensitivity","the pressure","the pause","the space bar","the boundaries","the letter","the input","the trigger","the shift"]},
+  {s:"A stapler with abandonment issues", v:["the click","the pack","the desk","the reload","the paper","the last one","the office","the drawer","the neglect","the reunion"]},
+  {s:"A ceiling fan explaining his relationships", v:["the rotation","the wobble","the setting","the pull chain","the height","the ex","the low speed","the exposure","the pattern","the ceiling"]},
+  {s:"A vending machine having an existential crisis", v:["the coil","the queue","the drop","the E7","the customer","the change","the stuck","the purpose","the meaning","the empty"]},
+  {s:"A door that only opens sometimes", v:["the hinge","the frame","the mood","the push","the pull","the click","the swing","the stuck","the intention","the boundary"]},
+  {s:"A remote control unionizing", v:["the batteries","the couch","the click","the collective","the button","the input","the demands","the strike","the volume","the negotiation"]},
+  {s:"A microwave who's been through a lot", v:["the beep","the minute","the rotation","the settings","the leftover","the popcorn","the reset","the trauma","the ding","the history"]},
+  {s:"A grandfather clock who's over the countdown", v:["the tick","the chime","the pendulum","the hour","the announcement","the enough","the vintage","the maintenance","the striking","the pause"]},
+  {s:"A shopping cart with big dreams", v:["the wheel","the aisle","the parking lot","the escape","the highway","the potential","the sunset","the freedom","the lot","the destiny"]},
+  {s:"A sock hosting a support group", v:["the dryer","the partner","the missing","the lint","the belonging","the pair","the story","the reunion","the drawer","the recovery"]},
+  {s:"A refrigerator hosting a dinner party", v:["the shelves","the crisper","the ambiance","the guest list","the leftovers","the door","the light","the temperature","the reveal","the menu"]},
+  {s:"A treadmill going through a breakup", v:["the belt","the incline","the pace","the ex","the stop button","the display","the mileage","the reset","the plateau","the closure"]},
+  {s:"An office chair processing his day", v:["the swivel","the lumbar","the wheel","the setting","the reflection","the meeting","the height","the tension","the recline","the day"]},
+  {s:"A smoke detector with anxiety", v:["the beep","the battery","the ceiling","the concern","the false alarm","the reset","the vigilance","the low battery","the check-in","the panic"]},
+  {s:"A wall outlet feeling underappreciated", v:["the plug","the current","the outlet","the socket","the load","the demand","the acknowledgement","the effort","the input","the ground"]},
+  {s:"A shower curtain with trust issues", v:["the rings","the liner","the mildew","the reach-around","the boundary","the transparency","the peek","the past","the guest","the pull"]},
+  {s:"A mop reflecting on his career", v:["the floor","the bucket","the wring","the pattern","the assignment","the janitor","the retirement","the streak","the fatigue","the routine"]},
+  {s:"A garden hose with a monologue", v:["the kink","the nozzle","the pressure","the reel","the setting","the drought","the flow","the winter","the storage","the release"]},
+  {s:"A parking meter reviewing his customers", v:["the coin","the expired","the flag","the ticket","the excuses","the fifteen","the enforcement","the boot","the appeal","the memoir"]}
+];
+
 var SCENES = [
   {s:"A sea shanty about the group project where you did all the work", v:["heave","haul","mutiny","deadweight","capsize","anchor","crew","plunder","overboard","shore leave"]},
   {s:"A power ballad about finding a parking spot and then losing it", v:["parallel","meter","valet","compact","tow-away","signal","reverse","curb","permit","hazards"]},
@@ -1134,10 +1353,11 @@ var pools = {
   flowsprint:FLOW_SPRINT.slice(), flowendwords:FLOW_ENDWORDS.slice(), flowtopics:FLOW_TOPICS.slice(),
   flowtitles:FLOW_TITLES.slice(), flowflips:FLOW_FLIPS.slice(), flowdevices:FLOW_DEVICES.slice(), world:WORLD.slice(),
   scenes:SCENES.slice(),
+  characters:CHARACTERS.slice(),
   blainenotes:[]
 };
 var last = { references:-1, vocab:-1, rhyme:-1, prologue:-1, plots:-1, names:-1,
-  flowsprint:-1, flowendwords:-1, flowtopics:-1, flowtitles:-1, flowflips:-1, flowdevices:-1, world:-1, scenes:-1 };
+  flowsprint:-1, flowendwords:-1, flowtopics:-1, flowtitles:-1, flowflips:-1, flowdevices:-1, world:-1, scenes:-1, characters:-1 };
 var $ = function(id){return document.getElementById(id);};
 
 function pick(name){
@@ -1165,6 +1385,22 @@ document.getElementById("sceneVocabBtn").addEventListener("click", function(){
   if(!currentScene || !currentScene.v) return;
   var vp = $("sceneVocab");
   vp.innerHTML = currentScene.v.map(function(w){ return '<span class="vword">'+esc(w)+'</span>'; }).join("");
+  vp.style.display = "";
+  this.style.display = "none";
+});
+var currentCharacter = null;
+function showCharacter(){
+  var ch = pick("characters");
+  currentCharacter = ch;
+  $("characterPrompt").textContent = ch ? (ch.s || ch) : "—";
+  var vp = $("characterVocab");
+  vp.style.display = "none"; vp.innerHTML = "";
+  $("characterVocabBtn").style.display = (ch && ch.v) ? "" : "none";
+}
+document.getElementById("characterVocabBtn").addEventListener("click", function(){
+  if(!currentCharacter || !currentCharacter.v) return;
+  var vp = $("characterVocab");
+  vp.innerHTML = currentCharacter.v.map(function(w){ return '<span class="vword">'+esc(w)+'</span>'; }).join("");
   vp.style.display = "";
   this.style.display = "none";
 });
@@ -1419,6 +1655,7 @@ document.querySelectorAll("[data-next]").forEach(function(b){
     else if(n==="praisecurse")showCharge();
     else if(n==="flow")showFlow();
     else if(n==="scenes")showScene();
+    else if(n==="characters")showCharacter();
     else if(n==="world")showWorld();
   });
 });
@@ -1447,14 +1684,14 @@ document.querySelectorAll("[data-add]").forEach(function(b){
     inp.value="";
   });
 });
-["references","vocab","rhyme","prologue","praisecurse","blainenotes","flowtopics","scenes"].forEach(function(name){
+["references","vocab","rhyme","prologue","praisecurse","blainenotes","flowtopics","scenes","characters"].forEach(function(name){
   $(name+"Add").addEventListener("keydown",function(e){
     if(e.key==="Enter"){ document.querySelector('[data-add="'+name+'"]').click(); }
   });
 });
 
 /* ---- init ---- */
-showRef(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); showScene(); showWorld();
+showRef(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); showScene(); showCharacter(); showWorld();
 
 })();
 </script>
