@@ -101,6 +101,7 @@
 
   <nav id="nav">
     <button class="tab on" data-tab="references">References</button>
+    <button class="tab" data-tab="pop">Pop Culture</button>
     <button class="tab" data-tab="praisecurse">Praise / Curse</button>
     <button class="tab" data-tab="prologue">Prologue</button>
     <button class="tab" data-tab="rhyme">Rhyme</button>
@@ -120,6 +121,14 @@
     <button class="next" data-next="references">Next category ↻</button>
     <div class="add"><input id="referencesAdd" placeholder="Add your own category…" /><button data-add="references">Add</button></div>
     <p class="added" id="referencesAdded"></p>
+  </section>
+
+  <section id="pop">
+    <p class="blurb">A movie, show, celebrity, or band. Drop it in the verse and let the house catch it.</p>
+    <div class="card"><div class="eyebrow">Work this in</div><p class="prompt" id="popPrompt">—</p></div>
+    <button class="next" data-next="pop">Next reference ↻</button>
+    <div class="add"><input id="popAdd" placeholder="Add your own reference…" /><button data-add="pop">Add</button></div>
+    <p class="added" id="popAdded"></p>
   </section>
 
   <section id="praisecurse">
@@ -572,6 +581,218 @@ var RHYME = [
   "scuffle","muffle","stifle","rifle","trifle","ferret","hermit","summit","committed","permitted",
   "emitted","admitted","transmitted","submitted","outwitted","ostrich","sandwich","zenith","width","sixth",
   "twelfth","eighth","depth","warmth"
+];
+
+var POP = [
+  "The Godfather","The Godfather Part II","Goodfellas","Scarface","Casino","The Departed","Pulp Fiction",
+  "Reservoir Dogs","Kill Bill","Django Unchained","Inglourious Basterds","Once Upon a Time in Hollywood",
+  "Jaws","E.T.","Jurassic Park","Indiana Jones","Raiders of the Lost Ark",
+  "Close Encounters of the Third Kind","Saving Private Ryan","Schindler's List","Star Wars",
+  "The Empire Strikes Back","Return of the Jedi","The Phantom Menace","Rogue One","The Mandalorian",
+  "Star Trek","Alien","Aliens","Predator","The Terminator","Terminator 2","RoboCop","Blade Runner","Mad Max",
+  "Mad Max Fury Road","The Matrix","Inception","Interstellar","Tenet","Dunkirk","Oppenheimer",
+  "The Dark Knight","Batman Begins","The Dark Knight Rises","Joker","Superman","Spider-Man","Spider-Verse",
+  "The Avengers","Iron Man","Black Panther","Thor Ragnarok","Guardians of the Galaxy","Deadpool","Logan",
+  "X-Men","The Incredibles","Toy Story","Finding Nemo","Monsters Inc","Up","WALL-E","Ratatouille",
+  "Inside Out","Coco","Shrek","The Lion King","Aladdin","Beauty and the Beast","The Little Mermaid","Frozen",
+  "Moana","Encanto","Mulan","Cinderella","Snow White","Sleeping Beauty","Pinocchio","Dumbo","Bambi",
+  "Fantasia","Mary Poppins","The Sound of Music","The Wizard of Oz","Singin' in the Rain","Citizen Kane",
+  "Casablanca","Gone with the Wind","It's a Wonderful Life","Vertigo","Psycho","Rear Window",
+  "North by Northwest","The Birds","12 Angry Men","On the Waterfront","Lawrence of Arabia",
+  "The Bridge on the River Kwai","Ben-Hur","Spartacus","Gladiator","Braveheart","The Last Samurai","300",
+  "Troy","Titanic","Avatar","The Revenant","The Wolf of Wall Street","Catch Me If You Can","The Aviator",
+  "Shutter Island","The Shawshank Redemption","The Green Mile","Forrest Gump","Cast Away","Big",
+  "Philadelphia","Apollo 13","A League of Their Own","Sleepless in Seattle","You've Got Mail",
+  "When Harry Met Sally","Notting Hill","Four Weddings and a Funeral","Love Actually","Bridget Jones's Diary",
+  "Pretty Woman","Dirty Dancing","Ghost","The Notebook","La La Land","Whiplash","Black Swan",
+  "Requiem for a Dream","The Wrestler","Rocky","Raging Bull","Taxi Driver","The King of Comedy",
+  "Mean Streets","The Irishman","Heat","The Fugitive","Air Force One","Die Hard","Lethal Weapon",
+  "Beverly Hills Cop","Bad Boys","Speed","Point Break","Top Gun","Top Gun Maverick","Mission Impossible",
+  "The Bourne Identity","James Bond","Goldfinger","Skyfall","Casino Royale","Ocean's Eleven",
+  "The Italian Job","Heist","The Sting","Butch Cassidy and the Sundance Kid","The Good the Bad and the Ugly",
+  "Unforgiven","True Grit","No Country for Old Men","Fargo","The Big Lebowski","O Brother Where Art Thou",
+  "Raising Arizona","Burn After Reading","There Will Be Blood","Boogie Nights","Magnolia","Punch-Drunk Love",
+  "The Master","Phantom Thread","Eternal Sunshine of the Spotless Mind","Being John Malkovich","Adaptation",
+  "Her","Lost in Translation","The Virgin Suicides","Moonrise Kingdom","The Grand Budapest Hotel",
+  "The Royal Tenenbaums","Rushmore","Fantastic Mr Fox","Little Miss Sunshine","Juno","Napoleon Dynamite",
+  "Superbad","Knocked Up","The 40-Year-Old Virgin","Anchorman","Talladega Nights","Step Brothers","Elf",
+  "Old School","Wedding Crashers","Dodgeball","Zoolander","Tropic Thunder","Meet the Parents",
+  "There's Something About Mary","Dumb and Dumber","Ace Ventura","The Mask","Liar Liar","Groundhog Day",
+  "Caddyshack","Ghostbusters","Stripes","Animal House","The Blues Brothers","Airplane","The Naked Gun",
+  "Spaceballs","Blazing Saddles","Young Frankenstein","Monty Python and the Holy Grail","Life of Brian",
+  "This Is Spinal Tap","Office Space","Clerks","Clueless","Mean Girls","Legally Blonde","Bring It On",
+  "10 Things I Hate About You","The Breakfast Club","Ferris Bueller's Day Off","Sixteen Candles",
+  "Pretty in Pink","Say Anything","Back to the Future","The Goonies","Stand By Me","The Karate Kid",
+  "Footloose","Flashdance","Grease","Saturday Night Fever","Purple Rain","The Rocky Horror Picture Show",
+  "Rain Man","Good Will Hunting","Dead Poets Society","A Few Good Men","The Firm","Jerry Maguire",
+  "As Good as It Gets","American Beauty","Fight Club","Se7en","The Silence of the Lambs","Zodiac","Gone Girl",
+  "The Social Network","The Sixth Sense","Signs","Unbreakable","The Others","The Shining","The Exorcist",
+  "Rosemary's Baby","Halloween","Friday the 13th","A Nightmare on Elm Street","Scream","It","The Conjuring",
+  "Get Out","Us","Nope","Hereditary","Midsommar","A Quiet Place","The Babadook","Paranormal Activity",
+  "The Blair Witch Project","Night of the Living Dead","Dawn of the Dead","Shaun of the Dead","Zombieland",
+  "World War Z","28 Days Later","I Am Legend","Children of Men","District 9","Arrival","Gravity",
+  "The Martian","Contact","2001 A Space Odyssey","Solaris","Dune","The Fifth Element","Total Recall",
+  "Minority Report","Ex Machina","Everything Everywhere All at Once","Parasite",
+  "Crouching Tiger Hidden Dragon","Hero","Kung Fu Panda","Enter the Dragon","The Raid","John Wick","Kingsman",
+  "Baby Driver","Drive","Nightcrawler","Michael Clayton","Erin Brockovich","Spotlight",
+  "All the President's Men","The Post","Argo","Zero Dark Thirty","The Hurt Locker","Platoon",
+  "Full Metal Jacket","Apocalypse Now","The Deer Hunter","Born on the Fourth of July","Black Hawk Down",
+  "American Sniper","1917","Jojo Rabbit","The Pianist","Life Is Beautiful","Slumdog Millionaire",
+  "The Lord of the Rings","The Fellowship of the Ring","The Two Towers","The Return of the King","The Hobbit",
+  "Harry Potter","The Sorcerer's Stone","The Prisoner of Azkaban","The Goblet of Fire",
+  "The Chronicles of Narnia","The Hunger Games","Twilight","Divergent","The Maze Runner","Percy Jackson",
+  "The Princess Bride","Willow","Labyrinth","The NeverEnding Story","The Dark Crystal","Beetlejuice",
+  "Edward Scissorhands","The Nightmare Before Christmas","Corpse Bride","Sweeney Todd","Big Fish",
+  "Charlie and the Chocolate Factory","Willy Wonka","Home Alone","A Christmas Story",
+  "National Lampoon's Christmas Vacation","Die Hard at Christmas","The Santa Clause","Miracle on 34th Street",
+  "The Polar Express","How the Grinch Stole Christmas","Jingle All the Way","Happy Gilmore","Billy Madison",
+  "The Waterboy","Big Daddy","50 First Dates","The Wedding Singer","Uncut Gems","Punch Drunk","Space Jam",
+  "The Sandlot","Field of Dreams","Bull Durham","Major League","Moneyball","Remember the Titans",
+  "Friday Night Lights","Rudy","Hoosiers","Cool Runnings","Miracle","The Blind Side","Creed","Southpaw",
+  "Million Dollar Baby","The Fighter","Seinfeld","Friends","Cheers","Frasier","The Office",
+  "Parks and Recreation","30 Rock","Brooklyn Nine-Nine","Community","Arrested Development",
+  "Curb Your Enthusiasm","It's Always Sunny in Philadelphia","Schitt's Creek","Ted Lasso","The Good Place",
+  "Superstore","New Girl","How I Met Your Mother","The Big Bang Theory","Modern Family",
+  "Married with Children","Roseanne","Everybody Loves Raymond","King of Queens","Home Improvement",
+  "Family Matters","Full House","Boy Meets World","Saved by the Bell","The Fresh Prince of Bel-Air","Martin",
+  "Living Single","A Different World","The Cosby Show","Good Times","The Jeffersons","All in the Family",
+  "Sanford and Son","M*A*S*H","Happy Days","Laverne and Shirley","Three's Company","The Golden Girls",
+  "Murphy Brown","Mad About You","Will and Grace","Sex and the City","Girls","Insecure","Broad City",
+  "Fleabag","Derry Girls","Peep Show","The IT Crowd","Black Books","Father Ted",
+  "Monty Python's Flying Circus","Fawlty Towers","Blackadder","Mr Bean","The Office UK","Extras","After Life",
+  "The Inbetweeners","Doctor Who","Sherlock","Downton Abbey","The Crown","Bridgerton","Poldark",
+  "Call the Midwife","Peaky Blinders","Line of Duty","Broadchurch","Luther","Happy Valley","The Fall",
+  "Bodyguard","Killing Eve","The Night Manager","The Sopranos","The Wire","Breaking Bad","Better Call Saul",
+  "Mad Men","Deadwood","Boardwalk Empire","Six Feet Under","Oz","Rome","Game of Thrones",
+  "House of the Dragon","The Last of Us","Westworld","True Detective","Ozark","Narcos","Succession",
+  "Yellowstone","Sons of Anarchy","Justified","The Shield","Dexter","Homeland","24","Prison Break","Lost",
+  "Alias","Fringe","The X-Files","Twin Peaks","Stranger Things","Dark","Black Mirror","The Twilight Zone",
+  "The Outer Limits","Tales from the Crypt","American Horror Story","The Walking Dead",
+  "Buffy the Vampire Slayer","Angel","Supernatural","Charmed","Smallville","Heroes","The Flash","Arrow",
+  "Daredevil","Jessica Jones","WandaVision","Loki","The Boys","Invincible","Watchmen","Battlestar Galactica",
+  "Firefly","Stargate","Star Trek The Next Generation","Deep Space Nine","Voyager","The Expanse","Severance",
+  "Ted","Squid Game","Money Heist","Dark Winds","Reservation Dogs","Atlanta","Barry","Russian Doll","Maniac",
+  "Bojack Horseman","Rick and Morty","The Simpsons","Futurama","Family Guy","American Dad","King of the Hill",
+  "Bob's Burgers","South Park","Beavis and Butt-Head","Daria","SpongeBob SquarePants","Rugrats","Hey Arnold",
+  "Doug","Ren and Stimpy","Animaniacs","Tiny Toons","DuckTales","Darkwing Duck","Gargoyles","Scooby-Doo",
+  "The Flintstones","The Jetsons","Tom and Jerry","Looney Tunes","Avatar The Last Airbender","Adventure Time",
+  "Regular Show","Steven Universe","Gravity Falls","Phineas and Ferb","Teen Titans","Pokemon","Dragon Ball Z",
+  "Naruto","One Piece","Attack on Titan","Death Note","Cowboy Bebop","Sailor Moon","Saturday Night Live",
+  "The Tonight Show","Late Night","The Daily Show","The Colbert Report","Last Week Tonight","Key and Peele",
+  "Chappelle's Show","In Living Color","MADtv","Whose Line Is It Anyway","The Carol Burnett Show","Mr Show",
+  "Kids in the Hall","I Think You Should Leave","Documentary Now","Nathan For You","Jeopardy",
+  "Wheel of Fortune","The Price Is Right","Family Feud","Who Wants to Be a Millionaire","Deal or No Deal",
+  "Survivor","Big Brother","The Amazing Race","The Bachelor","Love Island","Real Housewives",
+  "Keeping Up with the Kardashians","Jersey Shore","The Hills","Laguna Beach","Project Runway","Top Chef",
+  "Hell's Kitchen","MasterChef","Chopped","The Great British Bake Off","Iron Chef",
+  "Diners Drive-Ins and Dives","Kitchen Nightmares","Queer Eye","Fixer Upper","Property Brothers",
+  "House Hunters","Antiques Roadshow","Pawn Stars","American Pickers","Storage Wars","Shark Tank",
+  "The Apprentice","Dancing with the Stars","American Idol","The Voice","America's Got Talent",
+  "The Masked Singer","RuPaul's Drag Race","Planet Earth","Blue Planet","Cosmos","MythBusters","Dirty Jobs",
+  "Deadliest Catch","Ice Road Truckers","Mr Rogers' Neighborhood","Sesame Street","Reading Rainbow",
+  "Bill Nye the Science Guy","The Magic School Bus","Blue's Clues","Barney","Teletubbies","Bluey",
+  "Paw Patrol","Law and Order","SVU","CSI","NCIS","Criminal Minds","Bones","Monk","Psych","House",
+  "Grey's Anatomy","ER","Scrubs","Chicago Fire","The Good Wife","Suits","Better Things","This Is Us",
+  "One Tree Hill","The OC","Gossip Girl","Dawson's Creek","Gilmore Girls","Veronica Mars","Riverdale",
+  "Euphoria","13 Reasons Why","Glee","High School Musical","Hannah Montana","iCarly","Drake and Josh",
+  "Lizzie McGuire","That's So Raven","Kim Possible","Wizards of Waverly Place","Even Stevens",
+  "Malcolm in the Middle","Freaks and Geeks","My So-Called Life","Beverly Hills 90210","Melrose Place",
+  "Dallas","Dynasty","Knots Landing","General Hospital","Days of Our Lives","The Young and the Restless",
+  "Tom Hanks","Meryl Streep","Denzel Washington","Morgan Freeman","Robert De Niro","Al Pacino",
+  "Jack Nicholson","Clint Eastwood","Harrison Ford","Sylvester Stallone","Arnold Schwarzenegger",
+  "Bruce Willis","Tom Cruise","Brad Pitt","Leonardo DiCaprio","Matt Damon","Ben Affleck","George Clooney",
+  "Johnny Depp","Christian Bale","Hugh Jackman","Ryan Reynolds","Ryan Gosling","Chris Hemsworth",
+  "Chris Evans","Chris Pratt","Robert Downey Jr","Mark Ruffalo","Scarlett Johansson","Samuel L Jackson",
+  "Idris Elba","Michael B Jordan","Chadwick Boseman","Will Smith","Eddie Murphy","Chris Rock",
+  "Dave Chappelle","Kevin Hart","Jerry Seinfeld","Larry David","Jim Carrey","Robin Williams","Steve Martin",
+  "Bill Murray","Adam Sandler","Will Ferrell","Ben Stiller","Owen Wilson","Vince Vaughn","Seth Rogen",
+  "Jonah Hill","Paul Rudd","Steve Carell","Tina Fey","Amy Poehler","Kristen Wiig","Maya Rudolph",
+  "Melissa McCarthy","Rachel Dratch","Bill Hader","Andy Samberg","Keegan-Michael Key","Jordan Peele",
+  "Bob Odenkirk","John Mulaney","Nick Kroll","Kate McKinnon","Leslie Jones","Aidy Bryant","Pete Davidson",
+  "Bowen Yang","Nicolas Cage","Keanu Reeves","Christopher Walken","Jeff Goldblum","Steve Buscemi",
+  "John Malkovich","Gary Oldman","Daniel Day-Lewis","Anthony Hopkins","Ian McKellen","Patrick Stewart",
+  "Judi Dench","Maggie Smith","Helen Mirren","Emma Thompson","Kate Winslet","Cate Blanchett","Nicole Kidman",
+  "Charlize Theron","Julia Roberts","Sandra Bullock","Jennifer Aniston","Jennifer Lawrence","Emma Stone",
+  "Anne Hathaway","Natalie Portman","Reese Witherspoon","Viola Davis","Octavia Spencer","Lupita Nyong'o",
+  "Zendaya","Timothee Chalamet","Florence Pugh","Margot Robbie","Saoirse Ronan","Adam Driver","Oscar Isaac",
+  "Pedro Pascal","Matthew McConaughey","Woody Harrelson","Jeff Bridges","Kurt Russell","Michael Keaton",
+  "Danny DeVito","Tom Selleck","Burt Reynolds","Dolly Parton","Oprah Winfrey","Ellen DeGeneres",
+  "Jimmy Fallon","Jimmy Kimmel","Conan O'Brien","David Letterman","Jay Leno","Johnny Carson",
+  "Stephen Colbert","John Oliver","Trevor Noah","Jon Stewart","Howard Stern","Joe Rogan","Ryan Seacrest",
+  "Anderson Cooper","Barbara Walters","Katie Couric","Walter Cronkite","Bob Barker","Alex Trebek","Pat Sajak",
+  "Vanna White","Steve Harvey","Regis Philbin","Simon Cowell","Gordon Ramsay","Guy Fieri","Bobby Flay",
+  "Emeril Lagasse","Julia Child","Anthony Bourdain","Martha Stewart","Rachael Ray","Ina Garten","Bob Ross",
+  "Mr Rogers","David Attenborough","Steve Irwin","Jane Goodall","Neil deGrasse Tyson","Bill Nye","Carl Sagan",
+  "Stephen Hawking","Albert Einstein","Elon Musk","Jeff Bezos","Bill Gates","Steve Jobs","Mark Zuckerberg",
+  "Warren Buffett","Michael Jordan","LeBron James","Kobe Bryant","Shaquille O'Neal","Magic Johnson",
+  "Larry Bird","Stephen Curry","Charles Barkley","Dennis Rodman","Tom Brady","Peyton Manning","Joe Montana",
+  "Brett Favre","Aaron Rodgers","Patrick Mahomes","Jerry Rice","Deion Sanders","Wayne Gretzky","Babe Ruth",
+  "Derek Jeter","Ken Griffey Jr","Shohei Ohtani","Muhammad Ali","Mike Tyson","Floyd Mayweather",
+  "Conor McGregor","Tiger Woods","Serena Williams","Roger Federer","Rafael Nadal","Usain Bolt",
+  "Michael Phelps","Simone Biles","Tonya Harding","Lionel Messi","Cristiano Ronaldo","David Beckham","Pele",
+  "Magnus Carlsen","Bobby Fischer","Hulk Hogan","The Rock","John Cena","Stone Cold Steve Austin",
+  "Andre the Giant","Ric Flair","Macho Man Randy Savage","Vince McMahon","Evel Knievel","Bob Dylan",
+  "Paul McCartney","John Lennon","Mick Jagger","Keith Richards","Elton John","David Bowie","Freddie Mercury",
+  "Prince","Michael Jackson","Madonna","Cher","Tina Turner","Whitney Houston","Aretha Franklin",
+  "Stevie Wonder","Ray Charles","Johnny Cash","Willie Nelson","Elvis Presley","Frank Sinatra","Dean Martin",
+  "Sammy Davis Jr","Tony Bennett","Bing Crosby","Louis Armstrong","Miles Davis","John Coltrane",
+  "Jimi Hendrix","Eric Clapton","Bruce Springsteen","Tom Petty","Neil Young","Joni Mitchell","Carole King",
+  "James Taylor","Billy Joel","Stevie Nicks","Kurt Cobain","Eddie Vedder","Axl Rose","Ozzy Osbourne",
+  "Alice Cooper","Iggy Pop","Lou Reed","Patti Smith","Debbie Harry","Snoop Dogg","Dr Dre","Eminem","Jay-Z",
+  "Beyonce","Rihanna","Kanye West","Kendrick Lamar","Drake","Lil Wayne","Nicki Minaj","Cardi B",
+  "Missy Elliott","Queen Latifah","LL Cool J","Ice Cube","Tupac","Biggie","Run-DMC","Flavor Flav",
+  "Taylor Swift","Adele","Lady Gaga","Katy Perry","Ariana Grande","Billie Eilish","Bruno Mars",
+  "Justin Timberlake","Justin Bieber","Britney Spears","Christina Aguilera","Mariah Carey","Celine Dion",
+  "Shakira","Jennifer Lopez","Harry Styles","Ed Sheeran","Post Malone","The Weeknd","Lizzo","Dua Lipa",
+  "Olivia Rodrigo","Pharrell","Weird Al Yankovic","Andy Warhol","Pablo Picasso","Vincent van Gogh",
+  "Salvador Dali","Frida Kahlo","Banksy","Bob Marley","The Beatles","The Rolling Stones","Led Zeppelin",
+  "Pink Floyd","Queen","The Who","The Doors","Jimi Hendrix Experience","Cream","The Beach Boys","The Byrds",
+  "Creedence Clearwater Revival","Lynyrd Skynyrd","The Allman Brothers Band","The Eagles","Fleetwood Mac",
+  "The Band","Crosby Stills and Nash","Simon and Garfunkel","The Everly Brothers","The Temptations",
+  "The Supremes","The Four Tops","The Jackson 5","Earth Wind and Fire","Parliament-Funkadelic",
+  "Sly and the Family Stone","The Isley Brothers","Kool and the Gang","The Commodores","Chic","The Bee Gees",
+  "ABBA","The Carpenters","Hall and Oates","Steely Dan","Chicago","Boston","Journey","Foreigner","Kansas",
+  "Styx","REO Speedwagon","Toto","Heart","Van Halen","AC/DC","Black Sabbath","Deep Purple","Rush","Aerosmith",
+  "KISS","Guns N' Roses","Motley Crue","Bon Jovi","Def Leppard","Poison","Scorpions","Judas Priest",
+  "Iron Maiden","Metallica","Megadeth","Slayer","Anthrax","Pantera","Slipknot","System of a Down",
+  "Rage Against the Machine","Tool","Korn","Limp Bizkit","Linkin Park","Nirvana","Pearl Jam","Soundgarden",
+  "Alice in Chains","Stone Temple Pilots","Smashing Pumpkins","Foo Fighters","Green Day","Blink-182","Sum 41",
+  "The Offspring","Bad Religion","NOFX","Rancid","The Ramones","The Clash","Sex Pistols","The Misfits",
+  "Dead Kennedys","Black Flag","Minor Threat","Fugazi","Sonic Youth","Pixies","The Replacements","Husker Du",
+  "R.E.M.","The Cure","Depeche Mode","New Order","Joy Division","The Smiths","Echo and the Bunnymen",
+  "Talking Heads","Blondie","Devo","The B-52's","Duran Duran","Tears for Fears","Simple Minds","The Police",
+  "U2","Dire Straits","INXS","Midnight Oil","Crowded House","Oasis","Blur","Radiohead","Coldplay","Muse",
+  "Arctic Monkeys","The Strokes","The White Stripes","The Black Keys","Kings of Leon","Franz Ferdinand",
+  "Interpol","Modest Mouse","Death Cab for Cutie","The Shins","Arcade Fire","Vampire Weekend","The National",
+  "Bon Iver","Fleet Foxes","Mumford and Sons","The Lumineers","The Avett Brothers","Wilco",
+  "My Morning Jacket","Phish","The Grateful Dead","Widespread Panic","The String Cheese Incident",
+  "Dave Matthews Band","Ben Folds Five","Barenaked Ladies","Counting Crows","Third Eye Blind",
+  "Matchbox Twenty","Goo Goo Dolls","Hootie and the Blowfish","Sublime","311","Red Hot Chili Peppers",
+  "Jane's Addiction","Faith No More","Primus","Ween","They Might Be Giants","Gorillaz","Beastie Boys",
+  "Public Enemy","N.W.A","A Tribe Called Quest","De La Soul","Wu-Tang Clan","Outkast","The Roots",
+  "Cypress Hill","Salt-N-Pepa","TLC","Destiny's Child","En Vogue","Boyz II Men","New Edition",
+  "New Kids on the Block","Backstreet Boys","NSYNC","98 Degrees","Spice Girls","One Direction","BTS",
+  "BLACKPINK","The Cranberries","No Doubt","Garbage","Hole","The Breeders","Veruca Salt","The Go-Go's",
+  "The Bangles","The Runaways","Dixie Chicks","Alabama","The Judds","Rascal Flatts","Lady A",
+  "Little Big Town","Zac Brown Band","Florida Georgia Line","Old Crow Medicine Show",
+  "The Marshall Tucker Band","ZZ Top","The Doobie Brothers","Steve Miller Band","Santana","War","Los Lobos",
+  "Buena Vista Social Club","Bob Marley and the Wailers","Toots and the Maytals","The Specials","Madness",
+  "The Mighty Mighty Bosstones","Reel Big Fish","Cake","Weezer","The Flaming Lips","MGMT","Empire of the Sun",
+  "Daft Punk","The Chemical Brothers","The Prodigy","Fatboy Slim","Massive Attack","Portishead","Air","Moby",
+  "Deadmau5","Skrillex","Calvin Harris","Swedish House Mafia","LCD Soundsystem","Hot Chip","Tame Impala",
+  "Beach House","Sigur Ros","Explosions in the Sky","Godspeed You Black Emperor","Mogwai","Nine Inch Nails",
+  "Ministry","Marilyn Manson","Type O Negative","The Sisters of Mercy","Bauhaus","The Velvet Underground",
+  "The Monkees","The Kinks","The Animals","The Yardbirds","Herman's Hermits","The Zombies","Small Faces",
+  "Traffic","Jethro Tull","Yes","Genesis","King Crimson","Emerson Lake and Palmer","Supertramp",
+  "Electric Light Orchestra","The Moody Blues","Procol Harum","The Guess Who","Bachman-Turner Overdrive",
+  "Triumph","April Wine","Loverboy","Night Ranger","Great White","Warrant","Skid Row","Ratt","Quiet Riot",
+  "Twisted Sister","Dio","Whitesnake","Europe","Asia","Air Supply","Ambrosia","Bread","America",
+  "Seals and Crofts","England Dan and John Ford Coley","The Little River Band","Pablo Cruise","Player",
+  "Firefall","Poco","Little Feat","The Meters","Booker T and the MGs","The Stax Band",
+  "The Blues Brothers Band","Buddy Holly and the Crickets","Bill Haley and His Comets","The Drifters",
+  "The Platters","The Coasters","Frankie Valli and the Four Seasons","Dion and the Belmonts","The Shirelles",
+  "The Ronettes","The Crystals","Martha and the Vandellas","Gladys Knight and the Pips","The Spinners",
+  "The O'Jays","Harold Melvin and the Blue Notes","The Stylistics","The Delfonics"
 ];
 
 var PROLOGUE = [
@@ -1523,14 +1744,14 @@ var WORLD = [
 /* ---- state ---- */
 var pools = {
   references:REFERENCES.slice(), vocab:VOCAB.slice(), rhyme:RHYME.slice(),
-  prologue:PROLOGUE.slice(), plots:PLOTS.slice(), names:NAMES.slice(), pcnames:PC_NAMES.slice(), pcobjects:PC_OBJECTS.slice(),
+  pop:POP.slice(), prologue:PROLOGUE.slice(), plots:PLOTS.slice(), names:NAMES.slice(), pcnames:PC_NAMES.slice(), pcobjects:PC_OBJECTS.slice(),
   flowsprint:FLOW_SPRINT.slice(), flowendwords:FLOW_ENDWORDS.slice(), flowtopics:FLOW_TOPICS.slice(),
   flowtitles:FLOW_TITLES.slice(), flowflips:FLOW_FLIPS.slice(), flowdevices:FLOW_DEVICES.slice(), world:WORLD.slice(),
   scenes:SCENES.slice(),
   characters:CHARACTERS.slice(),
   blainenotes:[]
 };
-var last = { references:-1, vocab:-1, rhyme:-1, prologue:-1, plots:-1, names:-1,
+var last = { references:-1, pop:-1, vocab:-1, rhyme:-1, prologue:-1, plots:-1, names:-1,
   flowsprint:-1, flowendwords:-1, flowtopics:-1, flowtitles:-1, flowflips:-1, flowdevices:-1, world:-1, scenes:-1, characters:-1 };
 var $ = function(id){return document.getElementById(id);};
 
@@ -1544,6 +1765,7 @@ function any(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 
 function showRef(){ $("refPrompt").textContent = pick("references") || "—"; }
+function showPop(){ $("popPrompt").textContent = pick("pop") || "—"; }
 function showRhyme(){ $("rhymePrompt").textContent = pick("rhyme") || "—"; }
 var currentPrologue = null;
 function showPrologue(){
@@ -1838,6 +2060,7 @@ document.querySelectorAll("[data-next]").forEach(function(b){
     if(n==="references")showRef();
     else if(n==="vocab")showVocab();
     else if(n==="rhyme")showRhyme();
+    else if(n==="pop")showPop();
     else if(n==="prologue")showPrologue();
     else if(n==="plots")showPlot();
     else if(n==="names")showName();
@@ -1873,14 +2096,14 @@ document.querySelectorAll("[data-add]").forEach(function(b){
     inp.value="";
   });
 });
-["references","vocab","rhyme","prologue","praisecurse","blainenotes","flowtopics","scenes","characters"].forEach(function(name){
+["references","pop","vocab","rhyme","prologue","praisecurse","blainenotes","flowtopics","scenes","characters"].forEach(function(name){
   $(name+"Add").addEventListener("keydown",function(e){
     if(e.key==="Enter"){ document.querySelector('[data-add="'+name+'"]').click(); }
   });
 });
 
 /* ---- init ---- */
-showRef(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); showScene(); showCharacter(); showWorld();
+showRef(); showPop(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); showScene(); showCharacter(); showWorld();
 
 })();
 </script>
