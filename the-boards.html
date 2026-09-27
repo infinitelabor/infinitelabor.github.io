@@ -103,6 +103,7 @@
     <button class="tab on" data-tab="references">References</button>
     <button class="tab" data-tab="pop">Pop Culture</button>
     <button class="tab" data-tab="praisecurse">Praise / Curse</button>
+    <button class="tab" data-tab="conceit">Become</button>
     <button class="tab" data-tab="prologue">Prologue</button>
     <button class="tab" data-tab="rhyme">Rhyme</button>
     <button class="tab" data-tab="flow">Flow</button>
@@ -137,6 +138,22 @@
     <button class="next" data-next="praisecurse">Next charge ↻</button>
     <div class="add"><input id="praisecurseAdd" placeholder="Add a name to the pool… (a friend, a foe, anyone)" /><button data-add="praisecurse">Add</button></div>
     <p class="added" id="praisecurseAdded"></p>
+  </section>
+
+  <section id="conceit">
+    <p class="blurb">Become the thing. Say it four ways — same body, same object, four different arguments. The helper words are what the object <em>does</em>; let its own verbs finish your line.</p>
+    <div class="card">
+      <div class="eyebrow">Finish the line, four ways</div>
+      <p class="prompt" id="conceitPrompt">—</p>
+      <div class="chips" id="conceitCharge" style="justify-content:center;margin-top:14px"></div>
+      <div class="def" id="conceitHelpers" style="display:none;max-width:600px"></div>
+    </div>
+    <div class="flowctl">
+      <button id="conceitHelpBtn">Helpers: what it does</button>
+    </div>
+    <button class="next" data-next="conceit">Next draw ↻</button>
+    <div class="add"><input id="conceitobjectsAdd" placeholder="Add your own object…" /><button data-add="conceitobjects">Add</button></div>
+    <p class="added" id="conceitobjectsAdded"></p>
   </section>
 
   <section id="prologue">
@@ -793,6 +810,227 @@ var POP = [
   "The Platters","The Coasters","Frankie Valli and the Four Seasons","Dion and the Belmonts","The Shirelles",
   "The Ronettes","The Crystals","Martha and the Vandellas","Gladys Knight and the Pips","The Spinners",
   "The O'Jays","Harold Melvin and the Blue Notes","The Stylistics","The Delfonics"
+];
+
+var CONCEIT_BODY = [
+  "My heart","My gaze","My hands","My arms","My tongue","My breath","My blood","My voice","My throat",
+  "My ribs","My spine","My shoulders","My eyes","My mouth","My fingers","My feet","My bones","My skin",
+  "My pulse","My mind","My soul","My knees","My jaw","My name","My grief","My hunger","My patience",
+  "My memory","My temper","My faith"
+];
+
+var CONCEIT_CHARGES = [
+  "Praise","Threaten","Seduce","Mourn","Confess","Beg","Boast","Warn","Forgive","Accuse","Swear an oath",
+  "Bid farewell"
+];
+
+var CONCEIT_OBJECTS = [
+  {s:"a lighthouse", v:["sweeps","warns","stands","blinds","finds","the beam","the rocks","the keeper","the fog","the harbor"]},
+  {s:"an anvil", v:["takes","holds","rings","waits","wears","the blow","the hammer","the sparks","the iron","the forge"]},
+  {s:"a war drum", v:["beats","summons","rolls","quickens","thunders","the skin","the march","the line","the signal","the charge"]},
+  {s:"an anchor", v:["moors","drags","drops","bites","holds","the chain","the seabed","the rust","the weight","the harbor"]},
+  {s:"velvet chains", v:["binds","softens","weighs","gleams","yields","the link","the nap","the clasp","the drape","the lock"]},
+  {s:"a church bell", v:["tolls","calls","mourns","rings","cracks","the rope","the tower","the clapper","the hour","the funeral"]},
+  {s:"a furnace", v:["consumes","roars","glows","devours","warms","the coal","the grate","the flue","the ash","the blast"]},
+  {s:"a compass", v:["points","spins","finds","betrays","settles","the needle","the north","the housing","the bearing","the drift"]},
+  {s:"a locked door", v:["refuses","holds","swings","bars","admits","the hinge","the bolt","the key","the threshold","the frame"]},
+  {s:"a bear trap", v:["waits","snaps","holds","hides","maims","the jaw","the spring","the chain","the bait","the teeth"]},
+  {s:"a river", v:["carves","floods","carries","drowns","runs","the current","the bank","the mouth","the bed","the source"]},
+  {s:"a whetstone", v:["sharpens","wears","grinds","hones","whispers","the edge","the grit","the oil","the blade","the draw"]},
+  {s:"a debtor's ledger", v:["records","tallies","waits","condemns","balances","the column","the ink","the sum","the margin","the reckoning"]},
+  {s:"an hourglass", v:["empties","turns","measures","runs","narrows","the sand","the neck","the glass","the grain","the last"]},
+  {s:"a cracked bell", v:["rings","fails","sours","tolls","splits","the flaw","the note","the rope","the tower","the silence"]},
+  {s:"a wildfire", v:["spreads","consumes","leaps","clears","outruns","the ember","the wind","the line","the crown","the ash"]},
+  {s:"a spider's web", v:["catches","waits","trembles","binds","mends","the strand","the dew","the center","the snare","the silk"]},
+  {s:"a lantern", v:["burns","guides","gutters","reveals","fails","the wick","the oil","the glass","the flame","the dark"]},
+  {s:"a rusted hinge", v:["shrieks","sticks","gives","swings","seizes","the pin","the door","the oil","the frame","the weight"]},
+  {s:"a millstone", v:["grinds","turns","crushes","hangs","wears","the grain","the wheel","the flour","the neck","the water"]},
+  {s:"a chisel", v:["cuts","reveals","strikes","shapes","bites","the edge","the mallet","the marble","the chip","the line"]},
+  {s:"a plow", v:["breaks","turns","furrows","drags","sows","the blade","the earth","the ox","the row","the harvest"]},
+  {s:"a cannon", v:["fires","levels","recoils","waits","thunders","the fuse","the barrel","the shot","the smoke","the breach"]},
+  {s:"a sentry", v:["watches","challenges","stands","calls","sleeps","the post","the relief","the wall","the watch","the gate"]},
+  {s:"a tide", v:["returns","retreats","rises","drowns","obeys","the moon","the shore","the pull","the flood","the ebb"]},
+  {s:"a candle", v:["burns","shortens","warms","gutters","dies","the wick","the wax","the draft","the flame","the stub"]},
+  {s:"a mirror", v:["shows","flatters","cracks","repeats","betrays","the glass","the silver","the frame","the image","the flaw"]},
+  {s:"a kettle", v:["boils","whistles","holds","spills","rattles","the lid","the spout","the steam","the flame","the water"]},
+  {s:"a scale", v:["weighs","tips","judges","balances","condemns","the pan","the fulcrum","the ounce","the measure","the verdict"]},
+  {s:"a crow", v:["watches","calls","scavenges","gathers","remembers","the feather","the field","the eye","the flock","the carrion"]},
+  {s:"a hound", v:["tracks","howls","guards","obeys","runs","the scent","the leash","the master","the trail","the teeth"]},
+  {s:"a caged bird", v:["sings","beats","waits","remembers","refuses","the bar","the perch","the wing","the door","the sky"]},
+  {s:"a wolf in winter", v:["hunts","starves","circles","waits","endures","the pack","the snow","the track","the den","the hunger"]},
+  {s:"a nettle", v:["stings","spreads","thrives","persists","punishes","the leaf","the root","the hedge","the sting","the grip"]},
+  {s:"an oak", v:["stands","endures","shelters","splits","roots","the bark","the ring","the branch","the acorn","the storm"]},
+  {s:"a wound", v:["opens","bleeds","closes","scars","aches","the edge","the salt","the stitch","the fever","the scar"]},
+  {s:"a fever", v:["rises","breaks","burns","spreads","passes","the sweat","the chill","the night","the crisis","the dream"]},
+  {s:"a debt", v:["comes due","accrues","binds","demands","settles","the note","the interest","the collector","the term","the hand"]},
+  {s:"a forge", v:["heats","shapes","tempers","roars","softens","the coal","the bellows","the quench","the iron","the hammer"]},
+  {s:"a shipwreck", v:["strands","sinks","scatters","surfaces","warns","the hull","the reef","the salvage","the mast","the wreckage"]},
+  {s:"a gallows", v:["waits","stands","drops","condemns","creaks","the rope","the trap","the crowd","the sentence","the beam"]},
+  {s:"a crown", v:["weighs","sits","passes","gilds","slips","the gold","the head","the heir","the jewel","the throne"]},
+  {s:"a throne", v:["holds","empties","waits","elevates","outlasts","the seat","the claim","the heir","the court","the dais"]},
+  {s:"a battlefield", v:["swallows","scars","remembers","empties","claims","the field","the dead","the standard","the ground","the smoke"]},
+  {s:"a siege", v:["waits","starves","encircles","breaks","outlasts","the wall","the supply","the breach","the parley","the gate"]},
+  {s:"a moat", v:["divides","protects","stagnates","drowns","encircles","the water","the bridge","the wall","the depth","the crossing"]},
+  {s:"a drawbridge", v:["lowers","raises","admits","refuses","spans","the chain","the gate","the moat","the crossing","the winch"]},
+  {s:"a cathedral", v:["towers","echoes","shelters","awes","endures","the vault","the nave","the bell","the stone","the choir"]},
+  {s:"a confessional", v:["hears","keeps","absolves","waits","divides","the screen","the whisper","the penance","the curtain","the sin"]},
+  {s:"a reliquary", v:["holds","preserves","sanctifies","displays","seals","the bone","the gold","the glass","the pilgrim","the seal"]},
+  {s:"a coffin", v:["holds","closes","lowers","seals","waits","the lid","the nail","the earth","the plot","the bearer"]},
+  {s:"a gravestone", v:["marks","outlasts","names","weathers","stands","the epitaph","the moss","the plot","the date","the stone"]},
+  {s:"a ghost", v:["haunts","lingers","fades","returns","chills","the chain","the wail","the threshold","the hour","the room"]},
+  {s:"a shadow", v:["follows","lengthens","falls","vanishes","mocks","the light","the noon","the wall","the shape","the dusk"]},
+  {s:"a storm", v:["gathers","breaks","passes","floods","darkens","the cloud","the thunder","the wind","the eye","the aftermath"]},
+  {s:"a drought", v:["parches","spreads","lingers","cracks","kills","the well","the dust","the crop","the rain","the thirst"]},
+  {s:"a frost", v:["settles","kills","glitters","creeps","hardens","the pane","the field","the morning","the bloom","the thaw"]},
+  {s:"an avalanche", v:["waits","breaks","buries","gathers","roars","the snow","the slope","the crack","the silence","the weight"]},
+  {s:"a whirlpool", v:["pulls","spins","swallows","circles","drowns","the eddy","the center","the surface","the depth","the vessel"]},
+  {s:"a volcano", v:["sleeps","erupts","smokes","buries","builds","the ash","the vent","the flow","the rumble","the crater"]},
+  {s:"a coal seam", v:["smolders","burns","hides","spreads","outlasts","the vein","the mine","the smoke","the dark","the fuel"]},
+  {s:"a quarry", v:["yields","deepens","echoes","scars","supplies","the stone","the blast","the face","the pit","the cut"]},
+  {s:"a well", v:["gives","runs dry","echoes","deepens","holds","the bucket","the rope","the depth","the stone","the water"]},
+  {s:"a cistern", v:["gathers","holds","stagnates","empties","waits","the rain","the lid","the stone","the drought","the store"]},
+  {s:"a dam", v:["holds","strains","releases","floods","cracks","the wall","the reservoir","the spillway","the pressure","the break"]},
+  {s:"a lock on a canal", v:["raises","lowers","admits","levels","holds","the gate","the chamber","the water","the passage","the wait"]},
+  {s:"a bridge", v:["spans","bears","connects","burns","collapses","the arch","the span","the crossing","the toll","the river"]},
+  {s:"a ferryman", v:["carries","charges","waits","crosses","returns","the coin","the oar","the shore","the passage","the river"]},
+  {s:"a shipwright", v:["builds","measures","seals","launches","repairs","the keel","the plank","the pitch","the hull","the yard"]},
+  {s:"a sail", v:["catches","fills","luffs","tears","drives","the wind","the mast","the sheet","the canvas","the course"]},
+  {s:"a keel", v:["steadies","cuts","holds","rights","bears","the hull","the water","the ballast","the line","the depth"]},
+  {s:"a rudder", v:["steers","answers","fails","turns","holds","the helm","the wake","the course","the pintle","the drag"]},
+  {s:"a harbor", v:["shelters","receives","holds","releases","waits","the mouth","the mooring","the wall","the ship","the tide"]},
+  {s:"a beacon fire", v:["signals","burns","summons","warns","answers","the hill","the watch","the smoke","the chain","the relay"]},
+  {s:"a watchtower", v:["sees","warns","stands","guards","looms","the height","the horizon","the watch","the wall","the alarm"]},
+  {s:"a portcullis", v:["drops","bars","raises","admits","seals","the iron","the gate","the winch","the spike","the arch"]},
+  {s:"a battering ram", v:["strikes","persists","breaks","swings","splinters","the beam","the gate","the crew","the blow","the breach"]},
+  {s:"a sword", v:["cuts","draws","rusts","defends","breaks","the edge","the hilt","the sheath","the point","the oath"]},
+  {s:"a shield", v:["takes","covers","bears","dents","holds","the boss","the arm","the blow","the wall","the rim"]},
+  {s:"a dagger", v:["hides","finds","slips","turns","strikes","the sheath","the ribs","the grip","the dark","the point"]},
+  {s:"a quiver", v:["holds","empties","rattles","supplies","waits","the arrow","the strap","the draw","the count","the fletching"]},
+  {s:"a bowstring", v:["draws","sings","holds","snaps","releases","the tension","the nock","the limb","the loose","the arrow"]},
+  {s:"a key", v:["opens","turns","fits","is lost","locks","the ward","the lock","the ring","the turn","the copy"]},
+  {s:"a lock", v:["holds","yields","jams","guards","admits","the tumbler","the key","the shackle","the pick","the click"]},
+  {s:"a chain", v:["binds","links","drags","holds","breaks","the link","the weight","the anchor","the shackle","the length"]},
+  {s:"a knot", v:["holds","tightens","tangles","binds","slips","the rope","the pull","the loop","the hitch","the cut"]},
+  {s:"a net", v:["catches","tears","spreads","holds","mends","the mesh","the haul","the float","the tear","the cast"]},
+  {s:"a fishhook", v:["catches","barbs","waits","tears","holds","the bait","the line","the barb","the lip","the set"]},
+  {s:"a lure", v:["tempts","glitters","deceives","draws","hides","the hook","the shine","the cast","the water","the strike"]},
+  {s:"a snare", v:["waits","tightens","hides","catches","holds","the wire","the loop","the path","the trigger","the game"]},
+  {s:"a cage", v:["holds","confines","displays","rattles","opens","the bar","the door","the floor","the key","the beast"]},
+  {s:"a leash", v:["restrains","permits","tightens","frays","holds","the collar","the slack","the hand","the pull","the length"]},
+  {s:"a muzzle", v:["silences","binds","chafes","prevents","comes off","the strap","the jaw","the bark","the buckle","the bite"]},
+  {s:"a bridle", v:["guides","restrains","chafes","turns","slips","the bit","the rein","the mouth","the hand","the head"]},
+  {s:"a spur", v:["urges","pricks","drives","wounds","commands","the heel","the flank","the rowel","the gallop","the boot"]},
+  {s:"a saddle", v:["bears","fits","chafes","carries","empties","the girth","the stirrup","the rider","the leather","the seat"]},
+  {s:"a coach and four", v:["carries","arrives","thunders","departs","overturns","the wheel","the team","the road","the driver","the dust"]},
+  {s:"a milestone", v:["marks","counts","stands","measures","passes","the road","the distance","the stone","the inscription","the traveler"]},
+  {s:"a crossroads", v:["divides","waits","offers","confounds","decides","the sign","the choice","the road","the gallows","the turning"]},
+  {s:"a map", v:["guides","lies","unfolds","charts","misleads","the edge","the legend","the route","the blank","the fold"]},
+  {s:"a ledger", v:["records","tallies","closes","reckons","balances","the entry","the column","the debt","the ink","the audit"]},
+  {s:"a seal on a letter", v:["binds","breaks","authorizes","conceals","proves","the wax","the ring","the crack","the crest","the fold"]},
+  {s:"an unsent letter", v:["waits","confesses","yellows","burns","says nothing","the ink","the drawer","the address","the draft","the seal"]},
+  {s:"a sonnet", v:["turns","counts","argues","closes","insists","the volta","the couplet","the meter","the quatrain","the line"]},
+  {s:"a quill", v:["scratches","blots","confesses","dulls","records","the ink","the nib","the page","the hand","the feather"]},
+  {s:"a printing press", v:["repeats","multiplies","fixes","spreads","cannot unsay","the type","the ink","the impression","the plate","the edition"]},
+  {s:"a bell tower", v:["tolls","counts","summons","looms","announces","the rope","the hour","the stair","the bell","the town"]},
+  {s:"a sundial", v:["marks","depends","waits","measures","fails","the gnomon","the shadow","the noon","the cloud","the hour"]},
+  {s:"a clockwork", v:["ticks","winds","unwinds","keeps","stops","the spring","the gear","the escapement","the key","the hour"]},
+  {s:"a pendulum", v:["swings","returns","measures","slows","cannot rest","the arc","the weight","the tick","the center","the stop"]},
+  {s:"a spinning wheel", v:["draws","twists","turns","spins","tangles","the thread","the flax","the treadle","the spindle","the skein"]},
+  {s:"a loom", v:["weaves","crosses","binds","patterns","unravels","the warp","the weft","the shuttle","the thread","the cloth"]},
+  {s:"a needle", v:["pierces","mends","threads","stitches","is lost","the eye","the thread","the seam","the point","the stitch"]},
+  {s:"a thread", v:["binds","follows","frays","unravels","holds","the spool","the seam","the knot","the end","the pull"]},
+  {s:"a tapestry", v:["depicts","fades","hangs","conceals","unravels","the scene","the thread","the wall","the border","the back"]},
+  {s:"a shroud", v:["covers","wraps","hides","whitens","waits","the linen","the body","the fold","the grave","the wind"]},
+  {s:"a wedding ring", v:["binds","circles","tightens","is removed","endures","the gold","the finger","the vow","the band","the engraving"]},
+  {s:"a dowry", v:["buys","binds","is counted","is promised","changes hands","the chest","the bargain","the father","the sum","the match"]},
+  {s:"a marriage bed", v:["holds","witnesses","empties","warms","keeps","the linen","the night","the vow","the silence","the dawn"]},
+  {s:"a cradle", v:["rocks","holds","waits","empties","creaks","the child","the rail","the lullaby","the night","the hand"]},
+  {s:"a hearth", v:["warms","gathers","banks","dies","endures","the fire","the ash","the mantel","the home","the chimney"]},
+  {s:"a threshold", v:["divides","admits","refuses","waits","is crossed","the door","the step","the welcome","the frame","the crossing"]},
+  {s:"an empty chair", v:["waits","accuses","holds","remains","reminds","the table","the place","the setting","the room","the absence"]},
+  {s:"a banquet", v:["overflows","gathers","ends","displays","empties","the table","the toast","the guest","the meat","the wine"]},
+  {s:"a wine cup", v:["holds","spills","toasts","empties","poisons","the rim","the lees","the pour","the toast","the drain"]},
+  {s:"a bitter cup", v:["is drunk","passes","burns","is offered","empties","the draught","the lees","the hand","the taste","the dregs"]},
+  {s:"a loaf of bread", v:["is broken","rises","feeds","goes stale","is shared","the crust","the crumb","the oven","the table","the portion"]},
+  {s:"salt", v:["preserves","stings","seasons","is spilled","cures","the wound","the shaker","the earth","the pillar","the savor"]},
+  {s:"honey", v:["sweetens","catches","keeps","slows","conceals","the comb","the bee","the sting","the gold","the pour"]},
+  {s:"a beehive", v:["hums","swarms","builds","stings","yields","the comb","the queen","the drone","the smoke","the honey"]},
+  {s:"a garden", v:["grows","needs tending","runs wild","yields","withers","the weed","the row","the fence","the seed","the harvest"]},
+  {s:"a weed", v:["persists","spreads","returns","chokes","thrives","the root","the crack","the hoe","the bed","the seed"]},
+  {s:"a seed", v:["waits","splits","takes","sleeps","becomes","the husk","the soil","the season","the root","the harvest"]},
+  {s:"a graft", v:["takes","joins","fails","bears","heals","the scion","the stock","the binding","the wound","the fruit"]},
+  {s:"an orchard", v:["bears","blossoms","is pruned","drops","waits","the row","the fruit","the frost","the harvest","the bough"]},
+  {s:"a vineyard", v:["ripens","is trodden","yields","ages","suffers","the vine","the press","the cask","the vintage","the slope"]},
+  {s:"a cask", v:["holds","ages","leaks","seals","is tapped","the stave","the hoop","the bung","the cellar","the vintage"]},
+  {s:"a fallow field", v:["rests","waits","recovers","refuses","promises","the season","the furrow","the soil","the sowing","the yield"]},
+  {s:"a scarecrow", v:["stands","frightens","fails","weathers","watches","the field","the straw","the coat","the crow","the pole"]},
+  {s:"a harvest", v:["comes","is gathered","is counted","fails","ends","the sickle","the sheaf","the barn","the season","the yield"]},
+  {s:"a barn", v:["stores","shelters","stands","fills","burns","the loft","the hay","the door","the beam","the winter"]},
+  {s:"a granary", v:["stores","measures","empties","feeds","is guarded","the grain","the measure","the mouse","the winter","the store"]},
+  {s:"a mill", v:["turns","grinds","depends","stops","serves","the wheel","the stream","the stone","the grain","the miller"]},
+  {s:"a market square", v:["gathers","trades","haggles","empties","announces","the stall","the crier","the coin","the crowd","the scale"]},
+  {s:"a town crier", v:["announces","carries","repeats","wakes","proclaims","the bell","the hour","the news","the square","the voice"]},
+  {s:"a rumor", v:["spreads","grows","outruns","returns","cannot be recalled","the whisper","the ear","the tongue","the crowd","the source"]},
+  {s:"a gossip's tongue", v:["carries","embroiders","wags","spreads","wounds","the whisper","the ear","the tale","the market","the poison"]},
+  {s:"a courtroom", v:["hears","judges","sentences","adjourns","weighs","the bench","the docket","the oath","the verdict","the gallery"]},
+  {s:"a verdict", v:["is returned","binds","condemns","acquits","stands","the jury","the bench","the sentence","the appeal","the word"]},
+  {s:"an oath", v:["binds","is sworn","is broken","holds","outlasts","the word","the hand","the witness","the breaking","the vow"]},
+  {s:"a contract", v:["binds","is signed","is voided","obliges","holds","the clause","the seal","the term","the breach","the signature"]},
+  {s:"a pardon", v:["releases","arrives late","is granted","is refused","restores","the seal","the sentence","the hand","the mercy","the record"]},
+  {s:"a sentence", v:["is passed","is served","ends","binds","commutes","the term","the bench","the cell","the appeal","the count"]},
+  {s:"a prison cell", v:["holds","confines","echoes","counts","releases","the bar","the wall","the mark","the door","the term"]},
+  {s:"a dungeon", v:["holds","forgets","dampens","swallows","echoes","the stair","the dark","the chain","the stone","the key"]},
+  {s:"an exile", v:["departs","longs","returns","is barred","remembers","the road","the border","the home","the pardon","the distance"]},
+  {s:"a banishment", v:["removes","divides","is proclaimed","endures","is lifted","the decree","the border","the gate","the return","the sentence"]},
+  {s:"a crown in exile", v:["waits","claims","is unrecognized","endures","returns","the claim","the court","the heir","the pretender","the restoration"]},
+  {s:"a pretender", v:["claims","convinces","is exposed","persists","usurps","the claim","the court","the proof","the blood","the throne"]},
+  {s:"a spy", v:["watches","reports","is turned","hides","betrays","the cipher","the handler","the cover","the message","the exposure"]},
+  {s:"a cipher", v:["conceals","is broken","carries","confounds","reveals","the key","the code","the message","the break","the clerk"]},
+  {s:"a false coin", v:["passes","deceives","is weighed","rings wrong","circulates","the stamp","the alloy","the weight","the ring","the assay"]},
+  {s:"a touchstone", v:["tests","proves","reveals","judges","marks","the streak","the gold","the assay","the rub","the proof"]},
+  {s:"a crucible", v:["purifies","burns","tests","separates","endures","the heat","the dross","the ore","the pour","the assay"]},
+  {s:"dross", v:["is skimmed","clings","cheapens","separates","is cast off","the melt","the surface","the ore","the pour","the refining"]},
+  {s:"a mine", v:["yields","deepens","collapses","exhausts","conceals","the shaft","the vein","the lamp","the dark","the ore"]},
+  {s:"a vein of ore", v:["runs","gives out","is followed","widens","is struck","the seam","the pick","the depth","the assay","the lode"]},
+  {s:"a mint", v:["stamps","issues","fixes","values","strikes","the die","the blank","the coin","the press","the seal"]},
+  {s:"a treasury", v:["holds","is drained","is counted","secures","funds","the vault","the count","the key","the levy","the store"]},
+  {s:"a tax collector", v:["comes","counts","takes","records","returns","the levy","the ledger","the door","the writ","the share"]},
+  {s:"a toll", v:["is paid","bars","permits","accrues","stops","the gate","the road","the keeper","the coin","the passage"]},
+  {s:"a pilgrim", v:["walks","seeks","suffers","arrives","returns","the road","the shrine","the staff","the vow","the blister"]},
+  {s:"a shrine", v:["receives","heals","waits","collects","sanctifies","the offering","the candle","the pilgrim","the relic","the niche"]},
+  {s:"a monastery", v:["keeps","copies","shelters","observes","endures","the rule","the hour","the cloister","the scriptorium","the silence"]},
+  {s:"a vow of silence", v:["holds","weighs","is broken","teaches","protects","the rule","the tongue","the year","the breaking","the word"]},
+  {s:"a hermit's cave", v:["shelters","isolates","echoes","suffices","waits","the mouth","the fire","the silence","the water","the stone"]},
+  {s:"an oracle", v:["speaks","confounds","waits","is misread","foretells","the riddle","the smoke","the tripod","the answer","the price"]},
+  {s:"a prophecy", v:["is uttered","is misread","fulfills itself","waits","binds","the word","the seer","the reading","the outcome","the doom"]},
+  {s:"a riddle", v:["is posed","confounds","has one answer","waits","kills","the sphinx","the answer","the guess","the price","the solving"]},
+  {s:"a labyrinth", v:["confounds","turns","conceals","waits","releases","the thread","the center","the turning","the wall","the minotaur"]},
+  {s:"a thread through the maze", v:["guides","unwinds","is followed","holds","runs out","the spool","the turning","the way back","the hand","the end"]},
+  {s:"a crossroad gibbet", v:["warns","stands","creaks","displays","deters","the chain","the cage","the road","the crow","the sentence"]},
+  {s:"a plague", v:["spreads","spares none","passes","empties","marks","the door","the cart","the bell","the mark","the quarantine"]},
+  {s:"a quarantine", v:["divides","waits","protects","confines","lifts","the line","the door","the term","the mark","the release"]},
+  {s:"a physician", v:["diagnoses","bleeds","prescribes","attends","errs","the lancet","the pulse","the draught","the bedside","the fee"]},
+  {s:"a poultice", v:["draws","soothes","is applied","cools","heals","the wound","the cloth","the herb","the heat","the drawing"]},
+  {s:"a poison", v:["works slowly","is administered","spreads","has an antidote","kills","the dose","the cup","the taste","the vial","the effect"]},
+  {s:"an antidote", v:["counters","arrives late","is rare","neutralizes","saves","the dose","the vial","the timing","the cure","the poison"]},
+  {s:"a fever dream", v:["distorts","visits","passes","terrifies","reveals","the night","the sweat","the vision","the breaking","the waking"]},
+  {s:"insomnia", v:["keeps","counts","stretches","visits","surrenders","the hour","the ceiling","the dark","the dawn","the clock"]},
+  {s:"a nightmare", v:["returns","pursues","wakes","distorts","recurs","the chase","the fall","the waking","the sweat","the dark"]},
+  {s:"a sleepwalker", v:["wanders","does not know","returns","acts","must not be woken","the stair","the night","the eyes","the return","the morning"]},
+  {s:"an echo", v:["returns","distorts","repeats","fades","answers","the canyon","the call","the delay","the repetition","the silence"]},
+  {s:"a whisper", v:["carries","conspires","travels","is overheard","spreads","the ear","the corner","the secret","the breath","the room"]},
+  {s:"a secret", v:["is kept","leaks","weighs","binds","is told","the keeper","the telling","the weight","the trust","the exposure"]},
+  {s:"a confession", v:["is made","relieves","condemns","is heard","cannot be unsaid","the priest","the record","the weight","the telling","the absolution"]},
+  {s:"an alibi", v:["holds","is checked","collapses","is provided","proves","the hour","the witness","the story","the gap","the truth"]},
+  {s:"a witness", v:["sees","testifies","recants","is sworn","remembers","the stand","the oath","the account","the memory","the cross"]},
+  {s:"a ruin", v:["stands","crumbles","remembers","shelters","testifies","the arch","the moss","the wall","the foundation","the weather"]},
+  {s:"a foundation stone", v:["bears","is laid","holds","settles","outlasts","the corner","the weight","the mortar","the building","the level"]},
+  {s:"mortar", v:["binds","cures","cracks","fills","holds","the joint","the trowel","the brick","the set","the seam"]},
+  {s:"a keystone", v:["holds","locks","bears","completes","fails","the arch","the span","the wedge","the load","the collapse"]},
+  {s:"an arch", v:["spans","bears","curves","stands","collapses","the keystone","the span","the load","the thrust","the pier"]},
+  {s:"scaffolding", v:["supports","is temporary","rises","comes down","enables","the pole","the plank","the build","the removal","the climb"]},
+  {s:"a blueprint", v:["specifies","precedes","is revised","guides","is discarded","the line","the scale","the draft","the plan","the build"]},
+  {s:"a cornerstone", v:["begins","aligns","bears","is inscribed","sets","the date","the corner","the level","the stone","the building"]}
 ];
 
 var PROLOGUE = [
@@ -1744,14 +1982,14 @@ var WORLD = [
 /* ---- state ---- */
 var pools = {
   references:REFERENCES.slice(), vocab:VOCAB.slice(), rhyme:RHYME.slice(),
-  pop:POP.slice(), prologue:PROLOGUE.slice(), plots:PLOTS.slice(), names:NAMES.slice(), pcnames:PC_NAMES.slice(), pcobjects:PC_OBJECTS.slice(),
+  pop:POP.slice(), conceitbody:CONCEIT_BODY.slice(), conceitcharges:CONCEIT_CHARGES.slice(), conceitobjects:CONCEIT_OBJECTS.slice(), prologue:PROLOGUE.slice(), plots:PLOTS.slice(), names:NAMES.slice(), pcnames:PC_NAMES.slice(), pcobjects:PC_OBJECTS.slice(),
   flowsprint:FLOW_SPRINT.slice(), flowendwords:FLOW_ENDWORDS.slice(), flowtopics:FLOW_TOPICS.slice(),
   flowtitles:FLOW_TITLES.slice(), flowflips:FLOW_FLIPS.slice(), flowdevices:FLOW_DEVICES.slice(), world:WORLD.slice(),
   scenes:SCENES.slice(),
   characters:CHARACTERS.slice(),
   blainenotes:[]
 };
-var last = { references:-1, pop:-1, vocab:-1, rhyme:-1, prologue:-1, plots:-1, names:-1,
+var last = { references:-1, pop:-1, conceitbody:-1, conceitcharges:-1, conceitobjects:-1, vocab:-1, rhyme:-1, prologue:-1, plots:-1, names:-1,
   flowsprint:-1, flowendwords:-1, flowtopics:-1, flowtitles:-1, flowflips:-1, flowdevices:-1, world:-1, scenes:-1, characters:-1 };
 var $ = function(id){return document.getElementById(id);};
 
@@ -1766,6 +2004,22 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp
 
 function showRef(){ $("refPrompt").textContent = pick("references") || "—"; }
 function showPop(){ $("popPrompt").textContent = pick("pop") || "—"; }
+var CONCEIT_CHARGE_SET = ["praise","threaten","seduce","mourn"];
+var currentConceitObj = null;
+function showConceit(){
+  var PLURALS = {"My hands":1,"My arms":1,"My eyes":1,"My ribs":1,"My fingers":1,"My feet":1,"My bones":1,"My shoulders":1,"My knees":1};
+  var b = pick("conceitbody"), o = pick("conceitobjects");
+  currentConceitObj = o;
+  var verb = PLURALS[b] ? "are" : "is";
+  $("conceitPrompt").innerHTML = esc(b || "\u2014") + ' <span style="color:var(--dim)">' + verb + '</span> ' +
+    '<b style="color:var(--gold)">' + esc(o ? (o.s || o) : "\u2014") + '</b>';
+  $("conceitCharge").innerHTML = CONCEIT_CHARGE_SET.map(function(c){
+    return '<span class="chip" style="cursor:default">' + esc(c) + '</span>';
+  }).join("");
+  var hp = $("conceitHelpers");
+  hp.style.display = "none"; hp.innerHTML = "";
+  $("conceitHelpBtn").style.display = (o && o.v) ? "" : "none";
+}
 function showRhyme(){ $("rhymePrompt").textContent = pick("rhyme") || "—"; }
 var currentPrologue = null;
 function showPrologue(){
@@ -1806,6 +2060,13 @@ document.getElementById("prologueVocabBtn").addEventListener("click", function()
   var vp = $("prologueVocab");
   vp.innerHTML = currentPrologue.v.map(function(w){ return '<span class="vword">'+esc(w)+'</span>'; }).join("");
   vp.style.display = "";
+  this.style.display = "none";
+});
+document.getElementById("conceitHelpBtn").addEventListener("click", function(){
+  if(!currentConceitObj || !currentConceitObj.v) return;
+  var hp = $("conceitHelpers");
+  hp.innerHTML = currentConceitObj.v.map(function(w){ return '<span class="vword">'+esc(w)+'</span>'; }).join("");
+  hp.style.display = "";
   this.style.display = "none";
 });
 document.getElementById("characterVocabBtn").addEventListener("click", function(){
@@ -2061,6 +2322,7 @@ document.querySelectorAll("[data-next]").forEach(function(b){
     else if(n==="vocab")showVocab();
     else if(n==="rhyme")showRhyme();
     else if(n==="pop")showPop();
+    else if(n==="conceit")showConceit();
     else if(n==="prologue")showPrologue();
     else if(n==="plots")showPlot();
     else if(n==="names")showName();
@@ -2096,14 +2358,14 @@ document.querySelectorAll("[data-add]").forEach(function(b){
     inp.value="";
   });
 });
-["references","pop","vocab","rhyme","prologue","praisecurse","blainenotes","flowtopics","scenes","characters"].forEach(function(name){
+["references","pop","conceitobjects","vocab","rhyme","prologue","praisecurse","blainenotes","flowtopics","scenes","characters"].forEach(function(name){
   $(name+"Add").addEventListener("keydown",function(e){
     if(e.key==="Enter"){ document.querySelector('[data-add="'+name+'"]').click(); }
   });
 });
 
 /* ---- init ---- */
-showRef(); showPop(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); showScene(); showCharacter(); showWorld();
+showRef(); showPop(); showConceit(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); showScene(); showCharacter(); showWorld();
 
 })();
 </script>
