@@ -106,7 +106,7 @@
     <button class="tab" data-tab="conceit">Become</button>
     <button class="tab" data-tab="prologue">Prologue</button>
     <button class="tab" data-tab="rhyme">Rhyme</button>
-    <button class="tab" data-tab="flow">Flow</button>
+    <button class="tab" data-tab="flow">Scheme</button>
     <button class="tab" data-tab="scenes">Scenes</button>
     <button class="tab" data-tab="characters">Characters</button>
     <button class="tab" data-tab="world">World</button>
@@ -174,35 +174,22 @@
   </section>
 
   <section id="flow">
-    <p class="blurb" id="flowBlurb">Verse under pressure. Pick a drill, get on the click, and keep talking.</p>
-    <div class="chips" id="flowChips">
-      <button class="chip on" data-flow="sprint">Sprint</button>
-      <button class="chip" data-flow="endword">End Word</button>
-      <button class="chip" data-flow="bars">Four Bars</button>
-      <button class="chip" data-flow="chorus">Chorus First</button>
-      <button class="chip" data-flow="flip">The Flip</button>
-      <button class="chip" data-flow="bard">Bard Bars</button>
-      <button class="chip" data-flow="cypher">Cypher</button>
-    </div>
+    <p class="blurb">Pick a scheme, draw four words, build the stanza. The letters tell you which line endings must match.</p>
+    <div class="chips" id="schemeChips"></div>
     <div class="card">
-      <div class="eyebrow" id="flowEyebrow">Rhyme against</div>
-      <p class="prompt" id="flowPrompt">—</p>
-      <div class="def" id="flowDef"></div>
+      <div class="eyebrow" id="schemeName">—</div>
+      <div id="schemeLines" style="margin:14px 0 4px"></div>
+      <div class="def" id="schemeNote" style="max-width:620px"></div>
+      <div id="schemeExample" style="display:none;margin-top:18px;border-top:1px solid var(--dim);padding-top:16px"></div>
     </div>
-    <div class="flowstat" id="flowStat"></div>
+    <div class="flowctl"><button id="schemeExBtn">Show example ↓</button></div>
+    <div class="card">
+      <div class="eyebrow">Four words to work in</div>
+      <div class="def" id="schemeWords" style="max-width:620px;min-height:34px"></div>
+    </div>
     <div class="flowctl">
-      <button id="flowTimerBtn">Start 20s</button>
-      <select id="flowBpm" aria-label="Beats per minute">
-        <option value="60">60 BPM</option>
-        <option value="80" selected>80 BPM</option>
-        <option value="90">90 BPM</option>
-        <option value="100">100 BPM</option>
-      </select>
-      <button id="flowMetroBtn">Start click</button>
+      <button id="schemeWordsBtn">Draw 4 words ↻</button>
     </div>
-    <button class="next" data-next="flow">Next prompt ↻</button>
-    <div class="add"><input id="flowtopicsAdd" placeholder="Add a topic to the pool…" /><button data-add="flowtopics">Add</button></div>
-    <p class="added" id="flowtopicsAdded"></p>
   </section>
 
   <section id="scenes">
@@ -1459,80 +1446,6 @@ var PC_OBJECTS = [
 ];
 
 /* ---- flow drills data ---- */
-var FLOW_SPRINT = [
-  "gold","flame","crown","stage","mind","street","clock","storm","blade","throne","tide","spark",
-  "elevator","operation","complicated","dedicated","territory","anniversary","gravity","festival",
-  "monumental","hesitation","conversation","fascinating","supersonic","revolution",
-  "silver","thunder","harbor","mirror","shadow","whisper","paper","hunger","engine","poison",
-  "diamond","emerald","kingdom","mountain","valley","weapon","empire","army","freedom","legend",
-  "unbelievable","cinematic","undeniable","irreversible","unforgettable","impossible","undefeated","catastrophic","electrifying","hypnotic",
-  "vibration","dedication","liberation","navigation","preparation","confrontation","transformation","validation","precipitation","exclamation"
-];
-var FLOW_ENDWORDS = [
-  "elevator","microphone","dynamite","alligator","cinnamon","gasoline","chandelier","corduroy",
-  "refrigerator","tambourine","catastrophe","broccoli","velociraptor","submarine","kaleidoscope",
-  "guillotine","honeydew","thermostat","porcupine","mozzarella","trampoline","apocalypse",
-  "avalanche","xylophone","pumpernickel","harmonica","limousine","umbrella","chameleon","asparagus",
-  "hallelujah","aluminum","cassette tape","tarantula","turpentine","paperback","interstellar","cardigan",
-  "quesadilla","polyester","carburetor","vestibule","pterodactyl","sarcophagus","peppermint","astronaut",
-  "cauliflower","sasquatch","hieroglyphic","kombucha","rickshaw","catamaran","embezzler","kryptonite"
-];
-var FLOW_TOPICS = [
-  "vending machines","airport security","group projects","sour candy","robot delivery","open mic night",
-  "thrift stores","leftovers","houseplants","self-checkout","conference calls","gas station sushi",
-  "escape rooms","pigeons","hot yoga","juice cleanses","street parking","karaoke","spreadsheets",
-  "the DMV","haunted houses","food trucks","garage sales","jury duty","meal prep","layovers",
-  "wet socks","cold pizza","dead phone","the group chat","the doorbell","the printer","the office pet",
-  "small talk","first dates","last calls","expired coupons","unread emails","lost keys","surprise parties",
-  "the wedding registry","the parade","the after-party","the neighborhood","the family reunion","the elevator",
-  "the drive-thru","the meeting that could have been an email","the notification","the podcast recommendation"
-];
-var FLOW_TITLES = [
-  "The Intern Who Knew Too Much","Fifty Feet of Feelings","My Landlord, My Enemy",
-  "Brunch at the End of the World","The Last Vending Machine","HOA Confidential",
-  "A Musical About Insurance","The Ghost in the Group Chat","Middle Seat",
-  "The Great Casserole Betrayal","Everyone Clapped But You","The Substitute Wizard",
-  "Weekend at the Water Park","My Roommate the Cryptid","Escrow!",
-  "The Dry Cleaner's Confession","Voicemail: The Musical","The Barista Who Named Me","The Return of the Mall",
-  "The Prophecy Was in the Fine Print","Kayak","The Fourth Marriage of Uncle Roy","Never Have I Ever, But Louder",
-  "The Cousin at the Reunion","Karaoke Night at the End of Days","The Long Wait","Elevator to Nowhere",
-  "Dinner With the Landlord","The Airport Musical","The Slow Divorce","The Ghost Hunter's Yelp Review"
-];
-var FLOW_FLIPS = [
-  "You write your rhymes in pencil so they're easy to erase.",
-  "I've heard your flow — it's still buffering.",
-  "You practice in the mirror and the mirror looks away.",
-  "Your bars are like decaf: technically coffee.",
-  "You rhyme 'fire' with 'fire' and call it a callback.",
-  "Your punchlines arrive by mail.",
-  "You freestyle like you're reading terms and conditions.",
-  "Even your echo won't repeat you.",
-  "Your best line was the one where you stopped.",
-  "You call that a verse? My voicemail goes harder.",
-  "You spit like your dentist told you not to.",
-  "Your ghostwriter quit to become a ghost.",
-  "You bring bars to the stage; I bring the whole prison.",
-  "Your metaphors need a translator and an apology.",
-  "You freestyle like you're checking notes on your palm.",
-  "Your delivery's got the confidence of a wet paper bag.",
-  "You went for a punchline and pulled a hamstring.",
-  "You rap like autocorrect is doing the flow for you.",
-  "Your best feature was the guy who left the group.",
-  "You want the mic? Here — take it. It's clearly the problem."
-];
-var FLOW_DEVICES = [
-  {n:"Iambic landing", d:"Every fourth line must land in clean iambic pentameter."},
-  {n:"Extended metaphor", d:"Pick one image in line one and stretch it the whole verse."},
-  {n:"Thou-form insult", d:"Every fourth line is an insult in the thou form."},
-  {n:"Apostrophe", d:"Every fourth line addresses someone or something absent — O topic, wherefore…"},
-  {n:"Alliteration run", d:"Every fourth line strings at least three alliterative words."},
-  {n:"Internal rhyme", d:"Every fourth line must rhyme inside itself before the end."},
-  {n:"Antithesis", d:"Every fourth line balances two opposing ideas — light/dark, near/far, love/scorn."},
-  {n:"Rule of three", d:"Every fourth line lists three items — nouns, verbs, or adjectives — building to the last."},
-  {n:"Rhetorical question", d:"Every fourth line poses a question the audience can't answer."},
-  {n:"Chiasmus", d:"Every fourth line inverts a phrase — ask not what X does for Y, but what Y does for X."},
-  {n:"End with proverb", d:"Every fourth line lands like an old saying — as though it were centuries old."}
-];
 var CHARACTERS = [
   {s:"Santa Claus takes some big swings with his lore", v:["sleigh","chimney","the list","milk","workshop","elf","jolly","nice","naughty","ho ho ho"]},
   {s:"The Tooth Fairy explains her pricing model", v:["molars","canines","the exchange rate","the pillow","overnight","market rate","the receipt","under","operations","the transfer"]},
@@ -1895,15 +1808,20 @@ var SCENES = [
   {s:"A very serious pillow fort under construction", v:["the blueprint","load-bearing","the entrance","reinforcement","the couch cushions","the blanket roof","the flashlight","the perimeter","the vote","the fortress"]}
 ];
 
-var FLOW_MODES = {
-  sprint:  {eye:"Rhyme against", blurb:"Twenty seconds. Speak every rhyme you can find — singles first, then reach for the multisyllables.", secs:20},
-  endword: {eye:"Land on", blurb:"Build the line backward: it must end exactly on this word. One bar. Stick the landing.", secs:15},
-  bars:    {eye:"Stay on the click", blurb:"Fill exactly four bars on the topic, on the beat. When the topic swaps, you swap — no seams.", secs:0},
-  chorus:  {eye:"Title of the song", blurb:"Thirty seconds to invent a chorus for this title. Then sing a verse — and return to your chorus, word for word.", secs:30},
-  flip:    {eye:"Thrown at thee", blurb:"The line's been thrown at you. One bar to turn it back on them.", secs:10},
-  bard:    {eye:"Your charge", blurb:"Freestyle the verse on the topic — but every fourth line must obey the charge.", secs:0},
-  cypher:  {eye:"Spark (optional)", blurb:"A simple beat that loops forever. Rhyme about anything — the topic's just a spark if you want one.", secs:0}
-};
+var SCHEMES = [
+  {k:"AA", p:"AA", n:"Couplet", d:"Two lines, one rhyme. The scene-ender \u2014 land it and walk off.", ex:["Then get thee hence, and trouble me no {more},","For I have swept thy footprints from my {floor}."]},
+  {k:"AABB", p:"AABB", n:"Paired couplets", d:"Two couplets back to back. Easiest four-line shape; the rhyme never waits.", ex:["My uncle keeps a ledger by the {bed},","And counts the living slower than the {dead}.","He says a man is measured by his {debts},","And pays me nothing but his old {regrets}."]},
+  {k:"ABAB", p:"ABAB", n:"Alternating (cross rhyme)", d:"Lines 1 and 3, lines 2 and 4. The Shakespeare sonnet quatrain \u2014 you must hold a rhyme in reserve for a whole line.", ex:["I came to Venice with an empty {purse},","And found the city richer than its {fame}.","I leave with gold, and something rather {worse} \u2014","A merchant's habit and a merchant's {name}."]},
+  {k:"ABBA", p:"ABBA", n:"Enclosed (envelope)", d:"The B pair sits inside the A pair. Line 4 has to reach all the way back to line 1.", ex:["Thou swore the orchard would be mine in {spring},","And spring has come, and brought me only {rain},","And every bough stands empty as my {brain},","And still I wait beneath the barren {thing}."]},
+  {k:"ABCB", p:"ABCB", n:"Ballad", d:"Only 2 and 4 rhyme. The most forgiving scheme live \u2014 two free lines to think in.", ex:["The miller's daughter went to {town}","Upon a Tuesday {morn},","She carried eggs and came back {home}","With both her pockets {torn}."]},
+  {k:"AABA", p:"AABA", n:"Rubaiyat", d:"Three rhymes with one odd line out. The C-slot is your breathing room.", ex:["The tavern door swings open to the {night},","And every man within is painted {bright},","But I have drunk my shilling into {dust},","And stumble homeward by another's {light}."]},
+  {k:"AAAA", p:"AAAA", n:"Monorhyme", d:"Four lines, one sound. Brutal. Pick a rhyme family with depth or you die on line 3.", ex:["They took my land, they took my father's {crown},","They burned the mill, they burned the market {town},","They tore the very banners sideways {down},","And left me weeping in my mother's {gown}."]},
+  {k:"AABBA", p:"AABBA", n:"Limerick", d:"Five lines. The BB pair is short; A returns for the punchline.", ex:["There once was a duke of {Dundee},","Who swore he was happy and {free},","But his wife kept a {list}","Of each promise he'd {missed},","And it ran to a volume and {three}."]},
+  {k:"ABABCC", p:"ABABCC", n:"Venus and Adonis stanza", d:"Shakespeare's own six-line stanza \u2014 a cross-rhymed quatrain, then a couplet to slam it shut.", ex:["She bade him stay; he answered with a {bow},","And turned his horse toward the darkening {wood}.","She called again \u2014 he did not hear her {now},","Or heard, and judged that hearing did no {good}.","And so the lady stood beside the {gate},","And learned the oldest lesson: men are {late}."]},
+  {k:"ABABBCC", p:"ABABBCC", n:"Rhyme royal", d:"Seven lines. The B does triple duty in the middle \u2014 that's the hard part.", ex:["The steward counted candles in the {hall},","And found the number lesser than the {night}.","He did not tell the lady of it {all},","But set the shortest stub beside her {light},","And trimmed it twice to keep the wick {upright},","And when the dark came early to her {door},","He swore the winter had been long {before}."]},
+  {k:"ABA-BCB", p:"ABA|BCB|CDC", n:"Terza rima", d:"Chained. The middle rhyme of each stanza becomes the outer rhyme of the next \u2014 it never lets you land.", ex:["I walked the road that leads beyond the {mill},","And met a fellow carrying a {door}.","He said he'd bear it up the farther {hill},","And asked me what I thought the thing was {for}.","I had no answer fit to give a {man}","Who hauls a door and asks you nothing {more}.","He told me then he had a kind of {plan},","To build a house around it before {night},","And that is how the parish church {began}."]},
+  {k:"SONNET", p:"ABAB|CDCD|EFEF|GG", n:"Shakespearean sonnet", d:"Three cross-rhymed quatrains and a closing couplet. Fourteen lines, seven rhyme pairs.", ex:["My lady keeps a garden by the {wall},","And will not let the gardener {inside}.","She says the roses answer when they {fall},","And no man ought to see them in their {pride}.","I watched her from the window late in {June},","Her hands were black with earth up to the {bone}.","She worked until the rising of the {moon},","And spoke to every single stem {alone}.","I asked her what the roses had to {say}.","She laughed and said I would not {understand}.","They tell me what I planted, and the {day},","And every single thing I let to {stand}.","So I have taken up a spade at {last},","To learn what I have buried in my {past}."]}
+];
 
 /* ---- world references ---- */
 var WORLD = [
@@ -1983,14 +1901,12 @@ var WORLD = [
 var pools = {
   references:REFERENCES.slice(), vocab:VOCAB.slice(), rhyme:RHYME.slice(),
   pop:POP.slice(), conceitbody:CONCEIT_BODY.slice(), conceitcharges:CONCEIT_CHARGES.slice(), conceitobjects:CONCEIT_OBJECTS.slice(), prologue:PROLOGUE.slice(), plots:PLOTS.slice(), names:NAMES.slice(), pcnames:PC_NAMES.slice(), pcobjects:PC_OBJECTS.slice(),
-  flowsprint:FLOW_SPRINT.slice(), flowendwords:FLOW_ENDWORDS.slice(), flowtopics:FLOW_TOPICS.slice(),
-  flowtitles:FLOW_TITLES.slice(), flowflips:FLOW_FLIPS.slice(), flowdevices:FLOW_DEVICES.slice(), world:WORLD.slice(),
+  world:WORLD.slice(),
   scenes:SCENES.slice(),
   characters:CHARACTERS.slice(),
   blainenotes:[]
 };
-var last = { references:-1, pop:-1, conceitbody:-1, conceitcharges:-1, conceitobjects:-1, vocab:-1, rhyme:-1, prologue:-1, plots:-1, names:-1,
-  flowsprint:-1, flowendwords:-1, flowtopics:-1, flowtitles:-1, flowflips:-1, flowdevices:-1, world:-1, scenes:-1, characters:-1 };
+var last = { references:-1, pop:-1, conceitbody:-1, conceitcharges:-1, conceitobjects:-1, vocab:-1, rhyme:-1, prologue:-1, plots:-1, names:-1, world:-1, scenes:-1, characters:-1 };
 var $ = function(id){return document.getElementById(id);};
 
 function pick(name){
@@ -2114,188 +2030,84 @@ function delBlaine(i){
 }
 
 /* ---- flow drills ---- */
-var flowMode = "sprint";
-var flowTimer = null, flowLeft = 0;
-var audioCtx = null, metroTimer = null, metroBeat = 0, metroBar = 0, metroOn = false;
-
-function showFlow(){
-  var m = FLOW_MODES[flowMode];
-  $("flowEyebrow").textContent = m.eye;
-  $("flowBlurb").textContent = m.blurb;
-  var p = $("flowPrompt"), d = $("flowDef");
-  d.innerHTML = "";
-  if(flowMode==="sprint"){ p.textContent = pick("flowsprint") || "—"; }
-  else if(flowMode==="endword"){ p.textContent = pick("flowendwords") || "—"; }
-  else if(flowMode==="bars"){ p.textContent = pick("flowtopics") || "—"; }
-  else if(flowMode==="chorus"){ p.textContent = pick("flowtitles") || "—"; }
-  else if(flowMode==="flip"){ p.textContent = "\u201C" + (pick("flowflips") || "—") + "\u201D"; }
-  else if(flowMode==="bard"){
-    var dev = pick("flowdevices"), top = pick("flowtopics");
-    if(dev && top){ p.textContent = top; d.innerHTML = '<b style="color:var(--gold)">'+esc(dev.n)+'</b> — '+esc(dev.d); }
-  }
-  else if(flowMode==="cypher"){ p.textContent = pick("flowtopics") || "—"; }
-  stopFlowTimer();
-  var btn = $("flowTimerBtn");
-  if(m.secs){ btn.style.display=""; btn.textContent = "Start "+m.secs+"s"; }
-  else { btn.style.display="none"; }
-  if(!metroOn) $("flowMetroBtn").textContent = (flowMode==="cypher") ? "Start beat" : "Start click";
-  if(!metroOn) $("flowStat").textContent = "";
-}
-
-function stopFlowTimer(){
-  if(flowTimer){ clearInterval(flowTimer); flowTimer = null; }
-  var btn = $("flowTimerBtn"); btn.classList.remove("live");
-}
-function startFlowTimer(){
-  var m = FLOW_MODES[flowMode]; if(!m.secs) return;
-  stopFlowTimer();
-  flowLeft = m.secs;
-  var btn = $("flowTimerBtn");
-  btn.classList.add("live"); btn.textContent = flowLeft + "s";
-  flowTimer = setInterval(function(){
-    flowLeft--;
-    if(flowLeft <= 0){
-      stopFlowTimer();
-      btn.textContent = "Start "+m.secs+"s";
-      $("flowStat").innerHTML = "<b>Time!</b>";
-      setTimeout(function(){ if(!metroOn && $("flowStat").innerHTML==="<b>Time!</b>") $("flowStat").textContent=""; }, 2000);
-    } else { btn.textContent = flowLeft + "s"; }
-  }, 1000);
-}
-
-function metroClick(accent, t){
-  if(!audioCtx) return;
-  var o = audioCtx.createOscillator(), g = audioCtx.createGain();
-  o.frequency.value = accent ? 880 : 440;
-  g.gain.setValueAtTime(accent ? 0.25 : 0.15, t);
-  g.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
-  o.connect(g); g.connect(audioCtx.destination);
-  o.start(t); o.stop(t + 0.08);
-}
-/* ---- cypher drum kit (synthesized, no samples) ---- */
-function drumKick(t){
-  var o = audioCtx.createOscillator(), g = audioCtx.createGain();
-  o.type = "sine";
-  o.frequency.setValueAtTime(150, t);
-  o.frequency.exponentialRampToValueAtTime(42, t + 0.12);
-  g.gain.setValueAtTime(0.9, t);
-  g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
-  o.connect(g); g.connect(audioCtx.destination);
-  o.start(t); o.stop(t + 0.25);
-}
-function noiseBuffer(){
-  var len = audioCtx.sampleRate * 0.2;
-  var buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-  var d = buf.getChannelData(0);
-  for(var i=0;i<len;i++) d[i] = Math.random()*2-1;
-  return buf;
-}
-var _noise = null;
-function drumSnare(t){
-  if(!_noise) _noise = noiseBuffer();
-  var s = audioCtx.createBufferSource(); s.buffer = _noise;
-  var f = audioCtx.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 1800; f.Q.value = 0.9;
-  var g = audioCtx.createGain();
-  g.gain.setValueAtTime(0.5, t);
-  g.gain.exponentialRampToValueAtTime(0.001, t + 0.13);
-  s.connect(f); f.connect(g); g.connect(audioCtx.destination);
-  s.start(t); s.stop(t + 0.15);
-  var o = audioCtx.createOscillator(), og = audioCtx.createGain();
-  o.type = "triangle"; o.frequency.value = 190;
-  og.gain.setValueAtTime(0.3, t);
-  og.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
-  o.connect(og); og.connect(audioCtx.destination);
-  o.start(t); o.stop(t + 0.1);
-}
-function drumHat(t, open){
-  if(!_noise) _noise = noiseBuffer();
-  var s = audioCtx.createBufferSource(); s.buffer = _noise;
-  var f = audioCtx.createBiquadFilter(); f.type = "highpass"; f.frequency.value = 7500;
-  var g = audioCtx.createGain();
-  var dur = open ? 0.12 : 0.045;
-  g.gain.setValueAtTime(0.16, t);
-  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
-  s.connect(f); f.connect(g); g.connect(audioCtx.destination);
-  s.start(t); s.stop(t + dur + 0.02);
-}
-/* boom-bap: 16 steps per bar. kick 1 & the and-of-3, snare 2 & 4, 8th hats, open hat on the and-of-4 */
-var CYPHER_KICK  = [0, 10];
-var CYPHER_SNARE = [4, 12];
-function scheduleStep(step, t){
-  if(flowMode === "cypher"){
-    if(CYPHER_KICK.indexOf(step) > -1) drumKick(t);
-    if(CYPHER_SNARE.indexOf(step) > -1) drumSnare(t);
-    if(step % 2 === 0) drumHat(t, step === 14);
-  } else {
-    if(step % 4 === 0) metroClick(step === 0, t);
-  }
-  if(step % 4 === 0){
-    metroBeat = step/4 + 1;
-    var swapped = false;
-    if(step === 0 && metroStarted){
-      metroBar++;
-      if(flowMode === "bars" && metroBar % 4 === 0){
-        $("flowPrompt").textContent = pick("flowtopics") || "—";
-        swapped = true;
-      }
-    }
-    if(step === 0) metroStarted = true;
-    updateFlowStat(swapped);
-  }
-}
-var nextNoteTime = 0, currentStep = 0, metroStarted = false, metroBpm = 80;
-function scheduler(){
-  while(nextNoteTime < audioCtx.currentTime + 0.12){
-    scheduleStep(currentStep, nextNoteTime);
-    nextNoteTime += 60 / metroBpm / 4;
-    currentStep = (currentStep + 1) % 16;
-  }
-}
-function updateFlowStat(swapped){
-  var s = "Bar <b>" + (metroBar % 4 + 1) + "</b> / 4 · Beat <b>" + metroBeat + "</b>";
-  if(swapped) s += ' &nbsp; <span class="swap">SWAP!</span>';
-  $("flowStat").innerHTML = s;
-}
-function startMetro(){
-  if(!audioCtx){
-    var AC = window.AudioContext || window.webkitAudioContext;
-    if(AC) audioCtx = new AC();
-  }
-  if(!audioCtx) return;
-  if(audioCtx.state === "suspended") audioCtx.resume();
-  stopMetro();
-  metroOn = true; metroBeat = 0; metroBar = 0; metroStarted = false;
-  currentStep = 0; nextNoteTime = audioCtx.currentTime + 0.06;
-  metroBpm = parseInt($("flowBpm").value, 10) || 80;
-  scheduler();
-  metroTimer = setInterval(scheduler, 25);
-  var b = $("flowMetroBtn");
-  b.textContent = (flowMode === "cypher") ? "Stop beat" : "Stop click";
-  b.classList.add("live");
-}
-function stopMetro(){
-  if(metroTimer){ clearInterval(metroTimer); metroTimer = null; }
-  metroOn = false;
-  var b = $("flowMetroBtn");
-  b.textContent = (flowMode === "cypher") ? "Start beat" : "Start click";
-  b.classList.remove("live");
-  $("flowStat").textContent = "";
-}
-document.querySelectorAll("#flowChips .chip").forEach(function(c){
-  c.addEventListener("click", function(){
-    document.querySelectorAll("#flowChips .chip").forEach(function(x){ x.classList.remove("on"); });
-    c.classList.add("on");
-    flowMode = c.getAttribute("data-flow");
-    stopMetro();
-    showFlow();
+var schemeIdx = 2;
+function renderSchemeChips(){
+  $("schemeChips").innerHTML = SCHEMES.map(function(s,i){
+    return '<button class="chip'+(i===schemeIdx?' on':'')+'" data-scheme="'+i+'">'+esc(s.k)+'</button>';
+  }).join("");
+  Array.prototype.forEach.call(document.querySelectorAll("#schemeChips .chip"), function(c){
+    c.addEventListener("click", function(){
+      schemeIdx = parseInt(c.getAttribute("data-scheme"), 10);
+      renderSchemeChips();
+      showFlow();
+    });
   });
+}
+var SCHEME_HUES = {A:"#d4a24c",B:"#6fa8c7",C:"#b07ec4",D:"#7fbf8a",E:"#d4756b",F:"#c7b36f",G:"#8a9fd4"};
+function showFlow(){
+  var s = SCHEMES[schemeIdx];
+  $("schemeName").textContent = s.n + "  \u00b7  " + s.k;
+  $("schemeNote").textContent = s.d;
+  var groups = s.p.split("|");
+  var n = 0, html = "";
+  groups.forEach(function(g, gi){
+    if(gi) html += '<div style="height:10px"></div>';
+    g.split("").forEach(function(L){
+      n++;
+      var col = SCHEME_HUES[L] || "var(--gold)";
+      html += '<div style="display:flex;align-items:center;gap:12px;padding:5px 0">'
+           +  '<span style="color:var(--dim);font-size:13px;width:52px;text-align:right">line '+n+'</span>'
+           +  '<span style="font-weight:700;font-size:20px;color:'+col+';width:22px">'+L+'</span>'
+           +  '<span style="flex:1;border-bottom:1px dashed var(--dim);opacity:.45;height:1px"></span>'
+           +  '</div>';
+    });
+  });
+  $("schemeLines").innerHTML = html;
+  var ep = $("schemeExample");
+  ep.style.display = "none"; ep.innerHTML = "";
+  $("schemeExBtn").style.display = (s.ex && s.ex.length) ? "" : "none";
+  $("schemeExBtn").textContent = "Show example \u2193";
+}
+function renderSchemeExample(){
+  var s = SCHEMES[schemeIdx];
+  if(!s.ex) return;
+  var letters = s.p.split("|").join("").split("");
+  var html = '<div class="eyebrow" style="margin-bottom:10px">Example</div>';
+  s.ex.forEach(function(line, i){
+    var L = letters[i] || "";
+    var col = SCHEME_HUES[L] || "var(--gold)";
+    var txt = esc(line).replace(/\{([^}]*)\}/, function(_, w){
+      return '<b style="color:'+col+'">'+w+'</b>';
+    });
+    html += '<div style="display:flex;align-items:baseline;gap:12px;padding:3px 0">'
+         +  '<span style="font-weight:700;font-size:15px;color:'+col+';width:18px;flex:none">'+esc(L)+'</span>'
+         +  '<span style="line-height:1.55">'+txt+'</span></div>';
+  });
+  var ep = $("schemeExample");
+  ep.innerHTML = html;
+  ep.style.display = "";
+  $("schemeExBtn").textContent = "Hide example \u2191";
+}
+function drawSchemeWords(){
+  var src = pools.rhyme || [];
+  if(!src.length){ $("schemeWords").innerHTML = ""; return; }
+  var picked = [], guard = 0;
+  while(picked.length < 4 && guard++ < 400){
+    var w = src[Math.floor(Math.random()*src.length)];
+    if(w && picked.indexOf(w) === -1) picked.push(w);
+  }
+  $("schemeWords").innerHTML = picked.map(function(w){
+    return '<span class="vword">'+esc(w)+'</span>';
+  }).join("");
+}
+$("schemeExBtn").addEventListener("click", function(){
+  var ep = $("schemeExample");
+  if(ep.style.display === "none"){ renderSchemeExample(); }
+  else { ep.style.display = "none"; ep.innerHTML = ""; this.textContent = "Show example \u2193"; }
 });
-$("flowTimerBtn").addEventListener("click", function(){
-  if(flowTimer){ stopFlowTimer(); $("flowTimerBtn").textContent = "Start "+FLOW_MODES[flowMode].secs+"s"; }
-  else startFlowTimer();
-});
-$("flowMetroBtn").addEventListener("click", function(){ metroOn ? stopMetro() : startMetro(); });
-$("flowBpm").addEventListener("change", function(){ if(metroOn) startMetro(); });
+$("schemeWordsBtn").addEventListener("click", drawSchemeWords);
+renderSchemeChips();
+
 
 
 function showWorld(){
@@ -2358,14 +2170,14 @@ document.querySelectorAll("[data-add]").forEach(function(b){
     inp.value="";
   });
 });
-["references","pop","conceitobjects","vocab","rhyme","prologue","praisecurse","blainenotes","flowtopics","scenes","characters"].forEach(function(name){
+["references","pop","conceitobjects","vocab","rhyme","prologue","praisecurse","blainenotes","scenes","characters"].forEach(function(name){
   $(name+"Add").addEventListener("keydown",function(e){
     if(e.key==="Enter"){ document.querySelector('[data-add="'+name+'"]').click(); }
   });
 });
 
 /* ---- init ---- */
-showRef(); showPop(); showConceit(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); showScene(); showCharacter(); showWorld();
+showRef(); showPop(); showConceit(); showVocab(); showRhyme(); showPrologue(); showPlot(); showName(); showCharge(); showFlow(); drawSchemeWords(); showScene(); showCharacter(); showWorld();
 
 })();
 </script>
